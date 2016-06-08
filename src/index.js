@@ -28,9 +28,9 @@ const OperaWebDriverBrowser = require('./webdriver-browser/opera');
  *
  * @example <caption>Usage in Node</caption>
  * const seleniumWrapper = require('selenium-wrapper');
- * automatedBrowserTesting.printAvailableBrowsers();
+ * seleniumWrapper.printAvailableBrowsers();
  *
- * const browsers = automatedBrowserTesting.getAvailableBrowsers();
+ * const browsers = seleniumWrapper.getAvailableBrowsers();
  * browsers.forEach(browser => {
  *   console.log(browsers.getPrettyName());
  *   console.log(browsers.getReleaseName());
@@ -159,10 +159,15 @@ class SeleniumWrapper {
    * @param  {WebDriver} driver Instance of a {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver}
    * @return {Promise}          Promise that resolves once the browser is killed.
    */
-  static killWebDriver(driver) {
-    return new Promise(resolve => {
-      if (driver === null) {
+  killWebDriver(driver) {
+    return new Promise((resolve, reject) => {
+      if (typeof driver === 'undefined' ||
+        driver === null) {
         return resolve();
+      }
+
+      if (!driver.quit || typeof driver.quit !== 'function') {
+        reject(new Error('Unable to find a quit method on the web driver.'));
       }
 
       // Suggested as fix to 'chrome not reachable'

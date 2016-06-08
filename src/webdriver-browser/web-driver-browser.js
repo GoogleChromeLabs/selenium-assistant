@@ -43,6 +43,10 @@ class WebDriverBrowser {
    * `selenium-webdriver/firefox` or `selenium-webdriver/chrome`
    */
   constructor(prettyName, release, seleniumBrowserId, seleniumOptions) {
+    if (typeof prettyName !== 'string' || prettyName.length === 0) {
+      throw new Error('Invalid prettyName value: ', prettyName);
+    }
+
     if (release !== 'stable' && release !== 'beta' && release !== 'unstable') {
       throw new Error('Unexpected browser release given: ', release);
     }
@@ -59,17 +63,6 @@ class WebDriverBrowser {
     this._release = release;
     this._seleniumBrowserId = seleniumBrowserId;
     this._seleniumOptions = seleniumOptions;
-    this._executablePath = this.getExecutablePath();
-
-    if (seleniumOptions.setChromeBinaryPath) {
-      seleniumOptions.setChromeBinaryPath(this._executablePath);
-    } else if (seleniumOptions.setOperaBinaryPath) {
-      seleniumOptions.setOperaBinaryPath(this._executablePath);
-    } else if (seleniumOptions.setBinary) {
-      seleniumOptions.setBinary(this._executablePath);
-    } else {
-      throw new Error('Unknown selenium options object');
-    }
   }
 
   getExecutablePath() {
@@ -84,7 +77,7 @@ class WebDriverBrowser {
    * @return {String} Raw string that identifies the browser
    */
   getRawVersionString() {
-    return execSync(`"${this._executablePath}" --version`)
+    return execSync(`"${this.getExecutablePath()}" --version`)
       .toString();
   }
 
@@ -113,13 +106,13 @@ class WebDriverBrowser {
    * @return {Boolean} True if a selenium driver can be produced
    */
   isValid() {
-    if (!this._executablePath) {
+    if (!this.getExecutablePath()) {
       return false;
     }
 
     try {
       // This will throw if it's not found
-      fs.lstatSync(this._executablePath);
+      fs.lstatSync(this.getExecutablePath());
 
       return true;
     } catch (error) {}
@@ -187,12 +180,26 @@ class WebDriverBrowser {
    * @return {WebDriver} [description]
    */
   getSeleniumDriver() {
+    const seleniumOptions = this.getSeleniumOptions();
+
+    if (seleniumOptions.setChromeBinaryPath) {
+      seleniumOptions.setChromeBinaryPath(this.getExecutablePath());
+    } else if (seleniumOptions.setOperaBinaryPath) {
+      seleniumOptions.setOperaBinaryPath(this.getExecutablePath());
+    } else if (seleniumOptions.setBinary) {
+      seleniumOptions.setBinary(this.getExecutablePath());
+    } else {
+      throw new Error('Unknown selenium options object');
+    }
+
     return new webdriver
       .Builder()
       .forBrowser(this.getSeleniumBrowserId())
-      .setChromeOptions(this.getSeleniumOptions())
-      .setFirefoxOptions(this.getSeleniumOptions())
-      .setOperaOptions(this.getSeleniumOptions())
+      .setChromeOptions(seleniumOptions)
+      .setFirefoxOptions(seleniumOptions)
+      .setOperaOptions(seleniumOptions)
+      .setSafariOptions(seleniumOptions)
+      .setEdgeOptions(seleniumOptions)
       .build();
   }
 }

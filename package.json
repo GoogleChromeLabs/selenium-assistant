@@ -8,7 +8,7 @@
   },
   "scripts": {
     "lint": "eslint ./**/*.js",
-    "test": "npm run lint && mocha"
+    "test": "npm run lint && istanbul cover _mocha"
   },
   "repository": {
     "type": "git",
