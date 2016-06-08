@@ -1,13 +1,13 @@
 # selenium-wrapper
 
-It can be a challenge to manage which browsers you can / can't run your tests against 
+It can be a challenge to manage which browsers you can / can't run your tests against
 as well as blocking those that have known issues.
 
 This library is a simple set of helpers that helps find the browsers available
 in the current environment the tests are run on and adding a set of simple
 methods to check for versions and print useful info for logs.
 
-<p><button style="margin:0 auto;">View Documentation Here</button></p>
+<p><a style="margin:0 auto;">View Documentation Here</a></p>
 
 # Contributing
 
