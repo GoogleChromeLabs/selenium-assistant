@@ -3,10 +3,8 @@
   "version": "0.0.1",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
+    "build-docs": "jsdoc -c ./jsdoc.conf",
     "lint": "eslint ./**/*.js",
     "test": "npm run lint && istanbul cover _mocha"
   },
@@ -29,6 +27,7 @@
     "eslint": "^2.11.1",
     "eslint-config-google": "^0.5.0",
     "istanbul": "^0.4.3",
+    "jsdoc": "^3.4.0",
     "sinon": "^1.17.4"
   },
   "dependencies": {

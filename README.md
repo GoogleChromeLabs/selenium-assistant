@@ -8,7 +8,7 @@ in the current environment the tests are run on and adding a set of simple
 methods to check for versions and print useful info for logs.
 
 <p>
-  <a href="#" style="margin:0 auto;">View Documentation Here</a>
+  <a href="#">View Documentation Here</a>
 </p>
 
 # Contributing
