@@ -59,7 +59,7 @@ class WebDriverBrowser {
     this._release = release;
     this._seleniumBrowserId = seleniumBrowserId;
     this._seleniumOptions = seleniumOptions;
-    this._executablePath = this._getExecutablePath();
+    this._executablePath = this.getExecutablePath();
 
     if (seleniumOptions.setChromeBinaryPath) {
       seleniumOptions.setChromeBinaryPath(this._executablePath);
@@ -72,8 +72,8 @@ class WebDriverBrowser {
     }
   }
 
-  _getExecutablePath() {
-    throw new Error('_getExecutablePath() must be overriden by subclasses');
+  getExecutablePath() {
+    throw new Error('getExecutablePath() must be overriden by subclasses');
   }
 
   /**
@@ -112,7 +112,7 @@ class WebDriverBrowser {
    *
    * @return {Boolean} True if a selenium driver can be produced
    */
-  isValidWebDriver() {
+  isValid() {
     if (!this._executablePath) {
       return false;
     }

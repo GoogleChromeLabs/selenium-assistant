@@ -17,7 +17,7 @@
 'use strict';
 
 const which = require('which');
-const chromeOptions = require('selenium-webdriver/chrome');
+const seleniumChrome = require('selenium-webdriver/chrome');
 const WebDriverBrowser = require('./web-driver-browser');
 
 /**
@@ -42,11 +42,11 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
       prettyName,
       release,
       'chrome',
-      new chromeOptions.Options()
+      new seleniumChrome.Options()
     );
   }
 
-  _getExecutablePath() {
+  getExecutablePath() {
     try {
       if (this._release === 'stable') {
         if (process.platform === 'darwin') {

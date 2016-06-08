@@ -18,7 +18,7 @@
 
 const which = require('which');
 const path = require('path');
-const firefoxOptions = require('selenium-webdriver/firefox');
+const seleniumFirefox = require('selenium-webdriver/firefox');
 const WebDriverBrowser = require('./web-driver-browser');
 /**
  * <p>Handles the prettyName and executable path for Firefox browser.</p>
@@ -41,7 +41,7 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
   constructor(release) {
     let prettyName = 'Firefox';
 
-    const ffOptions = new firefoxOptions.Options();
+    const ffOptions = new seleniumFirefox.Options();
     // Required since v47
     ffOptions.useMarionette(true);
 
@@ -61,7 +61,7 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
     );
   }
 
-  _getExecutablePath() {
+  getExecutablePath() {
     if (this._release === 'stable') {
       if (process.env.FF_STABLE_PATH) {
         return process.env.FF_STABLE_PATH;

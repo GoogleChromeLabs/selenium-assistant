@@ -16,23 +16,27 @@
 
 'use strict';
 
+const chalk = require('chalk');
+
 const ChromeWebDriverBrowser = require('./webdriver-browser/chrome');
 const FirefoxWebDriverBrowser = require('./webdriver-browser/firefox');
 const OperaWebDriverBrowser = require('./webdriver-browser/opera');
 
 /**
- * AutomatedBrowserTesting is a class that makes
+ * SeleniumWrapper is a class that makes
  * it easier to launch a browser and run mocha tests.
  *
  * @example <caption>Usage in Node</caption>
- * const automatedBrowserTesting = require('sw-testing-helpers').automatedBrowserTesting;
- * const browsers = automatedBrowserTesting.getDiscoverableBrowsers();
+ * const seleniumWrapper = require('selenium-wrapper');
+ * automatedBrowserTesting.printAvailableBrowsers();
+ *
+ * const browsers = automatedBrowserTesting.getAvailableBrowsers();
  * browsers.forEach(browser => {
  *   console.log(browsers.getPrettyName());
  *   console.log(browsers.getReleaseName());
  * });
  */
-class AutomatedBrowserTesting {
+class SeleniumWrapper {
   /**
    * <p>This method returns a list of discovered browsers in the current
    * environment.</p>
@@ -47,7 +51,7 @@ class AutomatedBrowserTesting {
    * @return {Array<WebDriverBrowser>} Array of browsers discovered in the
    * current environment.
    */
-  getDiscoverableBrowsers() {
+  getAvailableBrowsers() {
     if (process.platform !== 'darwin' && process.platform !== 'linux') {
       throw new Error('Sorry this library only supports OS X and Linux.');
     }
@@ -65,7 +69,7 @@ class AutomatedBrowserTesting {
     ];
 
     webdriveBrowsers = webdriveBrowsers.filter(webdriverBrowser => {
-      if (!webdriverBrowser.isValidWebDriver()) {
+      if (!webdriverBrowser.isValid()) {
         return false;
       }
 
@@ -76,12 +80,86 @@ class AutomatedBrowserTesting {
   }
 
   /**
+   * <p>This method prints out a table of info for all available browsers
+   * on the current environment.</p>
+   *
+   * <p>Useful if you are testing on travis and what to see what tests
+   * should be running on.</p>
+   *
+   * @param {Boolean} [printToConsole=true] - If you wish to prevent
+   * the table being printed to the console, you can suppress it by
+   * passing in false.
+   * @return {String} Returns table of information as a string.
+   */
+  printAvailableBrowserInfo(printToConsole) {
+    if (typeof printToConsole === 'undefined') {
+      printToConsole = true;
+    }
+
+    var browsers = this.getAvailableBrowsers();
+    const rows = [];
+    rows.push([
+      'Browser Name',
+      'Browser Version',
+      'Path'
+    ]);
+
+    browsers.forEach(browser => {
+      rows.push([
+        browser.getPrettyName(),
+        browser.getVersionNumber().toString(),
+        browser.getExecutablePath()
+      ]);
+    });
+
+    const noOfColumns = rows[0].length;
+    const rowLengths = [];
+    for (let i = 0; i < noOfColumns; i++) {
+      let currentRowMaxLength = 0;
+      rows.forEach(row => {
+        currentRowMaxLength = Math.max(
+          currentRowMaxLength, row[i].length);
+      });
+      rowLengths[i] = currentRowMaxLength;
+    }
+
+    let totalRowLength = rowLengths.reduce((a, b) => a + b, 0);
+
+    // Account for spaces and markers
+    totalRowLength += (noOfColumns * 3) + 1;
+
+    let outputString = chalk.gray('-'.repeat(totalRowLength)) + '\n';
+    rows.forEach((row, rowIndex) => {
+      const color = rowIndex === 0 ? chalk.bold : chalk.blue;
+      let coloredRows = row.map((column, columnIndex) => {
+        const padding = rowLengths[columnIndex] - column.length;
+        if (padding > 0) {
+          return color(column) + ' '.repeat(padding);
+        }
+        return color(column);
+      });
+
+      let rowString = coloredRows.join(' | ');
+
+      outputString += '| ' + rowString + ' |\n';
+    });
+
+    outputString += chalk.gray('-'.repeat(totalRowLength)) + '\n';
+
+    if (printToConsole) {
+      console.log(outputString);
+    }
+
+    return outputString;
+  }
+
+  /**
    * Once a web driver is no longer needed call this method to kill it. The
    * promise resolves once the browser is closed and clean up has been done.
    * @param  {WebDriver} driver Instance of a {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver}
    * @return {Promise}          Promise that resolves once the browser is killed.
    */
-  killWebDriver(driver) {
+  static killWebDriver(driver) {
     return new Promise(resolve => {
       if (driver === null) {
         return resolve();
@@ -104,4 +182,4 @@ class AutomatedBrowserTesting {
   }
 }
 
-module.exports = AutomatedBrowserTesting;
+module.exports = new SeleniumWrapper();

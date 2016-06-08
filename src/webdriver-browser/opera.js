@@ -17,7 +17,7 @@
 'use strict';
 
 const which = require('which');
-const operaOptions = require('selenium-webdriver/opera');
+const seleniumOpera = require('selenium-webdriver/opera');
 const WebDriverBrowser = require('./web-driver-browser');
 
 /**
@@ -42,11 +42,11 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
       prettyName,
       release,
       'opera',
-      new operaOptions.Options()
+      new seleniumOpera.Options()
     );
   }
 
-  _getExecutablePath() {
+  getExecutablePath() {
     try {
       if (this._release === 'stable') {
         if (process.platform === 'darwin') {
