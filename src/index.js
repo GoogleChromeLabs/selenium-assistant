@@ -18,9 +18,8 @@
 
 const chalk = require('chalk');
 
-const ChromeWebDriverBrowser = require('./webdriver-browser/chrome');
-const FirefoxWebDriverBrowser = require('./webdriver-browser/firefox');
-const OperaWebDriverBrowser = require('./webdriver-browser/opera');
+const browserManager = require('./browser-manager.js');
+const downloadManager = require('./download-manager.js');
 
 /**
  * SeleniumWrapper is a class that makes
@@ -37,6 +36,53 @@ const OperaWebDriverBrowser = require('./webdriver-browser/opera');
  * });
  */
 class SeleniumWrapper {
+
+  constructor() {
+    this._installDir = null;
+  }
+
+  /**
+   * This returns the path of where browsers are downloaded to.
+   * @return {String} Path of downloaded browsers
+   */
+  getBrowserInstallDir() {
+    return this._installDir;
+  }
+
+  /**
+   * To change where browsers are downloaded to, call this method
+   * before calling {@link downloadBrowser}.
+   * @param {String} newInstallDir Path to download browsers to. Pass in
+   *                               null to use default path.
+   */
+  setBrowserInstallDir(newInstallDir) {
+    this._installDir = newInstallDir;
+  }
+
+  /**
+   * <p>The download browser is a helper method what will grab a browser
+   * on a specific track.</p>
+   *
+   * <p>If the request browser is already installed, it will resolve
+   * the promise and not download anything.</p>
+   *
+   * <p>This is somewhat experimental, so be prepared for issues.</p>
+   *
+   * @param  {String} browserId The selenium id of the browser you wish
+   *                            to download.
+   * @param  {String} release   String of the release channel, can be
+   *                            'stable', 'beta' or 'unstable'
+   * @param  {Boolean} [force=false]  Force download of a browser
+   * @return {Promise}          A promise is returned which resolves
+   *                            once the browser has been downloaded.
+   */
+  downloadBrowser(browserId, release, force) {
+    return downloadManager.downloadBrowser(browserId, release, {
+      installDir: this.getBrowserInstallDir(),
+      force: force
+    });
+  }
+
   /**
    * <p>This method returns a list of discovered browsers in the current
    * environment.</p>
@@ -56,18 +102,7 @@ class SeleniumWrapper {
       throw new Error('Sorry this library only supports OS X and Linux.');
     }
 
-    let webdriveBrowsers = [
-      new ChromeWebDriverBrowser('stable'),
-      new ChromeWebDriverBrowser('beta'),
-      new ChromeWebDriverBrowser('unstable'),
-      new FirefoxWebDriverBrowser('stable'),
-      new FirefoxWebDriverBrowser('beta'),
-      new FirefoxWebDriverBrowser('unstable'),
-      new OperaWebDriverBrowser('stable'),
-      new OperaWebDriverBrowser('beta'),
-      new OperaWebDriverBrowser('unstable')
-    ];
-
+    let webdriveBrowsers = browserManager.getSupportedBrowsers();
     webdriveBrowsers = webdriveBrowsers.filter(webdriverBrowser => {
       if (!webdriverBrowser.isValid()) {
         return false;
