@@ -95,6 +95,7 @@ describe('Test Download and Usage of Browsers', function() {
           return selectedBrowser;
         })
         .then(selectedBrowser => {
+          seleniumAssistant.printAvailableBrowserInfo();
           const driver = selectedBrowser.getSeleniumDriver();
           return new Promise((resolve, reject) => {
             driver.get('https://google.com')
@@ -137,6 +138,7 @@ describe('Test Download and Usage of Browsers', function() {
           return selectedBrowser;
         })
         .then(selectedBrowser => {
+          seleniumAssistant.printAvailableBrowserInfo();
           const driver = selectedBrowser.getSeleniumDriver();
           return new Promise((resolve, reject) => {
             driver.get('https://google.com')

@@ -87,23 +87,25 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
       return installDirExecutable;
     }
 
-    if (this._release === 'stable') {
-      if (process.env.FF_STABLE_PATH) {
-        return process.env.FF_STABLE_PATH;
-      }
+    try {
+      if (this._release === 'stable') {
+        if (process.env.FF_STABLE_PATH) {
+          return process.env.FF_STABLE_PATH;
+        }
 
-      if (process.platform === 'darwin') {
-        return '/Applications/Firefox.app/Contents/MacOS/firefox';
-      } else if (process.platform === 'linux') {
-        return which.sync('firefox');
-      }
-    } else if (this._release === 'beta') {
+        if (process.platform === 'darwin') {
+          return '/Applications/Firefox.app/Contents/MacOS/firefox';
+        } else if (process.platform === 'linux') {
+          return which.sync('firefox');
+        }
+      } else if (this._release === 'beta') {
 
-    } else if (this._release === 'unstable') {
-      if (process.platform === 'darwin') {
-        return '/Applications/FirefoxNightly.app/Contents/MacOS/firefox';
+      } else if (this._release === 'unstable') {
+        if (process.platform === 'darwin') {
+          return '/Applications/FirefoxNightly.app/Contents/MacOS/firefox';
+        }
       }
-    }
+    } catch (err) {}
 
     return null;
   }
