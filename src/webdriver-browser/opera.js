@@ -16,17 +16,26 @@
 
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const which = require('which');
 const seleniumOpera = require('selenium-webdriver/opera');
 const WebDriverBrowser = require('./web-driver-browser');
+const application = require('../application-state.js');
 
 /**
- * <p>Handles the prettyName and executable path for Chrome browser.</p>
+ * <p>Handles the prettyName and executable path for Opera browser.</p>
  *
  * @private
  * @extends WebDriverBrowser
  */
 class OperaWebDriverBrowser extends WebDriverBrowser {
+  /**
+   * Create an Opera representation of a {@link WebDriverBrowser}
+   * instance on a specific channel.
+   * @param  {String} release The channel of Opera you want to get, either
+   *                          'stable', 'beta' or 'unstable'
+   */
   constructor(release) {
     let prettyName = 'Opera';
 
@@ -46,7 +55,36 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
     );
   }
 
+  _findInInstallDir() {
+    let defaultDir = application.getInstallDirectory();
+    let operaBinary = 'opera';
+    if (this._release === 'beta') {
+      operaBinary = 'opera-beta';
+    } else if (this._release === 'unstable') {
+      operaBinary = 'opera-developer';
+    }
+
+    const expectedPath = path.join(
+      defaultDir, 'opera', this._release, 'usr/bin', operaBinary);
+    try {
+      // This will throw if it's not found
+      fs.lstatSync(expectedPath);
+      return expectedPath;
+    } catch (error) {}
+    return null;
+  }
+
+  /**
+   * Returns the executable for the browser
+   * @return {String} Path of executable
+   */
   getExecutablePath() {
+    const installDirExecutable = this._findInInstallDir();
+    if (installDirExecutable) {
+      // We have a path for the browser
+      return installDirExecutable;
+    }
+
     try {
       if (this._release === 'stable') {
         if (process.platform === 'darwin') {
@@ -75,8 +113,17 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
     return null;
   }
 
+  /**
+   * A version number for the browser. This is the major version number
+   * (i.e. for 48.0.1293, this would return 18)
+   * @return {Integer} The major version number of this browser
+   */
   getVersionNumber() {
     const operaVersion = this.getRawVersionString();
+    if (!operaVersion) {
+      return false;
+    }
+
     const regexMatch = operaVersion.match(/(\d+).\d+.\d+.\d+/);
     if (regexMatch === null) {
       console.warn('Unable to parse version number from Opera',

@@ -18,50 +18,54 @@
 
 const chalk = require('chalk');
 
+const application = require('./application-state.js');
 const browserManager = require('./browser-manager.js');
 const downloadManager = require('./download-manager.js');
 
 /**
- * SeleniumWrapper is a class that makes
- * it easier to launch a browser and run mocha tests.
+ * SeleniumAssistant is a class that makes
+ * it easier to download, interegate and launch a browser
+ * for running tests with selenium.
  *
  * @example <caption>Usage in Node</caption>
- * const seleniumWrapper = require('selenium-wrapper');
- * seleniumWrapper.printAvailableBrowsers();
+ * const seleniumAssistant = require('selenium-assistant');
+ * seleniumAssistant.printAvailableBrowsers();
  *
- * const browsers = seleniumWrapper.getAvailableBrowsers();
+ * const browsers = seleniumAssistant.getAvailableBrowsers();
  * browsers.forEach(browser => {
  *   console.log(browsers.getPrettyName());
  *   console.log(browsers.getReleaseName());
  * });
  */
-class SeleniumWrapper {
-
-  constructor() {
-    this._installDir = null;
-  }
+class SeleniumAssistant {
 
   /**
    * This returns the path of where browsers are downloaded to.
    * @return {String} Path of downloaded browsers
    */
   getBrowserInstallDir() {
-    return this._installDir;
+    return application.getInstallDirectory();
   }
 
   /**
    * To change where browsers are downloaded to, call this method
-   * before calling {@link downloadBrowser}.
+   * before calling {@link downloadBrowser} and
+   * {@link getAvailableBrowsers}.
+   *
+   * By default, this will install under `.selenium-assistant` in
+   * your home directory on OS X and Linux, or just `selenium-assistant`
+   * in your home directory on Windows.
+   *
    * @param {String} newInstallDir Path to download browsers to. Pass in
    *                               null to use default path.
    */
   setBrowserInstallDir(newInstallDir) {
-    this._installDir = newInstallDir;
+    application.setInstallDirectory(newInstallDir);
   }
 
   /**
-   * <p>The download browser is a helper method what will grab a browser
-   * on a specific track.</p>
+   * <p>The downloadBrowser() function is a helper method what will
+   * grab a browser on a specific release channel.</p>
    *
    * <p>If the request browser is already installed, it will resolve
    * the promise and not download anything.</p>
@@ -72,24 +76,29 @@ class SeleniumWrapper {
    *                            to download.
    * @param  {String} release   String of the release channel, can be
    *                            'stable', 'beta' or 'unstable'
-   * @param  {Boolean} [force=false]  Force download of a browser
+   * @param  {Boolean} [force=false]  Force download of a browser regardless
+   *                                  of whether it exists already or not.
    * @return {Promise}          A promise is returned which resolves
    *                            once the browser has been downloaded.
    */
   downloadBrowser(browserId, release, force) {
-    return downloadManager.downloadBrowser(browserId, release, {
-      installDir: this.getBrowserInstallDir(),
-      force: force
-    });
+    return downloadManager.downloadBrowser(browserId, release, force);
+  }
+
+  /**
+   * At the time of writing Firefox doesn't have a friendly node wrapper
+   * for it's selenium driver (June 2016), so this method will get it
+   * and install it in the current directory so tests can find it.
+   * @return {Promise} Resolves when the requires Firefox driver is
+   *                   doesnloaded.
+   */
+  downloadFirefoxDriver() {
+    return downloadManager.downloadFirefoxDriver();
   }
 
   /**
    * <p>This method returns a list of discovered browsers in the current
    * environment.</p>
-   *
-   * <p><strong>NOTE:</strong> For Firefox please define `FF_BETA_PATH`
-   * and / or `FF_NIGHTLY_PATH` as environment variables if you want to use
-   * Beta and Nightly versions of Firefox.</p>
    *
    * <p>This method will throw an error if run on a platform other than
    * OS X and Linux.</p>
@@ -118,12 +127,12 @@ class SeleniumWrapper {
    * <p>This method prints out a table of info for all available browsers
    * on the current environment.</p>
    *
-   * <p>Useful if you are testing on travis and what to see what tests
-   * should be running on.</p>
+   * <p>Useful if you are testing on travis and want to see what tests
+   * should be running.</p>
    *
    * @param {Boolean} [printToConsole=true] - If you wish to prevent
    * the table being printed to the console, you can suppress it by
-   * passing in false.
+   * passing in false and simply use the string response.
    * @return {String} Returns table of information as a string.
    */
   printAvailableBrowserInfo(printToConsole) {
@@ -189,8 +198,12 @@ class SeleniumWrapper {
   }
 
   /**
-   * Once a web driver is no longer needed call this method to kill it. The
-   * promise resolves once the browser is closed and clean up has been done.
+   * <p>Once a web driver is no longer needed call this method to kill it. The
+   * promise resolves once the browser is closed and clean up has been done.</p>
+   *
+   * <p>This is a basic helper that adds a timeout to the end of killling
+   * driver to account for shutdown time and the issues that can cause.</p>
+   *
    * @param  {WebDriver} driver Instance of a {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver}
    * @return {Promise}          Promise that resolves once the browser is killed.
    */
@@ -222,4 +235,4 @@ class SeleniumWrapper {
   }
 }
 
-module.exports = new SeleniumWrapper();
+module.exports = new SeleniumAssistant();

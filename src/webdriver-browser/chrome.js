@@ -16,9 +16,12 @@
 
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const which = require('which');
 const seleniumChrome = require('selenium-webdriver/chrome');
 const WebDriverBrowser = require('./web-driver-browser');
+const application = require('../application-state.js');
 
 /**
  * <p>Handles the prettyName and executable path for Chrome browser.</p>
@@ -46,7 +49,37 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     );
   }
 
+  _findInInstallDir() {
+    let defaultDir = application.getInstallDirectory();
+    let chromeSubPath = 'chrome';
+    if (this._release === 'beta') {
+      chromeSubPath = 'chrome-beta';
+    } else if (this._release === 'unstable') {
+      chromeSubPath = 'chrome-unstable';
+    }
+
+    const expectedPath = path.join(
+      defaultDir, 'chrome', this._release, 'opt/google/',
+      chromeSubPath, '/google-chrome');
+    try {
+      // This will throw if it's not found
+      fs.lstatSync(expectedPath);
+      return expectedPath;
+    } catch (error) {}
+    return null;
+  }
+
+  /**
+   * Returns the executable for the browser
+   * @return {String} Path of executable
+   */
   getExecutablePath() {
+    const installDirExecutable = this._findInInstallDir();
+    if (installDirExecutable) {
+      // We have a path for the browser
+      return installDirExecutable;
+    }
+
     try {
       if (this._release === 'stable') {
         if (process.platform === 'darwin') {
@@ -75,8 +108,17 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     return null;
   }
 
+  /**
+   * A version number for the browser. This is the major version number
+   * (i.e. for 48.0.1293, this would return 18)
+   * @return {Integer} The major version number of this browser
+   */
   getVersionNumber() {
     const chromeVersion = this.getRawVersionString();
+    if (!chromeVersion) {
+      return false;
+    }
+
     const regexMatch = chromeVersion.match(/(\d+).\d+.\d+.\d+/);
     if (regexMatch === null) {
       console.warn('Unable to parse version number from Firefox',

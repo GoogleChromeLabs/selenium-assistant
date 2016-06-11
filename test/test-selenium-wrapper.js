@@ -40,7 +40,7 @@ describe('SeleniumWrapper', function() {
     (browsers instanceof Array).should.equal(true);
   });
 
-  it('should return only valid browsers in available browsers', function() {
+  it('should return only browsers with executables in available browsers', function() {
     const browsers = seleniumWrapper.getAvailableBrowsers();
     browsers.forEach(browser => {
       browser.isValid().should.equal(true);
@@ -145,5 +145,19 @@ describe('SeleniumWrapper', function() {
     });
     (killPromise instanceof Promise).should.equal(true);
     return killPromise;
+  });
+
+  it('should return a default value for install dir', function() {
+    const directory = seleniumWrapper.getBrowserInstallDir();
+    (typeof directory).should.equal('string');
+    directory.length.should.be.gt(1);
+  });
+
+  it('should return the specified path for install dir', function() {
+    const installPath = './test-browsers/';
+    seleniumWrapper.setBrowserInstallDir(installPath);
+    const directory = seleniumWrapper.getBrowserInstallDir();
+    (typeof directory).should.equal('string');
+    directory.should.equal(installPath);
   });
 });

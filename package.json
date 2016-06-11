@@ -1,5 +1,5 @@
 {
-  "name": "selenium-wrapper",
+  "name": "selenium-assistant",
   "version": "0.0.1",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",

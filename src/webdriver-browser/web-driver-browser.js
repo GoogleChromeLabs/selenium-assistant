@@ -65,9 +65,16 @@ class WebDriverBrowser {
     this._seleniumOptions = seleniumOptions;
   }
 
+  /* eslint-disable valid-jsdoc */
+  /**
+   * To get the path of the browsers executable file, call this method.
+   * @return {String} Path of the browsers executable file or null if
+   * it can't be found.
+   */
   getExecutablePath() {
     throw new Error('getExecutablePath() must be overriden by subclasses');
   }
+  /* eslint-enable valid-jsdoc */
 
   /**
    * If you need to identify a browser based on it's version number but
@@ -77,14 +84,19 @@ class WebDriverBrowser {
    * @return {String} Raw string that identifies the browser
    */
   getRawVersionString() {
-    return execSync(`"${this.getExecutablePath()}" --version`)
+    const executablePath = this.getExecutablePath();
+    if (!executablePath) {
+      return null;
+    }
+
+    return execSync(`"${executablePath}" --version`)
       .toString();
   }
 
   /* eslint-disable valid-jsdoc */
   /**
    * <p>This method returns an integer if it can be determined from
-   * the browser executabl.</p>
+   * the browser executable.</p>
    *
    * <p>A scenario where it will be unable to produce a valid version
    * is if the browsers executable path can't be found.</p>
@@ -97,7 +109,7 @@ class WebDriverBrowser {
   /* eslint-enable valid-jsdoc */
 
   /**
-   * <p>This method returns true if the instance can produce a valid
+   * <p>This method returns true if the instance can be found and can create a
    * selenium driver that will launch the expected browser.</p>
    *
    * <p>A scenario where it will be unable to produce a valid selenium driver
@@ -106,13 +118,14 @@ class WebDriverBrowser {
    * @return {Boolean} True if a selenium driver can be produced
    */
   isValid() {
-    if (!this.getExecutablePath()) {
+    const executablePath = this.getExecutablePath();
+    if (!executablePath) {
       return false;
     }
 
     try {
       // This will throw if it's not found
-      fs.lstatSync(this.getExecutablePath());
+      fs.lstatSync(executablePath);
 
       return true;
     } catch (error) {}

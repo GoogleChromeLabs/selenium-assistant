@@ -16,10 +16,13 @@
 
 'use strict';
 
-const which = require('which');
+const fs = require('fs');
 const path = require('path');
+const which = require('which');
 const seleniumFirefox = require('selenium-webdriver/firefox');
 const WebDriverBrowser = require('./web-driver-browser');
+const application = require('../application-state.js');
+
 /**
  * <p>Handles the prettyName and executable path for Firefox browser.</p>
  *
@@ -61,7 +64,29 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
     );
   }
 
+  _findInInstallDir() {
+    let defaultDir = application.getInstallDirectory();
+    const expectedPath = path.join(
+      defaultDir, 'firefox', this._release, 'firefox');
+    try {
+      // This will throw if it's not found
+      fs.lstatSync(expectedPath);
+      return expectedPath;
+    } catch (error) {}
+    return null;
+  }
+
+  /**
+   * Returns the executable for the browser
+   * @return {String} Path of executable
+   */
   getExecutablePath() {
+    const installDirExecutable = this._findInInstallDir();
+    if (installDirExecutable) {
+      // We have a path for the browser
+      return installDirExecutable;
+    }
+
     if (this._release === 'stable') {
       if (process.env.FF_STABLE_PATH) {
         return process.env.FF_STABLE_PATH;
@@ -83,8 +108,17 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
     return null;
   }
 
+  /**
+   * A version number for the browser. This is the major version number
+   * (i.e. for 48.0.1293, this would return 18)
+   * @return {Integer} The major version number of this browser
+   */
   getVersionNumber() {
     const firefoxVersion = this.getRawVersionString();
+    if (!firefoxVersion) {
+      return false;
+    }
+
     const regexMatch = firefoxVersion.match(/(\d\d).\d/);
     if (regexMatch === null) {
       console.warn('Unable to parse version number from Firefox',

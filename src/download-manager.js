@@ -1,3 +1,19 @@
+/*
+  Copyright 2016 Google Inc. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
 'use strict';
 
 const spawn = require('child_process').spawn;
@@ -7,40 +23,151 @@ const request = require('request');
 const mkdirp = require('mkdirp');
 const del = require('del');
 
+const application = require('./application-state.js');
 const browserManager = require('./browser-manager.js');
 
+/**
+ * The download manager's sole job is to download browsers and drivers.
+ * The executable paths for these downloaded browsers will be discovered
+ * by the individual {@link WebDriverBrowser} instances.
+ *
+ * @private
+ */
 class DownloadManager {
-  getDefaultInstallLocation() {
-    let installLocation;
-    const homeLocation = process.env.HOME || process.env.USERPROFILE;
-    if (homeLocation) {
-      installLocation = homeLocation;
-    } else {
-      installLocation = '.';
+
+  /**
+   * This method retrieves the Firefox Marionette driver, renames it
+   * to wires and makes it executable. It's installed to the current working
+   * directory to that when tests are run, it's automatically found
+   * on the path.
+   * @param  {String} [downloadPath='.'] Directory to install the driver into.
+   *                                     Normally you wouldn't need to touch
+   *                                     this unless you have a place to install
+   *                                     the driver that is on your PATH.
+   * @return {Promise}              Resolves when the driver is downloaded
+   */
+  downloadFirefoxDriver(downloadPath) {
+    if (!downloadPath) {
+      downloadPath = '.';
     }
 
-    const folderName = process.platform === 'win32' ?
-      'selenium-wrapper-browsers' : '.selenium-wrapper-browsers';
-    return path.join(installLocation, folderName);
+    return new Promise((resolve, reject) => {
+      request({
+        url: 'https://api.github.com/repos/mozilla/geckodriver/releases',
+        headers: {
+          'User-Agent': 'request'
+        }
+      },
+      (err, response) => {
+        if (err) {
+          return reject(err);
+        }
+
+        const releaseAssets = JSON.parse(response.body)[0].assets;
+        switch (process.platform) {
+          case 'linux':
+            releaseAssets.forEach(download => {
+              if (download.name.indexOf('linux64') !== -1) {
+                return resolve({
+                  url: download.browser_download_url,
+                  name: download.name
+                });
+              }
+            });
+            break;
+          case 'darwin':
+            releaseAssets.forEach(download => {
+              if (download.name.indexOf('OSX') !== -1) {
+                return resolve({
+                  url: download.browser_download_url,
+                  name: download.name
+                });
+              }
+            });
+            break;
+          case 'windows':
+            releaseAssets.forEach(download => {
+              if (download.name.indexOf('win32') !== -1) {
+                return resolve({
+                  url: download.browser_download_url,
+                  name: download.name
+                });
+              }
+            });
+            break;
+          default:
+            return reject(new Error('Unsupported platform: ' +
+              process.platform));
+        }
+      });
+    })
+    .then(downloadInfo => {
+      return new Promise((resolve, reject) => {
+        const filePath = path.join(downloadPath, downloadInfo.name);
+        const file = fs.createWriteStream(filePath);
+
+        request(downloadInfo.url, err => {
+          if (err) {
+            return reject(err);
+          }
+
+          resolve({
+            filename: downloadInfo.name,
+            filePath: filePath
+          });
+        })
+        .pipe(file);
+      });
+    })
+    .then(fileInfo => {
+      return new Promise(function(resolve, reject) {
+        const untarProcess = spawn('gzip', [
+          '-d',
+          fileInfo.filePath,
+          '-f'
+        ]);
+
+        untarProcess.on('exit', code => {
+          if (code === 0) {
+            try {
+              const extractedFileName = path.parse(fileInfo.filename).name;
+              fs.renameSync(
+                path.join(downloadPath, extractedFileName),
+                path.join(downloadPath, 'wires')
+              );
+              fs.chmodSync(path.join(downloadPath, 'wires'), 755);
+              return resolve(fileInfo.filePath);
+            } catch (err) {
+              return reject(err);
+            }
+          }
+
+          reject(new Error('Unable to extract gzip'));
+        });
+      });
+    })
+    .then(filePath => {
+      return del(filePath, {force: true});
+    });
   }
 
   /**
-   * The options object for downloadBrowser.
-   *
-   * @typedef {Object} BrowserDownloadOptions
-   * @property {String} [installDir='$HOME/.selenium-wrapper-browsers/'] The directory to download cached browsers to
-   * @property {Boolean} [force=false]   Forces the browser to be downloaded
+   * This method will download a browser if it is needed (i.e. can't be found
+   * in the usual system location or in the install directory).
+   * @param  {String} browserId This is the Selenium ID of the browser you wish
+   *                            to download ('chrome', 'firefox', 'opera').
+   * @param  {String} release   This downloads the browser on a particular track
+   *                            and can be 'stable', 'beta' or 'unstable'
+   * @param  {Boolean} [force=false]
+   *         										 If you want to install the browser regardless
+   *                             of any existing installs of the process, pass
+   *                             in true.
+   * @return {Promise}           Promise resolves once the browser has been
+   *                             downloaded and ready for use.
    */
-
-  downloadBrowser(browserId, release, options) {
-    options = options || {};
-
-    let installDir = options.installDir;
-    let forceDownload = options.force || false;
-
-    if (!installDir) {
-      installDir = this.getDefaultInstallLocation();
-    }
+  downloadBrowser(browserId, release, force) {
+    let forceDownload = force || false;
+    let installDir = application.getInstallDirectory();
 
     const browserInstance = browserManager
       .createWebDriverBrowser(browserId, release);
@@ -87,6 +214,7 @@ class DownloadManager {
         throw new Error('Unsupport platform.', process.platform);
     }
 
+    const finalBrowserPath = path.join(installDir, 'chrome', release);
     const downloadUrl = `https://dl.google.com/${chromePlatformId}/direct/${chromeProduct}_current_amd64.deb`;
     return new Promise((resolve, reject) => {
       mkdirp(installDir, err => {
@@ -112,7 +240,7 @@ class DownloadManager {
     })
     .then(filePath => {
       return new Promise((resolve, reject) => {
-        mkdirp(path.join(installDir, chromeProduct), err => {
+        mkdirp(finalBrowserPath, err => {
           if (err) {
             return reject(err);
           }
@@ -126,7 +254,7 @@ class DownloadManager {
         const dpkgProcess = spawn('dpkg', [
           '-x',
           filePath,
-          path.join(installDir, chromeProduct)
+          finalBrowserPath
         ], {stdio: 'inherit'});
 
         dpkgProcess.on('exit', code => {
@@ -139,7 +267,7 @@ class DownloadManager {
       });
     })
     .then(filePath => {
-      return del(filePath);
+      return del(filePath, {force: true});
     });
   }
 
@@ -197,7 +325,7 @@ class DownloadManager {
     })
     .then(filePath => {
       return new Promise((resolve, reject) => {
-        mkdirp(path.join(installDir, ffProduct), err => {
+        mkdirp(path.join(installDir, 'firefox', release), err => {
           if (err) {
             return reject(err);
           }
@@ -211,7 +339,7 @@ class DownloadManager {
           'xvjf',
           filePath,
           '--directory',
-          path.join(installDir, ffProduct),
+          path.join(installDir, 'firefox', release),
           '--strip-components',
           1
         ]);
@@ -226,7 +354,7 @@ class DownloadManager {
       });
     })
     .then(filePath => {
-      return del(filePath);
+      return del(filePath, {force: true});
     });
   }
 
@@ -251,6 +379,7 @@ class DownloadManager {
         throw new Error('Unknown release.', release);
     }
 
+    const finalBrowserPath = path.join(installDir, 'opera', release);
     return new Promise((resolve, reject) => {
       mkdirp(installDir, err => {
         if (err) {
@@ -275,7 +404,7 @@ class DownloadManager {
     })
     .then(filePath => {
       return new Promise((resolve, reject) => {
-        mkdirp(path.join(installDir, operaProduct), err => {
+        mkdirp(finalBrowserPath, err => {
           if (err) {
             return reject(err);
           }
@@ -289,7 +418,7 @@ class DownloadManager {
         const dpkgProcess = spawn('dpkg', [
           '-x',
           filePath,
-          path.join(installDir, operaProduct)
+          finalBrowserPath
         ], {stdio: 'inherit'});
 
         dpkgProcess.on('exit', code => {
@@ -302,7 +431,7 @@ class DownloadManager {
       });
     })
     .then(filePath => {
-      return del(filePath);
+      return del(filePath, {force: true});
     });
   }
 }

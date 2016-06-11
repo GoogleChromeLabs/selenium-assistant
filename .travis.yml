@@ -8,28 +8,8 @@ os:
   - linux
 node_js:
   - '4'
-  - 'stable'
-addons:
-  # You can't install latest and beta as addons
-  # firefox: latest
-  # apt:
-  #   sources:
-  #     - google-chrome
-  #   packages:
-  #     - google-chrome-stable
-  #     - google-chrome-beta
-  #     - google-chrome-unstable
-
-before_install:
-  # Get firefox beta and nightly and extract to tar for the test runner to use.
-  # - ./project/download/firefox-beta.sh
-  # - ./project/download/firefox-nightly.sh
-  # Get marionette executable
-  # - if [[ "$TRAVIS_OS_NAME" = "linux" ]]; then ./project/download/get-marionette.sh; fi
-  # - if [[ "$TRAVIS_OS_NAME" = "linux" ]]; then wget -O - http://deb.opera.com/archive.key | sudo apt-key add -; fi
-  # - if [[ "$TRAVIS_OS_NAME" = "linux" ]]; then sudo apt-add-repository "deb http://deb.opera.com/opera/ stable non-free"; fi
-  # - if [[ "$TRAVIS_OS_NAME" = "linux" ]]; then sudo apt-get update; fi
-  # - if [[ "$TRAVIS_OS_NAME" = "linux" ]]; then sudo apt-get install opera opera-beta opera-developer -y; fi
+  - '5'
+  - '6'
 
 install:
   - npm install

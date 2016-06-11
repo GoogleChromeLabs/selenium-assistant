@@ -17,16 +17,24 @@
 'use strict';
 
 const fs = require('fs');
+const sinon = require('sinon');
 const seleniumChrome = require('selenium-webdriver/chrome');
 const seleniumFirefox = require('selenium-webdriver/firefox');
 const seleniumOpera = require('selenium-webdriver/opera');
 
 const releases = ['stable', 'beta', 'unstable'];
+const sinonStubs = [];
 
 function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
   const DriverBrowser = require(wdBrowserPath);
 
   describe(name, function() {
+    afterEach(function() {
+      while (sinonStubs.length > 0) {
+        const stub = sinonStubs.pop();
+        stub.restore();
+      }
+    });
 
     it('should be able to build new DriverBrowser', function() {
       releases.forEach(release => {
@@ -64,7 +72,11 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
       releases.forEach(release => {
         const browser = new DriverBrowser(release);
         const rawString = browser.getRawVersionString();
-        (typeof rawString).should.equal('string');
+        if (rawString) {
+          (typeof rawString).should.equal('string');
+        } else {
+          (rawString === null).should.equal(true);
+        }
       });
     });
 
@@ -77,6 +89,34 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
         } else {
           versionNumber.should.equal(false);
         }
+      });
+    });
+
+    it('should get null for raw version output if no executable found', function() {
+      releases.forEach(release => {
+        const browser = new DriverBrowser(release);
+        sinonStubs.push(
+          sinon.stub(browser, 'getExecutablePath', () => {
+            return null;
+          })
+        );
+
+        const rawString = browser.getRawVersionString();
+        (rawString === null).should.equal(true);
+      });
+    });
+
+    it('should get false for version number if no executable found', function() {
+      releases.forEach(release => {
+        const browser = new DriverBrowser(release);
+        sinonStubs.push(
+          sinon.stub(browser, 'getExecutablePath', () => {
+            return null;
+          })
+        );
+
+        const versionNumber = browser.getVersionNumber();
+        versionNumber.should.equal(false);
       });
     });
   });
