@@ -6,7 +6,7 @@
   "scripts": {
     "build-docs": "jsdoc -c ./jsdoc.conf",
     "lint": "eslint ./**/*.js",
-    "test": "npm run lint && istanbul cover _mocha"
+    "test": "npm run lint && istanbul cover _mocha --"
   },
   "repository": {
     "type": "git",
