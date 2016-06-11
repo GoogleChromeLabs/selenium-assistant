@@ -1,3 +1,5 @@
+[![Travis Build Status](https://travis-ci.org/GoogleChrome/selenium-assistant.svg?branch=master)](https://travis-ci.org/GoogleChrome/selenium-assistant) [![Dependency Status](https://david-dm.org/googlechrome/selenium-assistant.svg)](https://david-dm.org/googlechrome/selenium-assistant) [![devDependency Status](https://david-dm.org/googlechrome/selenium-assistant/dev-status.svg)](https://david-dm.org/googlechrome/selenium-assistant#info=devDependencies)
+
 # selenium-wrapper
 
 It can be a challenge to manage which browsers you can / can't run your tests against
