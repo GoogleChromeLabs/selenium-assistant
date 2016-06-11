@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GoogleChrome/selenium-wrapper.git"
+    "url": "git+https://github.com/GoogleChrome/selenium-assistant.git"
   },
   "keywords": [
     "selenium",
@@ -20,9 +20,9 @@
   "author": "Matt Gaunt",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/GoogleChrome/selenium-wrapper/issues"
+    "url": "https://github.com/GoogleChrome/selenium-assistant/issues"
   },
-  "homepage": "https://github.com/GoogleChrome/selenium-wrapper#readme",
+  "homepage": "https://github.com/GoogleChrome/selenium-assistant#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "coveralls": "^2.11.9",

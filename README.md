@@ -1,6 +1,6 @@
-[![Travis Build Status](https://travis-ci.org/GoogleChrome/selenium-assistant.svg?branch=master)](https://travis-ci.org/GoogleChrome/selenium-assistant) [![Dependency Status](https://david-dm.org/googlechrome/selenium-assistant.svg)](https://david-dm.org/googlechrome/selenium-assistant) [![devDependency Status](https://david-dm.org/googlechrome/selenium-assistant/dev-status.svg)](https://david-dm.org/googlechrome/selenium-assistant#info=devDependencies)
+[![Travis Build Status](https://travis-ci.org/GoogleChrome/selenium-assistant.svg?branch=master)](https://travis-ci.org/GoogleChrome/selenium-assistant) [![Coverage Status](https://coveralls.io/repos/github/GoogleChrome/selenium-assistant/badge.svg?branch=master)](https://coveralls.io/github/GoogleChrome/selenium-assistant?branch=master) [![Dependency Status](https://david-dm.org/googlechrome/selenium-assistant.svg)](https://david-dm.org/googlechrome/selenium-assistant) [![devDependency Status](https://david-dm.org/googlechrome/selenium-assistant/dev-status.svg)](https://david-dm.org/googlechrome/selenium-assistant#info=devDependencies)
 
-# selenium-wrapper
+# selenium-assistant
 
 It can be a challenge to manage which browsers you can / can't run your tests against
 as well as blocking those that have known issues.

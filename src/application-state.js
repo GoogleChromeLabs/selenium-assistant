@@ -67,7 +67,7 @@ class ApplicationState {
     }
 
     const folderName = process.platform === 'win32' ?
-      'selenium-wrapper-browsers' : '.selenium-wrapper-browsers';
+      'selenium-assistant' : '.selenium-assistant';
     return path.join(installLocation, folderName);
   }
 }
