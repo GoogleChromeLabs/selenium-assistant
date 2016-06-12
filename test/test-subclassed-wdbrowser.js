@@ -106,7 +106,7 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
       });
     });
 
-    it('should get false for version number if no executable found', function() {
+    it('should get -1 for version number if no executable found', function() {
       releases.forEach(release => {
         const browser = new DriverBrowser(release);
         sinonStubs.push(
@@ -116,7 +116,7 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
         );
 
         const versionNumber = browser.getVersionNumber();
-        versionNumber.should.equal(false);
+        versionNumber.should.equal(-1);
       });
     });
   });

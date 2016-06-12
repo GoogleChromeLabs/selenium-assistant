@@ -121,14 +121,14 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
   getVersionNumber() {
     const operaVersion = this.getRawVersionString();
     if (!operaVersion) {
-      return false;
+      return -1;
     }
 
     const regexMatch = operaVersion.match(/(\d+).\d+.\d+.\d+/);
     if (regexMatch === null) {
       console.warn('Unable to parse version number from Opera',
         this._executablePath);
-      return false;
+      return -1;
     }
 
     return parseInt(regexMatch[1], 10);

@@ -18,6 +18,7 @@
 
 const execSync = require('child_process').execSync;
 const fs = require('fs');
+const chalk = require('chalk');
 const webdriver = require('selenium-webdriver');
 
 /**
@@ -89,14 +90,21 @@ class WebDriverBrowser {
       return null;
     }
 
-    return execSync(`"${executablePath}" --version`)
-      .toString();
+    try {
+      return execSync(`"${executablePath}" --version`)
+        .toString();
+    } catch (err) {
+      console.warn(chalk.red('WARNING') + ': Unable to get a version string ' +
+        'for ' + this.getPrettyName());
+    }
+
+    return null;
   }
 
   /* eslint-disable valid-jsdoc */
   /**
    * <p>This method returns an integer if it can be determined from
-   * the browser executable.</p>
+   * the browser executable or -1 if the version is unknown.</p>
    *
    * <p>A scenario where it will be unable to produce a valid version
    * is if the browsers executable path can't be found.</p>

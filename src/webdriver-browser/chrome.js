@@ -51,16 +51,16 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
 
   _findInInstallDir() {
     let defaultDir = application.getInstallDirectory();
-    let chromeSubPath = 'chrome';
+    let chromeSubPath = 'chrome/google-chrome';
     if (this._release === 'beta') {
-      chromeSubPath = 'chrome-beta';
+      chromeSubPath = 'chrome-beta/google-chrome-beta';
     } else if (this._release === 'unstable') {
-      chromeSubPath = 'chrome-unstable';
+      chromeSubPath = 'chrome-unstable/google-chrome-unstable';
     }
 
     const expectedPath = path.join(
       defaultDir, 'chrome', this._release, 'opt/google/',
-      chromeSubPath, '/google-chrome');
+      chromeSubPath);
     try {
       // This will throw if it's not found
       fs.lstatSync(expectedPath);
@@ -116,14 +116,14 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
   getVersionNumber() {
     const chromeVersion = this.getRawVersionString();
     if (!chromeVersion) {
-      return false;
+      return -1;
     }
 
     const regexMatch = chromeVersion.match(/(\d+).\d+.\d+.\d+/);
     if (regexMatch === null) {
       console.warn('Unable to parse version number from Firefox',
         this._executablePath);
-      return false;
+      return -1;
     }
 
     return parseInt(regexMatch[1], 10);

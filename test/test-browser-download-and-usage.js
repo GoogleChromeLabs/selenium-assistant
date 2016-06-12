@@ -28,25 +28,38 @@ describe('Test Download and Usage of Browsers', function() {
   const browserIds = ['firefox', 'chrome', 'opera'];
   const testPath = './test/test-output';
 
+  let globalDriver = null;
+
   before(function() {
     this.timeout(180000);
 
-    return Promise.all([
-      seleniumAssistant.downloadFirefoxDriver()
-    ]);
+    seleniumAssistant.setBrowserInstallDir(testPath);
+    // return Promise.all([
+    //   seleniumAssistant.downloadFirefoxDriver()
+    // ]);
   });
 
   beforeEach(function() {
+    // Timeout is to account for slow closing of selenium web driver browser
+    this.timeout(4000);
+
     return Promise.all([
-      del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
-      del(testPath)
-    ]);
+      // del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
+      // del(testPath),
+      seleniumAssistant.killWebDriver(globalDriver)
+    ])
+    .then(() => {
+      globalDriver = null;
+    });
   });
 
   after(function() {
+    this.timeout(4000);
+
     return Promise.all([
       del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
-      del(testPath)
+      del(testPath),
+      seleniumAssistant.killWebDriver(globalDriver)
     ]);
   });
 
@@ -95,15 +108,16 @@ describe('Test Download and Usage of Browsers', function() {
           return selectedBrowser;
         })
         .then(selectedBrowser => {
+          console.log('');
+          console.log('');
+          console.log('');
           seleniumAssistant.printAvailableBrowserInfo();
-          const driver = selectedBrowser.getSeleniumDriver();
+
+          globalDriver = selectedBrowser.getSeleniumDriver();
           return new Promise((resolve, reject) => {
-            driver.get('https://google.com')
+            globalDriver.get('https://google.com')
             .then(() => {
-              return driver.wait(selenium.until.titleIs('Google'), 1000);
-            })
-            .then(() => {
-              return seleniumAssistant.killWebDriver(driver);
+              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
             })
             .then(resolve)
             .thenCatch(err => {
@@ -138,15 +152,16 @@ describe('Test Download and Usage of Browsers', function() {
           return selectedBrowser;
         })
         .then(selectedBrowser => {
+          console.log('');
+          console.log('');
+          console.log('');
           seleniumAssistant.printAvailableBrowserInfo();
-          const driver = selectedBrowser.getSeleniumDriver();
+
+          globalDriver = selectedBrowser.getSeleniumDriver();
           return new Promise((resolve, reject) => {
-            driver.get('https://google.com')
+            globalDriver.get('https://google.com')
             .then(() => {
-              return driver.wait(selenium.until.titleIs('Google'), 1000);
-            })
-            .then(() => {
-              return seleniumAssistant.killWebDriver(driver);
+              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
             })
             .then(resolve)
             .thenCatch(err => {
