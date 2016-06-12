@@ -59,7 +59,6 @@ describe('Test Download and Usage of Browsers', function() {
 
     return Promise.all([
       del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
-      del(testPath),
       seleniumAssistant.killWebDriver(globalDriver)
     ])
     .then(() => {
@@ -72,7 +71,6 @@ describe('Test Download and Usage of Browsers', function() {
 
     return Promise.all([
       del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
-      del(testPath),
       seleniumAssistant.killWebDriver(globalDriver)
     ]);
   });
