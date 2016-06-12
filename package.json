@@ -1,12 +1,17 @@
 {
   "name": "selenium-assistant",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
+    "publish-release": "./node_modules/sw-testing-helpers/project/publish-release.sh",
+    "build": "echo 'Skip Build Step.'",
+    "bundle": "./project/create-release-bundle.sh",
+    "publish-docs": "./node_modules/sw-testing-helpers/project/publish-docs.sh master",
     "build-docs": "jsdoc -c ./jsdoc.conf",
     "lint": "eslint ./**/*.js",
-    "test": "npm run lint && istanbul cover _mocha",
+    "test": "npm run lint && mocha",
+    "istanbul": "npm run lint && istanbul cover _mocha",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -31,7 +36,8 @@
     "istanbul": "^0.4.3",
     "jsdoc": "^3.4.0",
     "mocha": "^2.5.3",
-    "sinon": "^1.17.4"
+    "sinon": "^1.17.4",
+    "sw-testing-helpers": "^0.1.1"
   },
   "dependencies": {
     "chalk": "^1.1.3",
