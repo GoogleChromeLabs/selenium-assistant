@@ -34,9 +34,10 @@ describe('Test Download and Usage of Browsers', function() {
     this.timeout(180000);
 
     seleniumAssistant.setBrowserInstallDir(testPath);
-    // return Promise.all([
-    //   seleniumAssistant.downloadFirefoxDriver()
-    // ]);
+
+    return Promise.all([
+      seleniumAssistant.downloadFirefoxDriver()
+    ]);
   });
 
   beforeEach(function() {
@@ -44,8 +45,8 @@ describe('Test Download and Usage of Browsers', function() {
     this.timeout(4000);
 
     return Promise.all([
-      // del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
-      // del(testPath),
+      del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
+      del(testPath),
       seleniumAssistant.killWebDriver(globalDriver)
     ])
     .then(() => {
