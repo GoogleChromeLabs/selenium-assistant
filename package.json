@@ -7,7 +7,7 @@
     "publish-release": "./node_modules/sw-testing-helpers/project/publish-release.sh",
     "build": "echo 'Skip Build Step.'",
     "bundle": "./project/create-release-bundle.sh",
-    "publish-docs": "./node_modules/sw-testing-helpers/project/publish-docs.sh master",
+    "publish-docs": "./node_modules/sw-testing-helpers/project/publish-docs.sh",
     "build-docs": "jsdoc -c ./jsdoc.conf",
     "lint": "eslint ./**/*.js",
     "test": "npm run lint && mocha",

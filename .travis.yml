@@ -25,6 +25,6 @@ before_script:
 script:
   - npm run test
   - npm run coveralls
-  #- if [[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_OS_NAME" = "linux" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then
-  #    ./project/publish-docs.sh master;
-  #  fi
+  - if [[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_OS_NAME" = "linux" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then
+      npm run publish-docs master;
+    fi
