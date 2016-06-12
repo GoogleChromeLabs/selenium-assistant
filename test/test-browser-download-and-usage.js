@@ -18,6 +18,7 @@
 
 const del = require('del');
 const path = require('path');
+const fs = require('fs');
 const selenium = require('selenium-webdriver');
 
 require('chai').should();
@@ -35,9 +36,21 @@ describe('Test Download and Usage of Browsers', function() {
 
     seleniumAssistant.setBrowserInstallDir(testPath);
 
+    console.log('');
+    console.log('');
+    console.log('Current Directory: ', process.cwd());
+    console.log('');
+    console.log('');
+
     return Promise.all([
       seleniumAssistant.downloadFirefoxDriver()
-    ]);
+    ])
+    .then(() => {
+      const stats = fs.lstatSync('./wires');
+      console.log(stats);
+      console.log('');
+      console.log('');
+    });
   });
 
   beforeEach(function() {
