@@ -1,0 +1,52 @@
+{
+  "name": "selenium-assistant",
+  "version": "0.0.4",
+  "description": "A node module to help with use of selenium driver",
+  "main": "src/index.js",
+  "scripts": {
+    "publish-release": "./node_modules/sw-testing-helpers/project/publish-release.sh",
+    "build": "echo 'Skip Build Step.'",
+    "bundle": "./project/create-release-bundle.sh",
+    "publish-docs": "./node_modules/sw-testing-helpers/project/publish-docs.sh master",
+    "build-docs": "jsdoc -c ./jsdoc.conf",
+    "lint": "eslint ./**/*.js",
+    "test": "npm run lint && mocha",
+    "istanbul": "npm run lint && istanbul cover _mocha",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChrome/selenium-assistant.git"
+  },
+  "keywords": [
+    "selenium",
+    "webdriver"
+  ],
+  "author": "Matt Gaunt",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChrome/selenium-assistant/issues"
+  },
+  "homepage": "https://github.com/GoogleChrome/selenium-assistant#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
+    "eslint": "^2.11.1",
+    "eslint-config-google": "^0.5.0",
+    "istanbul": "^0.4.3",
+    "jsdoc": "^3.4.0",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.4",
+    "sw-testing-helpers": "^0.1.1"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "chromedriver": "^2.21.2",
+    "del": "^2.2.0",
+    "mkdirp": "^0.5.1",
+    "operadriver": "^0.2.2",
+    "request": "^2.72.0",
+    "selenium-webdriver": "^2.53.2",
+    "which": "^1.2.10"
+  }
+}
