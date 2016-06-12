@@ -78,7 +78,7 @@ describe('Test Download and Usage of Browsers', function() {
   browserIds.forEach(browserId => {
     releases.forEach(release => {
       it(`should download ${browserId} - ${release} if needed and return an updated executable path`, function() {
-        this.timeout(60000);
+        this.timeout(120000);
 
         const globallyAvailableBrowsers = seleniumAssistant.getAvailableBrowsers();
         let originalPath = null;
@@ -140,7 +140,7 @@ describe('Test Download and Usage of Browsers', function() {
       });
 
       it(`should force download ${browserId} - ${release} and return the global executable path`, function() {
-        this.timeout(60000);
+        this.timeout(120000);
 
         return seleniumAssistant.downloadBrowser(browserId, release, {force: true})
         .then(() => {
