@@ -10,7 +10,7 @@ in the current environment the tests are run on and adding a set of simple
 methods to check for versions and print useful info for logs.
 
 <p>
-  <a href="#">View Docs Here</a>
+  <a href="http://googlechrome.github.io/selenium-assistant/">View Docs Here</a>
 </p>
 
 # Contributing
