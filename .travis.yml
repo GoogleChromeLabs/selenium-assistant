@@ -23,7 +23,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start || echo \"Unable to start virtual display.\""
 
 script:
-  - npm run test
+  - npm run istanbul
   - npm run coveralls
   - if [[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_OS_NAME" = "linux" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then
       npm run publish-docs master;
