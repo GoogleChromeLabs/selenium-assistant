@@ -19,6 +19,7 @@
 const ChromeWebDriverBrowser = require('./webdriver-browser/chrome');
 const FirefoxWebDriverBrowser = require('./webdriver-browser/firefox');
 const OperaWebDriverBrowser = require('./webdriver-browser/opera');
+const SafariWebDriverBrowser = require('./webdriver-browser/safari');
 
 /**
  * This class is a simple helper to define the possible permutations of
@@ -50,7 +51,10 @@ class BrowserManager {
 
       this.createWebDriverBrowser('opera', 'stable'),
       this.createWebDriverBrowser('opera', 'beta'),
-      this.createWebDriverBrowser('opera', 'unstable')
+      this.createWebDriverBrowser('opera', 'unstable'),
+
+      this.createWebDriverBrowser('safari', 'stable'),
+      this.createWebDriverBrowser('safari', 'beta')
     ];
   }
 
@@ -74,6 +78,8 @@ class BrowserManager {
         return new FirefoxWebDriverBrowser(release);
       case 'opera':
         return new OperaWebDriverBrowser(release);
+      case 'safari':
+        return new SafariWebDriverBrowser(release);
       default:
         throw new Error('Unknown web driver browser request: ', browserId);
     }

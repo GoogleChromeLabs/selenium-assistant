@@ -17,68 +17,55 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
-const which = require('which');
-const seleniumOpera = require('selenium-webdriver/opera');
+const chalk = require('chalk');
+const seleniumSafari = require('selenium-webdriver/safari');
 const WebDriverBrowser = require('./web-driver-browser');
-const application = require('../application-state.js');
 
 /**
- * <p>Handles the prettyName and executable path for Opera browser.</p>
+ * <p>Handles the prettyName and executable path for Safari browser.</p>
  *
  * @private
  * @extends WebDriverBrowser
  */
-class OperaWebDriverBrowser extends WebDriverBrowser {
+class SafariWebDriverBrowser extends WebDriverBrowser {
   /**
-   * Create an Opera representation of a {@link WebDriverBrowser}
+   * Create an Safari representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
    * @param  {String} release The channel of Opera you want to get, either
    *                          'stable', 'beta' or 'unstable'
    */
   constructor(release) {
-    let prettyName = 'Opera';
+    let prettyName = 'Safari';
 
     if (release === 'stable') {
       prettyName += ' Stable';
     } else if (release === 'beta') {
-      prettyName += ' Beta';
+      prettyName += ' Technology Preview';
     } else if (release === 'unstable') {
-      prettyName += ' Developer';
+      throw new Error('Only stable and beta versions available ' +
+      'for this browser');
     }
 
     super(
       prettyName,
       release,
-      'opera',
-      new seleniumOpera.Options()
+      'safari',
+      new seleniumSafari.Options()
     );
   }
 
   _findInInstallDir() {
-    let defaultDir = application.getInstallDirectory();
+    /** let defaultDir = application.getInstallDirectory();
     let expectedPath;
-    if (process.platform === 'linux') {
-      let operaBinary = 'opera';
-      if (this._release === 'beta') {
-        operaBinary = 'opera-beta';
-      } else if (this._release === 'unstable') {
-        operaBinary = 'opera-developer';
-      }
+    if (process.platform === 'darwin') {
 
-      expectedPath = path.join(
-        defaultDir, 'opera', this._release, 'usr/bin', operaBinary);
-    } else if (process.platform === 'darwin') {
-      // Can't control where Opera is installed due to installer.
-      // Just use global path
-      return null;
     }
 
     try {
       // This will throw if it's not found
       fs.lstatSync(expectedPath);
       return expectedPath;
-    } catch (error) {}
+    } catch (error) {}**/
     return null;
   }
 
@@ -96,27 +83,47 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
     try {
       if (this._release === 'stable') {
         if (process.platform === 'darwin') {
-          return '/Applications/Opera.app/' +
-            'Contents/MacOS/Opera';
-        } else if (process.platform === 'linux') {
-          return which.sync('opera');
+          return '/Applications/Safari.app/' +
+            'Contents/MacOS/Safari';
         }
       } else if (this._release === 'beta') {
         if (process.platform === 'darwin') {
-          return '/Applications/Opera Beta.app/' +
-            'Contents/MacOS/Opera';
-        } else if (process.platform === 'linux') {
-          return which.sync('opera-beta');
-        }
-      } else if (this._release === 'unstable') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Opera Developer.app/' +
-            'Contents/MacOS/Opera';
-        } else if (process.platform === 'linux') {
-          return which.sync('opera-developer');
+          return '/Applications/Safari Technology Preview.app/' +
+            'Contents/MacOS/Safari Technology Preview'
         }
       }
     } catch (err) {}
+
+    return null;
+  }
+
+  getRawVersionString() {
+    const executablePath = this.getExecutablePath();
+    if (!executablePath) {
+      return null;
+    }
+
+    let versionListPath;
+    if (this._release === 'stable') {
+      versionListPath = '/Applications/Safari.app/Contents/version.plist';
+    } else if (this._release === 'beta') {
+      versionListPath = '/Applications/Safari Technology Preview.app/Contents/version.plist';
+    }
+    try {
+      const versionDoc = fs.readFileSync(versionList).toString();
+      /* eslint-disable no-useless-escape */
+      const results = new RegExp(
+        '<key>CFBundleShortVersionString</key>' +
+        '[\\s]+<string>([\\d]+.[\\d]+.[\\d]+)</string>', 'g')
+      .exec(versionDoc);
+      /* eslint-enable no-useless-escape */
+      if (results) {
+        return results[1];
+      }
+    } catch (err) {
+      console.warn(chalk.red('WARNING') + ': Unable to get a version string ' +
+        'for ' + this.getPrettyName());
+    }
 
     return null;
   }
@@ -127,12 +134,12 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
    * @return {Integer} The major version number of this browser
    */
   getVersionNumber() {
-    const operaVersion = this.getRawVersionString();
-    if (!operaVersion) {
+    const safariVersion = this.getRawVersionString();
+    if (!safariVersion) {
       return -1;
     }
 
-    const regexMatch = operaVersion.match(/(\d+).\d+.\d+.\d+/);
+    const regexMatch = safariVersion.match(/(\d+).\d+.\d+/);
     if (regexMatch === null) {
       console.warn('Unable to parse version number from Opera',
         this._executablePath);
@@ -141,6 +148,10 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
 
     return parseInt(regexMatch[1], 10);
   }
+
+  static getAvailableReleases() {
+    return ['stable', 'beta'];
+  }
 }
 
-module.exports = OperaWebDriverBrowser;
+module.exports = SafariWebDriverBrowser;
