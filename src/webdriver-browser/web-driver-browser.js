@@ -55,7 +55,8 @@ class WebDriverBrowser {
     if (
       seleniumBrowserId !== 'chrome' &&
       seleniumBrowserId !== 'firefox' &&
-      seleniumBrowserId !== 'opera'
+      seleniumBrowserId !== 'opera' &&
+      seleniumBrowserId !== 'safari'
     ) {
       throw new Error('Unexpected browser ID given: ', seleniumBrowserId);
     }
@@ -209,6 +210,9 @@ class WebDriverBrowser {
       seleniumOptions.setOperaBinaryPath(this.getExecutablePath());
     } else if (seleniumOptions.setBinary) {
       seleniumOptions.setBinary(this.getExecutablePath());
+    } else if (seleniumOptions.setCleanSession) {
+      // This is a safari options, there is no way we can define
+      // an executable path :(
     } else {
       throw new Error('Unknown selenium options object');
     }
@@ -222,6 +226,10 @@ class WebDriverBrowser {
       .setSafariOptions(seleniumOptions)
       .setEdgeOptions(seleniumOptions)
       .build();
+  }
+
+  static getAvailableReleases() {
+    return ['stable', 'beta', 'unstable'];
   }
 }
 

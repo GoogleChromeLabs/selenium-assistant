@@ -38,7 +38,7 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     } else if (release === 'beta') {
       prettyName += ' Beta';
     } else if (release === 'unstable') {
-      prettyName += ' Dev / Canary';
+      prettyName += ' Dev';
     }
 
     super(
@@ -51,21 +51,38 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
 
   _findInInstallDir() {
     let defaultDir = application.getInstallDirectory();
-    let chromeSubPath = 'chrome/google-chrome';
-    if (this._release === 'beta') {
-      chromeSubPath = 'chrome-beta/google-chrome-beta';
-    } else if (this._release === 'unstable') {
-      chromeSubPath = 'chrome-unstable/google-chrome-unstable';
+    let expectedPath;
+    if (process.platform === 'linux') {
+      let chromeSubPath = 'chrome/google-chrome';
+      if (this._release === 'beta') {
+        chromeSubPath = 'chrome-beta/google-chrome-beta';
+      } else if (this._release === 'unstable') {
+        chromeSubPath = 'chrome-unstable/google-chrome-unstable';
+      }
+
+      expectedPath = path.join(
+        defaultDir, 'chrome', this._release, 'opt/google/',
+        chromeSubPath);
+    } else if (process.platform === 'darwin') {
+      let chromeAppName = 'Google Chrome';
+      if (this._release === 'beta') {
+        chromeAppName = 'Google Chrome';
+      } else if (this._release === 'unstable') {
+        chromeAppName = 'Google Chrome';
+      }
+
+      expectedPath = path.join(
+        defaultDir, 'chrome', this._release, chromeAppName + '.app',
+        'Contents/MacOS/' + chromeAppName
+      );
     }
 
-    const expectedPath = path.join(
-      defaultDir, 'chrome', this._release, 'opt/google/',
-      chromeSubPath);
     try {
       // This will throw if it's not found
       fs.lstatSync(expectedPath);
       return expectedPath;
     } catch (error) {}
+
     return null;
   }
 
@@ -81,7 +98,39 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     }
 
     try {
-      if (this._release === 'stable') {
+      switch (process.platform) {
+        case 'darwin':
+          // Chrome on OS X
+          switch (this._release) {
+            case 'stable':
+              return '/Applications/Google Chrome.app/' +
+                'Contents/MacOS/Google Chrome';
+            case 'beta':
+              return '/Applications/Google Chrome Beta.app/' +
+                'Contents/MacOS/Google Chrome Beta';
+            case 'unstable':
+              return '/Applications/Google Chrome Dev.app/' +
+                'Contents/MacOS/Google Chrome Dev';
+            default:
+              throw new Error('Unknown release: ' + this._release);
+          }
+        case 'linux':
+          // Chrome on linux
+          switch (this._release) {
+            case 'stable':
+              return which.sync('google-chrome');
+            case 'beta':
+              return which.sync('google-chrome-beta');
+            case 'unstable':
+              return which.sync('google-chrome-unstable');
+            default:
+              throw new Error('Unknown release: ' + this._release);
+          }
+        default:
+          throw new Error('Sorry, this platform isn\'t supported');
+      }
+
+      /** if (this._release === 'stable') {
         if (process.platform === 'darwin') {
           return '/Applications/Google Chrome.app/' +
             'Contents/MacOS/Google Chrome';
@@ -102,7 +151,7 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
         } else if (process.platform === 'linux') {
           return which.sync('google-chrome-unstable');
         }
-      }
+      }**/
     } catch (err) {}
 
     return null;

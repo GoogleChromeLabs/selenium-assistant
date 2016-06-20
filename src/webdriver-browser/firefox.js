@@ -66,13 +66,36 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
 
   _findInInstallDir() {
     let defaultDir = application.getInstallDirectory();
-    const expectedPath = path.join(
-      defaultDir, 'firefox', this._release, 'firefox');
-    try {
-      // This will throw if it's not found
-      fs.lstatSync(expectedPath);
-      return expectedPath;
-    } catch (error) {}
+    if (process.platform === 'linux') {
+      const expectedPath = path.join(
+        defaultDir, 'firefox', this._release, 'firefox');
+
+      try {
+        // This will throw if it's not found
+        fs.lstatSync(expectedPath);
+        return expectedPath;
+      } catch (error) {}
+    } else if (process.platform === 'darwin') {
+      // Find OS X expected path
+      let firefoxAppName;
+      if (this._release === 'unstable') {
+        firefoxAppName = 'FirefoxNightly.app';
+      } else {
+        firefoxAppName = 'Firefox.app';
+      }
+
+      const expectedPath = path.join(
+        defaultDir, 'firefox', this._release, firefoxAppName,
+        'Contents/MacOS/firefox'
+      );
+
+      try {
+        // This will throw if it's not found
+        fs.lstatSync(expectedPath);
+        return expectedPath;
+      } catch (error) {}
+    }
+
     return null;
   }
 
@@ -88,24 +111,43 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
     }
 
     try {
-      if (this._release === 'stable') {
-        if (process.env.FF_STABLE_PATH) {
-          return process.env.FF_STABLE_PATH;
-        }
+      switch (process.platform) {
+        case 'darwin':
+          // Firefox Beta on OS X overrides Firefox stable, so realistically
+          // this location could return ff stable as beta, but at least it will
+          // only be returned once.
+          if (this._release === 'stable') {
+            return '/Applications/Firefox.app/Contents/MacOS/firefox';
+          } else if (this._release === 'unstable') {
+            return '/Applications/FirefoxNightly.app/Contents/MacOS/firefox';
+          }
+          break;
+        case 'linux':
+          // Stable firefox on Linux is the only known location we can find
+          // otherwise it's jsut a .tar.gz that users have to put anywhere
+          if (this._release === 'stable') {
+            return which.sync('firefox');
+          }
+          break;
+        default:
+          throw new Error('Sorry, this platform isn\'t supported');
+      }
+    } catch (err) {}
 
+    /** try {
+      if (this._release === 'stable') {
         if (process.platform === 'darwin') {
           return '/Applications/Firefox.app/Contents/MacOS/firefox';
         } else if (process.platform === 'linux') {
           return which.sync('firefox');
         }
       } else if (this._release === 'beta') {
-
       } else if (this._release === 'unstable') {
         if (process.platform === 'darwin') {
           return '/Applications/FirefoxNightly.app/Contents/MacOS/firefox';
         }
       }
-    } catch (err) {}
+    } catch (err) {}**/
 
     return null;
   }

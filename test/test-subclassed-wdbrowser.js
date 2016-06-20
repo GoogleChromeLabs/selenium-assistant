@@ -21,14 +21,21 @@ const sinon = require('sinon');
 const seleniumChrome = require('selenium-webdriver/chrome');
 const seleniumFirefox = require('selenium-webdriver/firefox');
 const seleniumOpera = require('selenium-webdriver/opera');
+const seleniumSafari = require('selenium-webdriver/safari');
 
-const releases = ['stable', 'beta', 'unstable'];
+require('chai').should();
+
 const sinonStubs = [];
 
 function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
   const DriverBrowser = require(wdBrowserPath);
+  let releases;
 
   describe(name, function() {
+    before(function() {
+      releases = DriverBrowser.getAvailableReleases();
+    });
+
     afterEach(function() {
       while (sinonStubs.length > 0) {
         const stub = sinonStubs.pop();
@@ -142,6 +149,10 @@ webdriverFiles.forEach(webdriverFile => {
     case 'opera.js':
       prettyNameStart = 'Opera ';
       seleniumBrowser = seleniumOpera;
+      break;
+    case 'safari.js':
+      prettyNameStart = 'Safari ';
+      seleniumBrowser = seleniumSafari;
       break;
     default:
       throw new Error('Unable to find options for: ', webdriverFile);
