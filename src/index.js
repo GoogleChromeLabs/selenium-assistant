@@ -97,6 +97,21 @@ class SeleniumAssistant {
   }
 
   /**
+   * If you want a specific browser you can use to retrieve although
+   * you should use {@link WebDriverBrowser#isValid} to check if the
+   * browser is available in the current environment.
+   *
+   * @param  {String} browserId The selenium id of the browser you want.
+   * @param  {String} release   The release of the browser you want. Either
+   *                            'stable', 'beta' or 'unstable.'
+   * @return {WebDriverBrowser} The WebDriverBrowser instance that represents
+   *                            your request.
+   */
+  getBrowser(browserId, release) {
+    return browserManager.createWebDriverBrowser(browserId, release);
+  }
+
+  /**
    * <p>This method returns a list of discovered browsers in the current
    * environment.</p>
    *

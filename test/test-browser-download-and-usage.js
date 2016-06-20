@@ -50,12 +50,6 @@ describe('Test Download and Usage of Browsers', function() {
 
     seleniumAssistant.setBrowserInstallDir(testPath);
 
-    console.log('');
-    console.log('');
-    console.log('Current Directory: ', process.cwd());
-    console.log('');
-    console.log('');
-
     return Promise.all([
       seleniumAssistant.downloadFirefoxDriver()
       .catch(err => {
@@ -173,18 +167,23 @@ describe('Test Download and Usage of Browsers', function() {
         .then(() => {
           console.log('');
           console.log('');
-          console.log('');
+          console.log('After Possible Download');
           seleniumAssistant.printAvailableBrowserInfo();
 
-          globalDriver = specificBrowser.getSeleniumDriver();
-          return new Promise((resolve, reject) => {
-            globalDriver.get('https://google.com')
-            .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
-            })
-            .then(resolve)
-            .thenCatch(err => {
-              reject(err);
+          return specificBrowser.getSeleniumDriver()
+          .then(driver => {
+            globalDriver = driver;
+          })
+          .then(() => {
+            return new Promise((resolve, reject) => {
+              globalDriver.get('https://google.com')
+              .then(() => {
+                return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+              })
+              .then(resolve)
+              .thenCatch(err => {
+                reject(err);
+              });
             });
           });
         });
@@ -210,18 +209,23 @@ describe('Test Download and Usage of Browsers', function() {
         .then(() => {
           console.log('');
           console.log('');
-          console.log('');
+          console.log('After Forced Download');
           seleniumAssistant.printAvailableBrowserInfo();
 
-          globalDriver = specificBrowser.getSeleniumDriver();
-          return new Promise((resolve, reject) => {
-            globalDriver.get('https://google.com')
-            .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
-            })
-            .then(resolve)
-            .thenCatch(err => {
-              reject(err);
+          return specificBrowser.getSeleniumDriver()
+          .then(driver => {
+            globalDriver = driver;
+          })
+          .then(() => {
+            return new Promise((resolve, reject) => {
+              globalDriver.get('https://google.com')
+              .then(() => {
+                return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+              })
+              .then(resolve)
+              .thenCatch(err => {
+                reject(err);
+              });
             });
           });
         });
