@@ -195,6 +195,28 @@ describe('SeleniumAssistant', function() {
     return killPromise;
   });
 
+  it('should resolve when a driver with quit method that never resolves is injected', function() {
+    // Driver quit waits up to 4 seconds + additional setup time for driver to completely finish
+    this.timeout(5000);
+
+    const killPromise = seleniumAssistant.killWebDriver({
+      quit: () => {
+        var fakePromise = {
+          then: () => {
+            return fakePromise;
+          },
+          thenCatch: () => {
+            return fakePromise;
+          }
+        };
+
+        return fakePromise;
+      }
+    });
+    (killPromise instanceof Promise).should.equal(true);
+    return killPromise;
+  });
+
   it('should return a default value for install dir', function() {
     const directory = seleniumAssistant.getBrowserInstallDir();
     (typeof directory).should.equal('string');
