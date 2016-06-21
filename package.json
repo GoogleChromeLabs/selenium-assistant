@@ -32,7 +32,7 @@
     "chai": "^3.5.0",
     "coveralls": "^2.11.9",
     "eslint": "^2.11.1",
-    "eslint-config-google": "^0.5.0",
+    "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.3",
     "jsdoc": "^3.4.0",
     "mocha": "^2.5.3",
