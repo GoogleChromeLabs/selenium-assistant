@@ -129,29 +129,6 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
         default:
           throw new Error('Sorry, this platform isn\'t supported');
       }
-
-      /** if (this._release === 'stable') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Google Chrome.app/' +
-            'Contents/MacOS/Google Chrome';
-        } else if (process.platform === 'linux') {
-          return which.sync('google-chrome');
-        }
-      } else if (this._release === 'beta') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Google Chrome Beta.app/' +
-            'Contents/MacOS/Google Chrome Beta';
-        } else if (process.platform === 'linux') {
-          return which.sync('google-chrome-beta');
-        }
-      } else if (this._release === 'unstable') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Google Chrome Canary.app/' +
-            'Contents/MacOS/Google Chrome Canary';
-        } else if (process.platform === 'linux') {
-          return which.sync('google-chrome-unstable');
-        }
-      }**/
     } catch (err) {}
 
     return null;
@@ -176,6 +153,24 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     }
 
     return parseInt(regexMatch[1], 10);
+  }
+
+  /**
+   * <p>This method returns true if the instance can be found and can create a
+   * selenium driver that will launch the expected browser.</p>
+   *
+   * <p>A scenario where it will be unable to produce a valid selenium driver
+   * is if the browsers executable path can't be found.</p>
+   *
+   * @return {Boolean} True if a selenium driver can be produced
+   */
+  isValid() {
+    if (!super.isValid()) {
+      return false;
+    }
+
+    // selenium-webdriver fails for old versions of Chrome.
+    return this.getVersionNumber() > 46;
   }
 }
 

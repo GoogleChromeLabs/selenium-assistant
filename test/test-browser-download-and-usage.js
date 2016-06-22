@@ -141,12 +141,6 @@ describe('Test Download and Usage of Browsers', function() {
         return;
       }
 
-      if (specificBrowser.getSeleniumBrowserId() === 'chrome' &&
-        specificBrowser.getVersionNumber() < 46) {
-        console.log('An old version of Chrome, so skipping');
-        return;
-      }
-
       it(`should download ${browserId} - ${release} if needed and return an updated executable path`, function() {
         this.timeout(180000);
         let originalPath = specificBrowser.getExecutablePath();
