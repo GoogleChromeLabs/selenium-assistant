@@ -155,22 +155,9 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     return parseInt(regexMatch[1], 10);
   }
 
-  /**
-   * <p>This method returns true if the instance can be found and can create a
-   * selenium driver that will launch the expected browser.</p>
-   *
-   * <p>A scenario where it will be unable to produce a valid selenium driver
-   * is if the browsers executable path can't be found.</p>
-   *
-   * @return {Boolean} True if a selenium driver can be produced
-   */
-  isValid() {
-    if (!super.isValid()) {
-      return false;
-    }
-
-    // selenium-webdriver fails for old versions of Chrome.
-    return this.getVersionNumber() > 46;
+  _getMinSupportedVersion() {
+    // ChromeDriver only works on Chrome 47+
+    return 47;
   }
 }
 
