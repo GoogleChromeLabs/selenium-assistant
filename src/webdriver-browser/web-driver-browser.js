@@ -117,6 +117,10 @@ class WebDriverBrowser {
   }
   /* eslint-enable valid-jsdoc */
 
+  _getMinSupportedVersion() {
+    return false;
+  }
+
   /**
    * <p>This method returns true if the instance can be found and can create a
    * selenium driver that will launch the expected browser.</p>
@@ -135,6 +139,11 @@ class WebDriverBrowser {
     try {
       // This will throw if it's not found
       fs.lstatSync(executablePath);
+
+      const minVersion = this._getMinSupportedVersion();
+      if (minVersion) {
+        return this.getVersionNumber() >= minVersion;
+      }
 
       return true;
     } catch (error) {}
@@ -229,8 +238,7 @@ class WebDriverBrowser {
         .buildAsync()
         .then(resolve)
         .thenCatch(reject);
-    })
-
+    });
   }
 
   static getAvailableReleases() {
