@@ -35,11 +35,11 @@ class ApplicationState {
    * @param {String} newInstallDir The path to install new browsers in to.
    */
   setInstallDirectory(newInstallDir) {
-    if (!newInstallDir) {
+    if (newInstallDir) {
+      this._installDir = newInstallDir;
+    } else {
       this._installDir = this.getDefaultInstallLocation();
     }
-
-    this._installDir = newInstallDir;
   }
 
   /**

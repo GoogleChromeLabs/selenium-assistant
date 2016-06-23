@@ -126,12 +126,31 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
         versionNumber.should.equal(-1);
       });
     });
+
+    it('should get -1 for an unexpected raw version string', function() {
+      releases.forEach(release => {
+        const browser = new DriverBrowser(release);
+        sinonStubs.push(
+          sinon.stub(browser, 'getRawVersionString', () => {
+            return 'ImTotallyMadeUp 12345678.asdf.12345678.asdf';
+          })
+        );
+
+        const versionNumber = browser.getVersionNumber();
+        versionNumber.should.equal(-1);
+      });
+    });
   });
 }
 
 const webdriverFiles = fs.readdirSync('./src/webdriver-browser');
 webdriverFiles.forEach(webdriverFile => {
   if (webdriverFile === 'web-driver-browser.js') {
+    return;
+  }
+
+  // Skip until it's properly supported
+  if (webdriverFile === 'safari.js') {
     return;
   }
 

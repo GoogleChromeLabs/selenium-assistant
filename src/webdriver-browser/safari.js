@@ -55,17 +55,6 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
   }
 
   _findInInstallDir() {
-    /** let defaultDir = application.getInstallDirectory();
-    let expectedPath;
-    if (process.platform === 'darwin') {
-
-    }
-
-    try {
-      // This will throw if it's not found
-      fs.lstatSync(expectedPath);
-      return expectedPath;
-    } catch (error) {}**/
     return null;
   }
 
@@ -139,10 +128,10 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
       return -1;
     }
 
-    const regexMatch = safariVersion.match(/(\d+).\d+.\d+/);
+    const regexMatch = safariVersion.match(/(\d+)\.\d+\.\d+/);
     if (regexMatch === null) {
-      console.warn('Unable to parse version number from Opera',
-        this._executablePath);
+      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
+        'from Safari: ', this.getExecutablePath());
       return -1;
     }
 
