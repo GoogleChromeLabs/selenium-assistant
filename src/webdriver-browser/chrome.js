@@ -129,29 +129,6 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
         default:
           throw new Error('Sorry, this platform isn\'t supported');
       }
-
-      /** if (this._release === 'stable') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Google Chrome.app/' +
-            'Contents/MacOS/Google Chrome';
-        } else if (process.platform === 'linux') {
-          return which.sync('google-chrome');
-        }
-      } else if (this._release === 'beta') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Google Chrome Beta.app/' +
-            'Contents/MacOS/Google Chrome Beta';
-        } else if (process.platform === 'linux') {
-          return which.sync('google-chrome-beta');
-        }
-      } else if (this._release === 'unstable') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Google Chrome Canary.app/' +
-            'Contents/MacOS/Google Chrome Canary';
-        } else if (process.platform === 'linux') {
-          return which.sync('google-chrome-unstable');
-        }
-      }**/
     } catch (err) {}
 
     return null;
@@ -176,6 +153,11 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     }
 
     return parseInt(regexMatch[1], 10);
+  }
+
+  _getMinSupportedVersion() {
+    // ChromeDriver only works on Chrome 47+
+    return 47;
   }
 }
 

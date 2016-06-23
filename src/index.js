@@ -97,6 +97,21 @@ class SeleniumAssistant {
   }
 
   /**
+   * If you want a specific browser you can use to retrieve although
+   * you should use {@link WebDriverBrowser#isValid} to check if the
+   * browser is available in the current environment.
+   *
+   * @param  {String} browserId The selenium id of the browser you want.
+   * @param  {String} release   The release of the browser you want. Either
+   *                            'stable', 'beta' or 'unstable.'
+   * @return {WebDriverBrowser} The WebDriverBrowser instance that represents
+   *                            your request.
+   */
+  getBrowser(browserId, release) {
+    return browserManager.createWebDriverBrowser(browserId, release);
+  }
+
+  /**
    * <p>This method returns a list of discovered browsers in the current
    * environment.</p>
    *
@@ -215,21 +230,25 @@ class SeleniumAssistant {
       }
 
       if (!driver.quit || typeof driver.quit !== 'function') {
-        reject(new Error('Unable to find a quit method on the web driver.'));
+        return reject(new Error('Unable to find a quit method on the ' +
+          'web driver.'));
       }
 
-      // Suggested as fix to 'chrome not reachable'
-      // http://stackoverflow.com/questions/23014220/webdriver-randomly-produces-chrome-not-reachable-on-linux-tests
-      const timeoutGapCb = function() {
-        setTimeout(resolve, 2000);
-      };
-
-      driver.quit()
-      .then(() => {
-        timeoutGapCb();
+      // Sometimes calling driver.quit() on Chrome, doesn't work,
+      // so this timeout offers a semi-decent fallback
+      let quitTimeout;
+      new Promise(quitResolve => {
+        quitTimeout = setTimeout(quitResolve, 2000);
+        driver.quit()
+        .then(quitResolve)
+        .thenCatch(quitResolve);
       })
-      .thenCatch(() => {
-        timeoutGapCb();
+      .then(() => {
+        clearTimeout(quitTimeout);
+
+        // Suggested as fix to 'chrome not reachable'
+        // http://stackoverflow.com/questions/23014220/webdriver-randomly-produces-chrome-not-reachable-on-linux-tests
+        setTimeout(resolve, 2000);
       });
     });
   }

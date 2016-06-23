@@ -117,6 +117,10 @@ class WebDriverBrowser {
   }
   /* eslint-enable valid-jsdoc */
 
+  _getMinSupportedVersion() {
+    return false;
+  }
+
   /**
    * <p>This method returns true if the instance can be found and can create a
    * selenium driver that will launch the expected browser.</p>
@@ -135,6 +139,11 @@ class WebDriverBrowser {
     try {
       // This will throw if it's not found
       fs.lstatSync(executablePath);
+
+      const minVersion = this._getMinSupportedVersion();
+      if (minVersion) {
+        return this.getVersionNumber() >= minVersion;
+      }
 
       return true;
     } catch (error) {}
@@ -194,12 +203,12 @@ class WebDriverBrowser {
   }
 
   /**
-   * <p>This method creates a webdriver instance of this browser.</p>
+   * <p>This method resolves to a webdriver instance of this browser instance.</p>
    *
    * <p>For more info, see:
    * {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver Docs}</p>
    *
-   * @return {WebDriver} [description]
+   * @return {Promise<WebDriver>} [description]
    */
   getSeleniumDriver() {
     const seleniumOptions = this.getSeleniumOptions();
@@ -217,15 +226,19 @@ class WebDriverBrowser {
       throw new Error('Unknown selenium options object');
     }
 
-    return new webdriver
-      .Builder()
-      .forBrowser(this.getSeleniumBrowserId())
-      .setChromeOptions(seleniumOptions)
-      .setFirefoxOptions(seleniumOptions)
-      .setOperaOptions(seleniumOptions)
-      .setSafariOptions(seleniumOptions)
-      .setEdgeOptions(seleniumOptions)
-      .build();
+    return new Promise((resolve, reject) => {
+      new webdriver
+        .Builder()
+        .forBrowser(this.getSeleniumBrowserId())
+        .setChromeOptions(seleniumOptions)
+        .setFirefoxOptions(seleniumOptions)
+        .setOperaOptions(seleniumOptions)
+        .setSafariOptions(seleniumOptions)
+        .setEdgeOptions(seleniumOptions)
+        .buildAsync()
+        .then(resolve)
+        .thenCatch(reject);
+    });
   }
 
   static getAvailableReleases() {

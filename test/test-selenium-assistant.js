@@ -17,6 +17,7 @@
 'use strict';
 
 require('chai').should();
+const expect = require('chai').expect;
 const sinon = require('sinon');
 
 const sinonStubs = [];
@@ -45,6 +46,53 @@ describe('SeleniumAssistant', function() {
     browsers.forEach(browser => {
       browser.isValid().should.equal(true);
     });
+  });
+
+  it('should return a browser for valid browser and release names', function() {
+    const possibleBrowsers = ['chrome', 'firefox', 'opera'];
+    const releases = ['stable', 'beta', 'unstable'];
+    possibleBrowsers.forEach(browserId => {
+      releases.forEach(release => {
+        const browser = seleniumAssistant.getBrowser(browserId, release);
+        (typeof browser).should.equal('object');
+      });
+    });
+  });
+
+  it('should throw for an invalid browser name in getBrowser', function() {
+    expect(function() {
+      seleniumAssistant.getBrowser('made-up', 'stable');
+    }).to.throw();
+  });
+
+  it('should throw for an null browser name in getBrowser', function() {
+    expect(function() {
+      seleniumAssistant.getBrowser(null, 'stable');
+    }).to.throw();
+  });
+
+  it('should throw for an invalid release name in getBrowser', function() {
+    expect(function() {
+      seleniumAssistant.getBrowser('chrome', 'made-up');
+    }).to.throw();
+  });
+
+  it('should throw for an null release name in getBrowser', function() {
+    expect(function() {
+      seleniumAssistant.getBrowser('chrome', null);
+    }).to.throw();
+  });
+
+  it('should throw for no release name in getBrowser', function() {
+    expect(function() {
+      seleniumAssistant.getBrowser('chrome');
+    }).to.throw();
+  });
+
+  it('should throw for no arguments in getBrowser', function() {
+    expect(function() {
+      seleniumAssistant.getBrowser();
+    }).to.throw();
   });
 
   it('should be able to print available browsers', function() {
@@ -136,6 +184,28 @@ describe('SeleniumAssistant', function() {
           },
           thenCatch: cb => {
             cb();
+            return fakePromise;
+          }
+        };
+
+        return fakePromise;
+      }
+    });
+    (killPromise instanceof Promise).should.equal(true);
+    return killPromise;
+  });
+
+  it('should resolve when a driver with quit method that never resolves is injected', function() {
+    // Driver quit waits up to 4 seconds + additional setup time for driver to completely finish
+    this.timeout(5000);
+
+    const killPromise = seleniumAssistant.killWebDriver({
+      quit: () => {
+        var fakePromise = {
+          then: () => {
+            return fakePromise;
+          },
+          thenCatch: () => {
             return fakePromise;
           }
         };

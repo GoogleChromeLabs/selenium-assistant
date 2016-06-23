@@ -26,18 +26,22 @@ const selenium = require('selenium-webdriver');
 require('chai').should();
 
 describe('Test Download and Usage of Browsers', function() {
+  const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
   const seleniumAssistant = require('../src/index.js');
   const releases = ['stable', 'beta', 'unstable'];
-  const browserIds = ['chrome'];
+  const browserIds = ['chrome', 'firefox'];
 
-  if (process.platform !== 'darwin' || (process.env.RELEASE !== 'true' &&
-    process.env.TRAVIS !== 'true')) {
-    browserIds.push('firefox');
+  if (
+    // Opera on OS X requires user prompt
+    process.platform !== 'darwin' ||
+    // This isn't a release and it's not a travis run
+    (process.env.RELEASE !== 'true' && process.env.TRAVIS !== 'true')
+  ) {
     browserIds.push('opera');
   }
 
   if (process.platform === 'darwin') {
-    // TODO: Need to figure out how to test Safar with download etc.
+    // Need to figure out how to test Safar with download etc.
     // browserIds.push('safari');
   }
 
@@ -49,12 +53,6 @@ describe('Test Download and Usage of Browsers', function() {
     this.timeout(180000);
 
     seleniumAssistant.setBrowserInstallDir(testPath);
-
-    console.log('');
-    console.log('');
-    console.log('Current Directory: ', process.cwd());
-    console.log('');
-    console.log('');
 
     return Promise.all([
       seleniumAssistant.downloadFirefoxDriver()
@@ -132,30 +130,20 @@ describe('Test Download and Usage of Browsers', function() {
 
   browserIds.forEach(browserId => {
     releases.forEach(release => {
-      const globallyAvailableBrowsers = seleniumAssistant.getAvailableBrowsers();
-      let specificBrowser;
-      globallyAvailableBrowsers.forEach(browser => {
-        if (browser.getSeleniumBrowserId() !== browserId ||
-          browser.getReleaseName() !== release) {
-          return;
-        }
-
-        specificBrowser = browser;
-      });
-
+      let specificBrowser = seleniumAssistant.getBrowser(browserId, release);
       if (!specificBrowser) {
-        return;
-      }
-
-      if (specificBrowser.getSeleniumBrowserId() === 'chrome' &&
-        specificBrowser.getVersionNumber() < 46) {
-        console.log('An old version of Chrome, so skipping');
+        console.warn(chalk.red('WARNING:') + ' Unable to find ' +
+          browserId + ' ' + release);
         return;
       }
 
       it(`should download ${browserId} - ${release} if needed and return an updated executable path`, function() {
-        this.timeout(180000);
-        let originalPath = specificBrowser.getExecutablePath();
+        this.timeout(DOWNLOAD_TIMEOUT);
+
+        let originalPath = null;
+        if (specificBrowser.isValid()) {
+          originalPath = specificBrowser.getExecutablePath();
+        }
         return seleniumAssistant.downloadBrowser(browserId, release)
         .then(() => {
           let afterDownloadPath = specificBrowser.getExecutablePath();
@@ -173,25 +161,30 @@ describe('Test Download and Usage of Browsers', function() {
         .then(() => {
           console.log('');
           console.log('');
-          console.log('');
+          console.log('After Possible Download');
           seleniumAssistant.printAvailableBrowserInfo();
 
-          globalDriver = specificBrowser.getSeleniumDriver();
-          return new Promise((resolve, reject) => {
-            globalDriver.get('https://google.com')
-            .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
-            })
-            .then(resolve)
-            .thenCatch(err => {
-              reject(err);
+          return specificBrowser.getSeleniumDriver()
+          .then(driver => {
+            globalDriver = driver;
+          })
+          .then(() => {
+            return new Promise((resolve, reject) => {
+              globalDriver.get('https://google.com')
+              .then(() => {
+                return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+              })
+              .then(resolve)
+              .thenCatch(err => {
+                reject(err);
+              });
             });
           });
         });
       });
 
       it(`should force download ${browserId} - ${release} and return the global executable path`, function() {
-        this.timeout(180000);
+        this.timeout(DOWNLOAD_TIMEOUT);
 
         return seleniumAssistant.downloadBrowser(browserId, release, {force: true})
         .then(() => {
@@ -210,18 +203,23 @@ describe('Test Download and Usage of Browsers', function() {
         .then(() => {
           console.log('');
           console.log('');
-          console.log('');
+          console.log('After Forced Download');
           seleniumAssistant.printAvailableBrowserInfo();
 
-          globalDriver = specificBrowser.getSeleniumDriver();
-          return new Promise((resolve, reject) => {
-            globalDriver.get('https://google.com')
-            .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
-            })
-            .then(resolve)
-            .thenCatch(err => {
-              reject(err);
+          return specificBrowser.getSeleniumDriver()
+          .then(driver => {
+            globalDriver = driver;
+          })
+          .then(() => {
+            return new Promise((resolve, reject) => {
+              globalDriver.get('https://google.com')
+              .then(() => {
+                return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+              })
+              .then(resolve)
+              .thenCatch(err => {
+                reject(err);
+              });
             });
           });
         });
