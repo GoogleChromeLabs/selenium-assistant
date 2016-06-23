@@ -11,6 +11,9 @@ node_js:
   - '4'
   - '5'
   - '6'
+env:
+  global:
+    - COVERALLS_PARALLEL=true
 
 notifications:
   webhooks: https://coveralls.io/webhook?repo_token=COVERALLS_REPO_TOKEN
