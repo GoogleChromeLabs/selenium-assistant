@@ -172,6 +172,11 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
 
     return parseInt(regexMatch[1], 10);
   }
+
+  _getMinSupportedVersion() {
+    // Firefox Marionette only works on Firefox 47+
+    return 47;
+  }
 }
 
 module.exports = FirefoxWebDriverBrowser;

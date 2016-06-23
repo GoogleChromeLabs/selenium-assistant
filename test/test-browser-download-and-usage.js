@@ -139,6 +139,7 @@ describe('Test Download and Usage of Browsers', function() {
 
       it(`should download ${browserId} - ${release} if needed and return an updated executable path`, function() {
         this.timeout(DOWNLOAD_TIMEOUT);
+
         let originalPath = null;
         if (specificBrowser.isValid()) {
           originalPath = specificBrowser.getExecutablePath();
