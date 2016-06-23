@@ -19,6 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 const which = require('which');
+const chalk = require('chalk');
 const seleniumFirefox = require('selenium-webdriver/firefox');
 const WebDriverBrowser = require('./web-driver-browser');
 const application = require('../application-state.js');
@@ -134,21 +135,6 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
       }
     } catch (err) {}
 
-    /** try {
-      if (this._release === 'stable') {
-        if (process.platform === 'darwin') {
-          return '/Applications/Firefox.app/Contents/MacOS/firefox';
-        } else if (process.platform === 'linux') {
-          return which.sync('firefox');
-        }
-      } else if (this._release === 'beta') {
-      } else if (this._release === 'unstable') {
-        if (process.platform === 'darwin') {
-          return '/Applications/FirefoxNightly.app/Contents/MacOS/firefox';
-        }
-      }
-    } catch (err) {}**/
-
     return null;
   }
 
@@ -163,10 +149,10 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
       return -1;
     }
 
-    const regexMatch = firefoxVersion.match(/(\d\d).\d/);
+    const regexMatch = firefoxVersion.match(/(\d+)\.\d/);
     if (regexMatch === null) {
-      console.warn('Unable to parse version number from Firefox',
-        this.getExecutablePath());
+      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
+        'from Firefox: ', this.getExecutablePath());
       return -1;
     }
 

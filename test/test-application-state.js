@@ -27,6 +27,23 @@ describe('Application State', function() {
     (installLocation.length).should.be.gt(1);
   });
 
+  it('should return the current directory if no useful environment variables exist', function() {
+    const originalHomeValue = process.env.HOME;
+    const originalUserProfValue = process.env.USERPROFILE;
+
+    delete process.env.HOME;
+    delete process.env.USERPROFILE;
+
+    const applicationState = require('../src/application-state.js');
+    const installLocation = applicationState.getDefaultInstallLocation();
+
+    process.env.HOME = originalHomeValue;
+    process.env.USERPROFILE = originalUserProfValue;
+
+    (typeof installLocation).should.equal('string');
+    (installLocation).should.equal('.selenium-assistant');
+  });
+
   it('should start with default install directory', function() {
     const applicationState = require('../src/application-state.js');
     applicationState.getInstallDirectory().should.equal(
@@ -39,5 +56,18 @@ describe('Application State', function() {
     const newPath = './test/test-output/';
     applicationState.setInstallDirectory(newPath);
     applicationState.getInstallDirectory().should.equal(newPath);
+  });
+
+  it('should be able to pass in null to reset state to default install location', function() {
+    const applicationState = require('../src/application-state.js');
+
+    const newPath = './test/test-output/';
+    applicationState.setInstallDirectory(newPath);
+    applicationState.getInstallDirectory().should.equal(newPath);
+
+    applicationState.setInstallDirectory(null);
+    applicationState.getInstallDirectory().should.equal(
+      applicationState.getDefaultInstallLocation()
+    );
   });
 });

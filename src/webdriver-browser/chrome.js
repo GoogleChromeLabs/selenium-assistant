@@ -19,6 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 const which = require('which');
+const chalk = require('chalk');
 const seleniumChrome = require('selenium-webdriver/chrome');
 const WebDriverBrowser = require('./web-driver-browser');
 const application = require('../application-state.js');
@@ -145,10 +146,10 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
       return -1;
     }
 
-    const regexMatch = chromeVersion.match(/(\d+).\d+.\d+.\d+/);
+    const regexMatch = chromeVersion.match(/(\d+)\.\d+\.\d+\.\d+/);
     if (regexMatch === null) {
-      console.warn('Unable to parse version number from Firefox',
-        this._executablePath);
+      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
+        'from Chrome: ', this.getExecutablePath());
       return -1;
     }
 
