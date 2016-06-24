@@ -29,7 +29,7 @@ const downloadManager = require('./download-manager.js');
  *
  * @example <caption>Usage in Node</caption>
  * const seleniumAssistant = require('selenium-assistant');
- * seleniumAssistant.printAvailableBrowsers();
+ * seleniumAssistant.printAvailableBrowserInfo();
  *
  * const browsers = seleniumAssistant.getAvailableBrowsers();
  * browsers.forEach(browser => {
