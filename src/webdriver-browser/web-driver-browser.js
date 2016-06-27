@@ -203,14 +203,17 @@ class WebDriverBrowser {
   }
 
   /**
-   * <p>This method resolves to a webdriver instance of this browser instance.</p>
+   * <p>This method returns the preconfigured builder used by getSeleniumDriver().</p>
+   *
+   * <p>This is useful if you wish to customise the builder with additional options
+   * (i.e. customise the proxy of the driver.)</p>
    *
    * <p>For more info, see:
-   * {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver Docs}</p>
+   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
    *
-   * @return {Promise<WebDriver>} [description]
+   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
    */
-  getSeleniumDriver() {
+  getSeleniumDriverBuilder() {
     const seleniumOptions = this.getSeleniumOptions();
 
     if (seleniumOptions.setChromeBinaryPath) {
@@ -226,18 +229,35 @@ class WebDriverBrowser {
       throw new Error('Unknown selenium options object');
     }
 
+    return new webdriver
+      .Builder()
+      .forBrowser(this.getSeleniumBrowserId())
+      .setChromeOptions(seleniumOptions)
+      .setFirefoxOptions(seleniumOptions)
+      .setOperaOptions(seleniumOptions)
+      .setSafariOptions(seleniumOptions)
+      .setEdgeOptions(seleniumOptions);
+  }
+
+  /**
+   * <p>This method resolves to a webdriver instance of this browser instance.</p>
+   *
+   * <p>For more info, see:
+   * {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver Docs}</p>
+   *
+   * @return {Promise<WebDriver>} [description]
+   */
+  getSeleniumDriver() {
     return new Promise((resolve, reject) => {
-      new webdriver
-        .Builder()
-        .forBrowser(this.getSeleniumBrowserId())
-        .setChromeOptions(seleniumOptions)
-        .setFirefoxOptions(seleniumOptions)
-        .setOperaOptions(seleniumOptions)
-        .setSafariOptions(seleniumOptions)
-        .setEdgeOptions(seleniumOptions)
-        .buildAsync()
+      try {
+        const builder = this.getSeleniumDriverBuilder();
+
+        builder.buildAsync()
         .then(resolve)
         .thenCatch(reject);
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 

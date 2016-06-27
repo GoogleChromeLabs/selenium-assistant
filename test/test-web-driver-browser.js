@@ -21,6 +21,8 @@ const seleniumChrome = require('selenium-webdriver/chrome');
 const seleniumFF = require('selenium-webdriver/firefox');
 const seleniumOpera = require('selenium-webdriver/opera');
 
+require('chai').should();
+
 describe('WebDriverBrowser', function() {
   const WebDriverBrowser = require('./../src/webdriver-browser/web-driver-browser.js');
 
@@ -255,7 +257,7 @@ describe('WebDriverBrowser', function() {
     }).to.throw('overriden');
   });
 
-  it('should throw for when invalid options object is used to get driver', function() {
+  it('should throw for when invalid options object is used to get builder', function() {
     expect(() => {
       var webdriver = new WebDriverBrowser(
         'Pretty Name',
@@ -264,11 +266,11 @@ describe('WebDriverBrowser', function() {
         {}
       );
 
-      webdriver.getSeleniumDriver();
+      webdriver.getSeleniumDriverBuilder();
     }).to.throw('Unknown selenium options');
   });
 
-  it('should throw for when building a driver which isn\'t a subclass', function() {
+  it('should throw when gettomg a builder for a driver which isn\'t a subclass because of no executable path', function() {
     expect(() => {
       var webdriver = new WebDriverBrowser(
         'Pretty Name',
@@ -277,7 +279,39 @@ describe('WebDriverBrowser', function() {
         new seleniumChrome.Options()
       );
 
-      webdriver.getSeleniumDriver();
+      webdriver.getSeleniumDriverBuilder();
     }).to.throw('overriden');
+  });
+
+  it('should reject when invalid options object is used to get driver', function() {
+    var webdriver = new WebDriverBrowser(
+      'Pretty Name',
+      'stable',
+      'chrome',
+      {}
+    );
+
+    return webdriver.getSeleniumDriver()
+    .then(() => {
+      throw new Error('Unexpected promise resolve');
+    }, err => {
+      (err.message.indexOf('Unknown selenium options')).should.not.equal(-1);
+    });
+  });
+
+  it('should reject when building a driver which isn\'t a subclass', function() {
+    var webdriver = new WebDriverBrowser(
+      'Pretty Name',
+      'stable',
+      'chrome',
+      new seleniumChrome.Options()
+    );
+
+    return webdriver.getSeleniumDriver()
+    .then(() => {
+      throw new Error('Unexpected promise resolve');
+    }, err => {
+      (err.message.indexOf('overriden')).should.not.equal(-1);
+    });
   });
 });

@@ -224,6 +224,50 @@ describe('Test Download and Usage of Browsers', function() {
           });
         });
       });
+
+      it(`should force download ${browserId} - ${release} and be able to use the web driver builder manually`, function() {
+        this.timeout(DOWNLOAD_TIMEOUT);
+
+        return seleniumAssistant.downloadBrowser(browserId, release, {force: true})
+        .then(() => {
+          let afterDownloadPath = specificBrowser.getExecutablePath();
+
+          if (browserId === 'opera' && process.platform === 'darwin') {
+            afterDownloadPath.indexOf(
+              path.normalize('/Applications/Opera')
+            ).should.not.equal(-1);
+          } else {
+            afterDownloadPath.indexOf(
+              path.normalize(seleniumAssistant.getBrowserInstallDir())
+            ).should.not.equal(-1);
+          }
+        })
+        .then(() => {
+          console.log('');
+          console.log('');
+          console.log('After Forced Download');
+          seleniumAssistant.printAvailableBrowserInfo();
+
+          const builder = specificBrowser.getSeleniumDriverBuilder();
+
+          return builder.buildAsync()
+          .then(driver => {
+            globalDriver = driver;
+          })
+          .then(() => {
+            return new Promise((resolve, reject) => {
+              globalDriver.get('https://google.com')
+              .then(() => {
+                return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+              })
+              .then(resolve)
+              .thenCatch(err => {
+                reject(err);
+              });
+            });
+          });
+        });
+      });
     });
   });
 });
