@@ -71,13 +71,9 @@ class DownloadManager {
           'User-Agent': 'request'
         }
       };
-      if (process.env.GH_USER && process.env.GH_TOKEN) {
-        // Do something here
-        requestOptions.auth = {
-          user: process.env.GH_USER,
-          pass: process.env.GH_TOKEN,
-          sendImmediately: false
-        };
+      if (process.env.GH_TOKEN) {
+        requestOptions.url = requestOptions.url + '?access_token=' +
+          process.env.GH_TOKEN;
       }
       request(requestOptions,
       (err, response) => {
