@@ -1,5 +1,6 @@
 # Auto-generated from the sw-testing-helper module
 releases:
+    - v0.2.0
     - v0.1.6
     - v0.1.4
     - v0.1.2
