@@ -59,6 +59,7 @@ class DownloadManager {
       // Check if Firefox driver is already on the path or not.
       const wiresPath = which.sync('wires');
       if (wiresPath) {
+        console.log('Using existing wires');
         return Promise.resolve();
       }
     } catch (err) {}
@@ -93,11 +94,7 @@ class DownloadManager {
         for (let i = 0; i < allReleases.length; i++) {
           const release = allReleases[i];
 
-          // Skip 0.9.0 since it breaks node's selenium-webdriver
-          // See: https://github.com/mozilla/geckodriver/issues/139
-          if (release.tag_name === 'v0.9.0') {
-            continue;
-          }
+          // Block releases here if needed
 
           if (!selectedRelease) {
             selectedRelease = release;
@@ -120,7 +117,7 @@ class DownloadManager {
               if (download.name.indexOf('OSX') !== -1) {
                 return resolve({
                   url: download.browser_download_url,
-                  name: download.name
+                  name: download.tag_name
                 });
               }
             });
@@ -130,7 +127,7 @@ class DownloadManager {
               if (download.name.indexOf('win32') !== -1) {
                 return resolve({
                   url: download.browser_download_url,
-                  name: download.name
+                  name: download.tag_name
                 });
               }
             });
@@ -139,10 +136,21 @@ class DownloadManager {
             return reject(new Error('Unsupported platform: ' +
               process.platform));
         }
+
+        return reject(new Error('Unable to find appropriate download for ' +
+          'this environment.'));
       });
     })
     .then(downloadInfo => {
       return new Promise((resolve, reject) => {
+        // Make sure we know what we are dealing with
+        const expectExtension = '.tar.gz';
+        if (downloadInfo.name.indexOf(expectExtension) !==
+          (downloadInfo.name.length - expectExtension.length)) {
+          return reject(new Error(`Unexpected file extension for ` +
+            `${downloadInfo.name}`));
+        }
+
         const filePath = path.join(downloadPath, downloadInfo.name);
         const file = fs.createWriteStream(filePath);
 
@@ -161,16 +169,15 @@ class DownloadManager {
     })
     .then(fileInfo => {
       return new Promise(function(resolve, reject) {
-        const untarProcess = spawn('gzip', [
-          '-d',
-          fileInfo.filePath,
-          '-f'
+        const untarProcess = spawn('tar', [
+          'xvzf',
+          fileInfo.filePath
         ]);
 
         untarProcess.on('exit', code => {
           if (code === 0) {
             try {
-              const extractedFileName = path.parse(fileInfo.filename).name;
+              const extractedFileName = 'geckodriver';
               fs.renameSync(
                 path.join(downloadPath, extractedFileName),
                 path.join(downloadPath, 'wires')
@@ -182,7 +189,7 @@ class DownloadManager {
             }
           }
 
-          reject(new Error('Unable to extract gzip'));
+          reject(new Error('Unable to extract tar'));
         });
       });
     })

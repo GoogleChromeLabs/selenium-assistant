@@ -58,53 +58,6 @@ describe('Test Download and Usage of Browsers', function() {
 
     return Promise.all([
       seleniumAssistant.downloadFirefoxDriver()
-      .catch(err => {
-        // This is likely to have errored due to github rate limit.
-        console.warn(chalk.red('WARNING') + ': Unable to get Firefox Driver ' +
-          err);
-
-        let fallbackGeckoDriverPath;
-        switch (process.platform) {
-          case 'linux':
-            fallbackGeckoDriverPath = './test/data/geckodriver/geckodriver' +
-              '-0.8.0-linux64.gz';
-            break;
-          case 'darwin':
-            fallbackGeckoDriverPath = './test/data/geckodriver/geckodriver' +
-              '-0.8.0-OSX.gz';
-            break;
-          default:
-            throw new Error('Unsupported platform for Firefox ' +
-              'driver fallback.');
-        }
-
-        return new Promise(function(resolve, reject) {
-          const untarProcess = spawn('gzip', [
-            '--keep',
-            '-d',
-            fallbackGeckoDriverPath,
-            '-f'
-          ]);
-
-          untarProcess.on('exit', code => {
-            if (code === 0) {
-              try {
-                const extractedFileName = path.parse(fallbackGeckoDriverPath).name;
-                fs.renameSync(
-                  path.join('./test/data/geckodriver/', extractedFileName),
-                  path.join('.', 'wires')
-                );
-                fs.chmodSync(path.join('.', 'wires'), '755');
-                return resolve();
-              } catch (err) {
-                return reject(err);
-              }
-            }
-
-            reject(new Error('Unable to extract gzip'));
-          });
-        });
-      })
     ]);
   });
 
