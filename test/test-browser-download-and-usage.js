@@ -19,8 +19,6 @@
 const del = require('del');
 const path = require('path');
 const chalk = require('chalk');
-const spawn = require('child_process').spawn;
-const fs = require('fs');
 const selenium = require('selenium-webdriver');
 
 require('chai').should();
