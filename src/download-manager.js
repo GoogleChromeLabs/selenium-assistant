@@ -110,7 +110,7 @@ class DownloadManager {
             break;
           case 'darwin':
             releaseAssets.forEach(download => {
-              if (download.name.indexOf('OSX') !== -1) {
+              if (download.name.indexOf('mac') !== -1) {
                 return resolve({
                   url: download.browser_download_url,
                   name: download.tag_name
@@ -120,7 +120,7 @@ class DownloadManager {
             break;
           case 'windows':
             releaseAssets.forEach(download => {
-              if (download.name.indexOf('win32') !== -1) {
+              if (download.name.indexOf('win64') !== -1) {
                 return resolve({
                   url: download.browser_download_url,
                   name: download.tag_name
