@@ -61,7 +61,7 @@ describe('Test Download and Usage of Browsers', function() {
 
   beforeEach(function() {
     // Timeout is to account for slow closing of selenium web driver browser
-    this.timeout(4000);
+    this.timeout(6000);
 
     return Promise.all([
       del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
@@ -73,7 +73,7 @@ describe('Test Download and Usage of Browsers', function() {
   });
 
   after(function() {
-    this.timeout(4000);
+    this.timeout(6000);
 
     return Promise.all([
       del(seleniumAssistant.getBrowserInstallDir(), {force: true}),

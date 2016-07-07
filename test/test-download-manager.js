@@ -7,10 +7,6 @@ describe('Test Download Manager', function() {
 
   const downloadManager = require('../src/download-manager.js');
 
-  beforeEach(function() {
-
-  });
-
   afterEach(function() {
     Object.defineProperty(process, 'platform', originalPlatform);
   });
