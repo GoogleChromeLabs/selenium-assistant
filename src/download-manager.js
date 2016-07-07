@@ -39,31 +39,7 @@ const browserManager = require('./browser-manager.js');
  */
 class DownloadManager {
 
-  /**
-   * This method retrieves the Firefox Marionette driver, renames it
-   * to wires and makes it executable. It's installed to the current working
-   * directory to that when tests are run, it's automatically found
-   * on the path.
-   * @param  {String} [downloadPath='.'] Directory to install the driver into.
-   *                                     Normally you wouldn't need to touch
-   *                                     this unless you have a place to install
-   *                                     the driver that is on your PATH.
-   * @return {Promise}              Resolves when the driver is downloaded
-   */
-  downloadFirefoxDriver(downloadPath) {
-    if (!downloadPath) {
-      downloadPath = '.';
-    }
-
-    try {
-      // Check if Firefox driver is already on the path or not.
-      const wiresPath = which.sync('wires');
-      if (wiresPath) {
-        console.log('Using existing wires');
-        return Promise.resolve();
-      }
-    } catch (err) {}
-
+  _getFirefoxDriverDownloadURL() {
     return new Promise((resolve, reject) => {
       const requestOptions = {
         url: 'https://api.github.com/repos/mozilla/geckodriver/releases',
@@ -113,7 +89,7 @@ class DownloadManager {
               if (download.name.indexOf('mac') !== -1) {
                 return resolve({
                   url: download.browser_download_url,
-                  name: download.tag_name
+                  name: download.name
                 });
               }
             });
@@ -123,7 +99,7 @@ class DownloadManager {
               if (download.name.indexOf('win64') !== -1) {
                 return resolve({
                   url: download.browser_download_url,
-                  name: download.tag_name
+                  name: download.name
                 });
               }
             });
@@ -136,7 +112,35 @@ class DownloadManager {
         return reject(new Error('Unable to find appropriate download for ' +
           'this environment.'));
       });
-    })
+    });
+  }
+
+  /**
+   * This method retrieves the Firefox Marionette driver, renames it
+   * to wires and makes it executable. It's installed to the current working
+   * directory to that when tests are run, it's automatically found
+   * on the path.
+   * @param  {String} [downloadPath='.'] Directory to install the driver into.
+   *                                     Normally you wouldn't need to touch
+   *                                     this unless you have a place to install
+   *                                     the driver that is on your PATH.
+   * @return {Promise}              Resolves when the driver is downloaded
+   */
+  downloadFirefoxDriver(downloadPath) {
+    if (!downloadPath) {
+      downloadPath = '.';
+    }
+
+    try {
+      // Check if Firefox driver is already on the path or not.
+      const wiresPath = which.sync('wires');
+      if (wiresPath) {
+        console.log('Using existing wires');
+        return Promise.resolve();
+      }
+    } catch (err) {}
+
+    return this._getFirefoxDriverDownloadURL()
     .then(downloadInfo => {
       return new Promise((resolve, reject) => {
         // Make sure we know what we are dealing with
