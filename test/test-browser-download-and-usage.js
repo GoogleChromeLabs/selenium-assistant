@@ -26,6 +26,8 @@ const selenium = require('selenium-webdriver');
 require('chai').should();
 
 describe('Test Download and Usage of Browsers', function() {
+  this.retries(3);
+
   const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
   const seleniumAssistant = require('../src/index.js');
   const releases = ['stable', 'beta', 'unstable'];
@@ -123,7 +125,7 @@ describe('Test Download and Usage of Browsers', function() {
     this.timeout(4000);
 
     return Promise.all([
-      // del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
+      del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
       seleniumAssistant.killWebDriver(globalDriver)
     ]);
   });

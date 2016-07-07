@@ -88,8 +88,22 @@ class DownloadManager {
           return reject(new Error('Unable to get valid response for Github. ' +
             JSON.parse(response.body).message));
         }
+        const allReleases = JSON.parse(response.body);
+        let selectedRelease;
+        for (let i = 0; i < allReleases.length; i++) {
+          const release = allReleases[i];
 
-        const releaseAssets = JSON.parse(response.body)[0].assets;
+          // Skip 0.9.0 since it breaks node's selenium-webdriver
+          // See: https://github.com/mozilla/geckodriver/issues/139
+          if (release.tag_name === 'v0.9.0') {
+            continue;
+          }
+
+          if (!selectedRelease) {
+            selectedRelease = release;
+          }
+        }
+        const releaseAssets = selectedRelease.assets;
         switch (process.platform) {
           case 'linux':
             releaseAssets.forEach(download => {
