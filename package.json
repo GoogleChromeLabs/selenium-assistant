@@ -36,7 +36,7 @@
     "istanbul": "^0.4.4",
     "jsdoc": "^3.4.0",
     "mocha": "^2.5.3",
-    "sinon": "^1.17.4",
+    "sinon": "^1.17.5",
     "sw-testing-helpers": "^0.1.1",
     "operadriver": "^0.2.2",
     "chromedriver": "^2.21.2"
