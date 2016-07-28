@@ -30,7 +30,7 @@
   "homepage": "https://github.com/GoogleChrome/selenium-assistant#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "coveralls": "^2.11.9",
+    "coveralls": "^2.11.12",
     "eslint": "^3.1.0",
     "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.4",
