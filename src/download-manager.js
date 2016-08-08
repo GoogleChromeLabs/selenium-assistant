@@ -63,10 +63,17 @@ class DownloadManager {
         }
         const allReleases = JSON.parse(response.body);
         let selectedRelease;
+        const blackList = [
+          // v0.10.0 requires selenium-webdriver 3.0.0
+          'v0.10.0'
+        ];
         for (let i = 0; i < allReleases.length; i++) {
           const release = allReleases[i];
 
           // Block releases here if needed
+          if (blackList.indexOf(release['tag_name']) !== -1) { // eslint-disable-line dot-notation
+            continue;
+          }
 
           if (!selectedRelease) {
             selectedRelease = release;
@@ -410,6 +417,7 @@ class DownloadManager {
     }
 
     const downloadUrl = `https://download.mozilla.org/?product=${ffProduct}&lang=en-US&os=${ffPlatformId}`;
+    console.log('downloadUrl: ', downloadUrl);
     return new Promise((resolve, reject) => {
       mkdirp(installDir, err => {
         if (err) {
