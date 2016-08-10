@@ -27,6 +27,16 @@ const path = require('path');
 class ApplicationState {
   constructor() {
     this._installDir = this.getDefaultInstallLocation();
+    this._addGeckoDriverToPath();
+  }
+
+  /**
+   * This method is required until geckodriver can be installed
+   * and added to the path as an NPM module.
+   */
+  _addGeckoDriverToPath() {
+    // Add geckodriver's path to process path
+    process.env.PATH += ':' + path.join(this._installDir, 'geckodriver');
   }
 
   /**
@@ -36,10 +46,12 @@ class ApplicationState {
    */
   setInstallDirectory(newInstallDir) {
     if (newInstallDir) {
-      this._installDir = newInstallDir;
+      this._installDir = path.resolve(newInstallDir);
     } else {
       this._installDir = this.getDefaultInstallLocation();
     }
+
+    this._addGeckoDriverToPath();
   }
 
   /**

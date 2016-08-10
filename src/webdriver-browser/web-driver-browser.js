@@ -248,17 +248,12 @@ class WebDriverBrowser {
    * @return {Promise<WebDriver>} [description]
    */
   getSeleniumDriver() {
-    return new Promise((resolve, reject) => {
-      try {
-        const builder = this.getSeleniumDriverBuilder();
-
-        builder.buildAsync()
-        .then(resolve)
-        .thenCatch(reject);
-      } catch (err) {
-        reject(err);
-      }
-    });
+    try {
+      const builder = this.getSeleniumDriverBuilder();
+      return builder.buildAsync();
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 
   static getAvailableReleases() {

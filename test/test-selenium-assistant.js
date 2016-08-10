@@ -16,9 +16,11 @@
 
 'use strict';
 
-require('chai').should();
 const expect = require('chai').expect;
 const sinon = require('sinon');
+const path = require('path');
+
+require('chai').should();
 
 const sinonStubs = [];
 
@@ -155,17 +157,9 @@ describe('SeleniumAssistant', function() {
 
     const killPromise = seleniumAssistant.killWebDriver({
       quit: () => {
-        var fakePromise = {
-          then: cb => {
-            cb();
-            return fakePromise;
-          },
-          thenCatch: () => {
-            return fakePromise;
-          }
-        };
-
-        return fakePromise;
+        return new Promise((resolve, reject) => {
+          resolve();
+        });
       }
     });
     (killPromise instanceof Promise).should.equal(true);
@@ -178,17 +172,9 @@ describe('SeleniumAssistant', function() {
 
     const killPromise = seleniumAssistant.killWebDriver({
       quit: () => {
-        var fakePromise = {
-          then: () => {
-            return fakePromise;
-          },
-          thenCatch: cb => {
-            cb();
-            return fakePromise;
-          }
-        };
-
-        return fakePromise;
+        return new Promise((resolve, reject) => {
+          reject();
+        });
       }
     });
     (killPromise instanceof Promise).should.equal(true);
@@ -201,16 +187,7 @@ describe('SeleniumAssistant', function() {
 
     const killPromise = seleniumAssistant.killWebDriver({
       quit: () => {
-        var fakePromise = {
-          then: () => {
-            return fakePromise;
-          },
-          thenCatch: () => {
-            return fakePromise;
-          }
-        };
-
-        return fakePromise;
+        return new Promise((resolve, reject) => {});
       }
     });
     (killPromise instanceof Promise).should.equal(true);
@@ -228,6 +205,6 @@ describe('SeleniumAssistant', function() {
     seleniumAssistant.setBrowserInstallDir(installPath);
     const directory = seleniumAssistant.getBrowserInstallDir();
     (typeof directory).should.equal('string');
-    directory.should.equal(installPath);
+    directory.should.equal(path.resolve(installPath));
   });
 });

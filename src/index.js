@@ -223,31 +223,28 @@ class SeleniumAssistant {
    * @return {Promise}          Promise that resolves once the browser is killed.
    */
   killWebDriver(driver) {
-    return new Promise((resolve, reject) => {
-      if (typeof driver === 'undefined' ||
-        driver === null) {
-        return resolve();
-      }
+    if (typeof driver === 'undefined' || driver === null) {
+      return Promise.resolve();
+    }
 
-      if (!driver.quit || typeof driver.quit !== 'function') {
-        return reject(new Error('Unable to find a quit method on the ' +
-          'web driver.'));
-      }
+    if (!driver.quit || typeof driver.quit !== 'function') {
+      return Promise.reject(new Error('Unable to find a quit method on the ' +
+        'web driver.'));
+    }
 
-      // Sometimes calling driver.quit() on Chrome, doesn't work,
-      // so this timeout offers a semi-decent fallback
-      let quitTimeout;
-      new Promise(quitResolve => {
-        quitTimeout = setTimeout(quitResolve, 2000);
-        driver.quit()
-        .then(quitResolve)
-        .thenCatch(quitResolve);
-      })
-      .then(() => {
-        clearTimeout(quitTimeout);
+    // Sometimes calling driver.quit() on Chrome, doesn't work,
+    // so this timeout offers a semi-decent fallback
+    let quitTimeout;
+    return new Promise(resolve => {
+      quitTimeout = setTimeout(resolve, 2000);
 
-        // Suggested as fix to 'chrome not reachable'
-        // http://stackoverflow.com/questions/23014220/webdriver-randomly-produces-chrome-not-reachable-on-linux-tests
+      driver.quit()
+      .then(resolve, resolve);
+    })
+    .then(() => {
+      clearTimeout(quitTimeout);
+
+      return new Promise((resolve, reject) => {
         setTimeout(resolve, 2000);
       });
     });
