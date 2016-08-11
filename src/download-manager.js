@@ -19,7 +19,6 @@
 const spawn = require('child_process').spawn;
 const path = require('path');
 const fs = require('fs');
-const which = require('which');
 const request = require('request');
 const mkdirp = require('mkdirp');
 const del = require('del');
@@ -65,7 +64,7 @@ class DownloadManager {
         let selectedRelease;
         const blackList = [
           // v0.10.0 requires selenium-webdriver 3.0.0
-          'v0.10.0'
+          // 'v0.10.0'
         ];
         for (let i = 0; i < allReleases.length; i++) {
           const release = allReleases[i];
@@ -123,31 +122,30 @@ class DownloadManager {
   }
 
   /**
-   * This method retrieves the Firefox Marionette driver, renames it
-   * to wires and makes it executable. It's installed to the current working
-   * directory to that when tests are run, it's automatically found
-   * on the path.
-   * @param  {String} [downloadPath='.'] Directory to install the driver into.
-   *                                     Normally you wouldn't need to touch
-   *                                     this unless you have a place to install
-   *                                     the driver that is on your PATH.
+   * This method retrieves the Firefox Gecko driver, and makes it
+   * executable. It's installed to the directory defined via the
+   * application get/setInstallDir() and it's added to the processes
+   * PATH for use by selenium-webdriver.
    * @return {Promise}              Resolves when the driver is downloaded
    */
-  downloadFirefoxDriver(downloadPath) {
-    if (!downloadPath) {
-      downloadPath = '.';
-    }
+  downloadFirefoxDriver() {
+    let geckoDriverPath = path.join(
+      application.getInstallDirectory(), 'geckodriver');
 
-    try {
-      // Check if Firefox driver is already on the path or not.
-      const wiresPath = which.sync('wires');
-      if (wiresPath) {
-        console.log('Using existing wires');
-        return Promise.resolve();
-      }
-    } catch (err) {}
+    // TODO: Should check if geckodriver is up to date but at the moment
+    // updates seem critical so probably worth always checking for latest
 
-    return this._getFirefoxDriverDownloadURL()
+    return new Promise((resolve, reject) => {
+      mkdirp(geckoDriverPath, err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    })
+    .then(() => {
+      return this._getFirefoxDriverDownloadURL();
+    })
     .then(downloadInfo => {
       return new Promise((resolve, reject) => {
         // Make sure we know what we are dealing with
@@ -158,7 +156,7 @@ class DownloadManager {
             `${downloadInfo.name}`));
         }
 
-        const filePath = path.join(downloadPath, downloadInfo.name);
+        const filePath = path.join(geckoDriverPath, downloadInfo.name);
         const file = fs.createWriteStream(filePath);
 
         request(downloadInfo.url, err => {
@@ -178,18 +176,17 @@ class DownloadManager {
       return new Promise(function(resolve, reject) {
         const untarProcess = spawn('tar', [
           'xvzf',
-          fileInfo.filePath
+          fileInfo.filePath,
+          '-C',
+          geckoDriverPath
         ]);
 
         untarProcess.on('exit', code => {
           if (code === 0) {
             try {
               const extractedFileName = 'geckodriver';
-              fs.renameSync(
-                path.join(downloadPath, extractedFileName),
-                path.join(downloadPath, 'wires')
-              );
-              fs.chmodSync(path.join(downloadPath, 'wires'), '755');
+              fs.chmodSync(path.join(geckoDriverPath, extractedFileName),
+                '755');
               return resolve(fileInfo.filePath);
             } catch (err) {
               return reject(err);
@@ -417,7 +414,6 @@ class DownloadManager {
     }
 
     const downloadUrl = `https://download.mozilla.org/?product=${ffProduct}&lang=en-US&os=${ffPlatformId}`;
-    console.log('downloadUrl: ', downloadUrl);
     return new Promise((resolve, reject) => {
       mkdirp(installDir, err => {
         if (err) {

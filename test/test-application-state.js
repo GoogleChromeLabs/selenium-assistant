@@ -16,6 +16,8 @@
 
 'use strict';
 
+const path = require('path');
+
 require('chai').should();
 
 describe('Application State', function() {
@@ -55,7 +57,7 @@ describe('Application State', function() {
     const applicationState = require('../src/application-state.js');
     const newPath = './test/test-output/';
     applicationState.setInstallDirectory(newPath);
-    applicationState.getInstallDirectory().should.equal(newPath);
+    applicationState.getInstallDirectory().should.equal(path.resolve(newPath));
   });
 
   it('should be able to pass in null to reset state to default install location', function() {
@@ -63,7 +65,7 @@ describe('Application State', function() {
 
     const newPath = './test/test-output/';
     applicationState.setInstallDirectory(newPath);
-    applicationState.getInstallDirectory().should.equal(newPath);
+    applicationState.getInstallDirectory().should.equal(path.resolve(newPath));
 
     applicationState.setInstallDirectory(null);
     applicationState.getInstallDirectory().should.equal(

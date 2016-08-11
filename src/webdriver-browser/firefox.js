@@ -45,10 +45,6 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
   constructor(release) {
     let prettyName = 'Firefox';
 
-    const ffOptions = new seleniumFirefox.Options();
-    // Required since v47
-    ffOptions.useMarionette(true);
-
     if (release === 'stable') {
       prettyName += ' Stable';
     } else if (release === 'beta') {
@@ -61,7 +57,7 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
       prettyName,
       release,
       'firefox',
-      ffOptions
+      new seleniumFirefox.Options()
     );
   }
 
