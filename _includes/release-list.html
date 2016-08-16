@@ -1,0 +1,21 @@
+{% if include.title and include.releaseData and include.releaseType %}
+
+## {{ include.title }}
+
+{% capture latestUrl %}{{ site.github.url }}/docs/releases/{{ include.releaseType }}/{{ include.releaseData.latest }}{% endcapture %}
+
+[View the docs for the latest release]({{ latestUrl | replace: 'http://', 'https://' }})
+
+<ul>
+  {% for release in include.releaseData.all %}
+
+  {% capture releaseUrl %}{{ site.github.url }}/docs/releases/{{ include.releaseType }}/{{ release }}{% endcapture %}
+
+  <li>
+    <a href="{{ releaseUrl | replace: 'http://', 'https://' }}">View the docs for {{ release }}</a>
+  </li>
+
+  {% endfor %}
+</ul>
+
+{% endif %}

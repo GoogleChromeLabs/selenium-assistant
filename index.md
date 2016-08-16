@@ -3,9 +3,12 @@ layout: default
 ---
 
 # Releases
-{% for release in site.data.gendoclist.releases %}
-[View the docs for {{ release }}]({{ release | prepend: "/docs/releases/" | prepend: site.github.url | replace: 'http://', 'https://' }})
-{% endfor %}
+
+{% include release-list.html title="Stable" releaseData=site.data.gendoclist.releases.stable releaseType="stable" %}
+
+{% include release-list.html title="Beta" releaseData=site.data.gendoclist.releases.beta releaseType="beta" %}
+
+{% include release-list.html title="Alpha" releaseData=site.data.gendoclist.releases.alpha releaseType="alpha" %}
 
 # Github Branches
 {% for doc in site.data.gendoclist.docs %}
