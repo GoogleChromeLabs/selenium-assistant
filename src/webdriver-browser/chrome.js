@@ -149,7 +149,7 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
     const regexMatch = chromeVersion.match(/(\d+)\.\d+\.\d+\.\d+/);
     if (regexMatch === null) {
       console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Chrome: ', this.getExecutablePath());
+        'from Chrome: ', chromeVersion);
       return -1;
     }
 
