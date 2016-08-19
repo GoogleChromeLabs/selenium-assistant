@@ -7,6 +7,10 @@ cache:
 os:
   - linux
   - osx
+
+# This is needed to make NVM happy on OS X https://github.com/travis-ci/travis-ci/issues/6476
+osx_image: xcode7.3
+
 node_js:
   - '4'
   - '5'

@@ -148,7 +148,7 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
     const regexMatch = firefoxVersion.match(/(\d+)\.\d/);
     if (regexMatch === null) {
       console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Firefox: ', this.getExecutablePath());
+        'from Firefox: ', firefoxVersion);
       return -1;
     }
 
