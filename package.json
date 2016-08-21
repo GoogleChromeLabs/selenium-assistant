@@ -34,7 +34,7 @@
     "coveralls": "^2.11.12",
     "eslint": "^3.2.0",
     "eslint-config-google": "^0.6.0",
-    "istanbul": "^0.4.4",
+    "istanbul": "^0.4.5",
     "jsdoc": "^3.4.0",
     "mocha": "^3.0.2",
     "npm-publish-scripts": "0.0.13",
