@@ -18,14 +18,20 @@
 
 const del = require('del');
 const which = require('which');
+const path = require('path');
 
 const expect = require('chai').expect;
 
 const testPath = './test/test-output';
 
+let originalPath;
+
 describe('Test GeckoDriver', function() {
   before(function() {
     this.timeout(180000);
+
+    originalPath = process.env.PATH;
+
     const seleniumAssistant = require('../src/index.js');
     seleniumAssistant.setBrowserInstallDir(testPath);
 
@@ -35,6 +41,9 @@ describe('Test GeckoDriver', function() {
 
   after(function() {
     this.timeout(6000);
+
+    process.env.PATH = originalPath;
+
     const seleniumAssistant = require('../src/index.js');
     return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
   });
@@ -52,6 +61,20 @@ describe('Test GeckoDriver', function() {
   });
 
   it('should be able to get geckdriver from previous test', function() {
+    const seleniumAssistantModulePath = path.join(__dirname, '../src/index.js');
+    delete require.cache[seleniumAssistantModulePath];
+
+    process.env.PATH = process.env.PATH.split('geckodriver')
+      .join('breakodriver');
+
+    expect(() => {
+      which.sync('geckodriver');
+    }).to.throw();
+
+    // Selenium Assistant should add geckodriver to path
+    const seleniumAssistant = require('../src/index.js');
+    seleniumAssistant.setBrowserInstallDir(testPath);
+
     expect(() => {
       which.sync('geckodriver');
     }).to.not.throw();
