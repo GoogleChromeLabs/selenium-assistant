@@ -4,11 +4,11 @@
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
-    "publish-release": "./node_modules/npm-publish-scripts/publish-release.sh",
+    "publish-release": "publish-release.sh",
+    "publish-docs": "publish-docs.sh",
     "build": "echo 'Skip Build Step.'",
     "bundle": "./project/create-release-bundle.sh",
-    "publish-docs": "./node_modules/npm-publish-scripts/publish-docs.sh",
-    "build-docs": "jsdoc -c ./jsdoc.conf",
+    "build-docs": "jsdoc -c ./jsdoc.conf -d ",
     "lint": "eslint ./**/*.js",
     "test": "npm run lint && mocha",
     "istanbul": "npm run lint && istanbul cover _mocha",
@@ -37,7 +37,7 @@
     "istanbul": "^0.4.4",
     "jsdoc": "^3.4.0",
     "mocha": "^3.0.2",
-    "npm-publish-scripts": "0.0.7",
+    "npm-publish-scripts": "1.0.1",
     "operadriver": "^0.2.2",
     "sinon": "^1.17.5"
   },
