@@ -11,4 +11,4 @@ stable:
             - v0.1.0
             - v0.0.4
 other:
-  - /docs/reference-docs/master
+  - /reference-docs/master
