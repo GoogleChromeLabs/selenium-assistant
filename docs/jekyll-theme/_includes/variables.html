@@ -7,7 +7,7 @@
 {% if jekyll.environment == 'development' %}
   {% assign project_root_url = '' %}
 {% else %}
-  {% assign project_root_url = site.github.url %}
+  {% assign project_root_url = site.github.url | replace: 'http://', '//'%}
 {% endif %}
 
 {% if site.data.customize.project_owner %}
