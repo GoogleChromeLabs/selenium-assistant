@@ -35,5 +35,5 @@ script:
   - npm run istanbul
   - npm run coveralls
   - if [[ "$TRAVIS_BRANCH" = "master" && "$TRAVIS_OS_NAME" = "linux" && "$TRAVIS_PULL_REQUEST" = "false" ]]; then
-      npm run publish-docs master;
+      # npm run publish-docs master;
     fi
