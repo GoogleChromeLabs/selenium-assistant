@@ -1,3 +1,8 @@
+---
+layout: index
+title: "Home"
+navigation_weight: 1
+---
 This library is designed to make using selenium a little easier in terms
 of finding different releases of a particular browser and
 generating a web driver instance.
