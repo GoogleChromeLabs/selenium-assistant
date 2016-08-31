@@ -1,6 +1,6 @@
 # Auto-generated from the npm-publish-scripts module
 stable:
-    latest: /docs/reference-docs/stable/v0.3.0
+    latest: /reference-docs/stable/v0.3.0
     all:
             - v0.3.0
             - v0.2.0
