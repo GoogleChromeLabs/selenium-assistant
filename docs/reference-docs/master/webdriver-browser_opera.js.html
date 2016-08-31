@@ -151,7 +151,7 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
     const regexMatch = operaVersion.match(/(\d+)\.\d+\.\d+\.\d+/);
     if (regexMatch === null) {
       console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Opera: ', operaVersion);
+        'from Opera: ', this.getExecutablePath());
       return -1;
     }
 
