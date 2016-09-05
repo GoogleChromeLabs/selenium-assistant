@@ -49,7 +49,7 @@
     "mkdirp": "^0.5.1",
     "request": "^2.72.0",
     "selenium-webdriver": "^3.0.0-beta-2",
-    "which": "^1.2.10",
+    "which": "^1.2.11",
     "yauzl": "^2.5.0"
   }
 }
