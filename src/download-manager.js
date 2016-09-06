@@ -518,7 +518,7 @@ class DownloadManager {
     }
 
     switch (process.platform) {
-      case 'linux':
+      /** case 'linux':
         fileExtension = 'deb';
         switch (release) {
           case 'stable':
@@ -533,7 +533,7 @@ class DownloadManager {
           default:
             throw new Error('Unknown release.', release);
         }
-        break;
+        break;**/
       case 'darwin':
         fileExtension = 'zip';
         switch (release) {

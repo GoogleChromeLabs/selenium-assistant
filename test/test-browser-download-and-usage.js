@@ -31,14 +31,16 @@ describe('Test Download and Usage of Browsers', function() {
   const releases = ['stable', 'beta', 'unstable'];
   const browserIds = ['chrome', 'firefox'];
 
-  if (
-    // Opera on OS X requires user prompt
-    process.platform !== 'darwin' ||
-    // This isn't a release and it's not a travis run
-    (process.env.RELEASE !== 'true' && process.env.TRAVIS !== 'true')
-  ) {
-    browserIds.push('opera');
-  }
+  // Can't test on Opera. Sadly OS X requires manual intervention to install
+  // Linux download URL's are unique for each release.
+  // if (
+  //   // Opera on OS X requires user prompt
+  //   process.platform !== 'darwin' ||
+  //   // This isn't a release and it's not a travis run
+  //   (process.env.RELEASE !== 'true' && process.env.TRAVIS !== 'true')
+  // ) {
+  //   browserIds.push('opera');
+  // }
 
   // Travis has Safari, but the extension won't be installed :(
   if ((!process.env.TRAVIS) && process.platform === 'darwin') {
