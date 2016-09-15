@@ -12,8 +12,9 @@ github repo.
 
 # Drivers
 
-To use this package, you'll need to set include / download the drivers
-yourself. For example:
+To use this package, you'll need to include / download the drivers
+for each browser yourself, this is to reduce dependencies for this project.
+For example:
 
 To use Google Chrome:
 
@@ -23,9 +24,9 @@ To use Opera:
 
     npm install --save operadriver
 
-To use Firefox there isn't a helpful wrapper, but you can use the
-{@link SeleniumAssistant#downloadFirefoxDriver} to make the appropriate
-driver available:
+To use Firefox there isn't a helpful wrapper that works 100%, but you
+can use the {@link SeleniumAssistant#downloadFirefoxDriver} to make
+the appropriate driver available:
 
     const seleniumAssistant = require('selenium-assistant');
     seleniumAssistant.downloadFirefoxDriver()
