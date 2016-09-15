@@ -2,13 +2,13 @@
 stable:
     latest: /reference-docs/stable/v0.3.0
     all:
-            - v0.3.0
-            - v0.2.0
-            - v0.1.6
-            - v0.1.4
-            - v0.1.2
-            - v0.1.1
-            - v0.1.0
-            - v0.0.4
+            - /reference-docs/stable/v0.3.0
+            - /reference-docs/stable/v0.2.0
+            - /reference-docs/stable/v0.1.6
+            - /reference-docs/stable/v0.1.4
+            - /reference-docs/stable/v0.1.2
+            - /reference-docs/stable/v0.1.1
+            - /reference-docs/stable/v0.1.0
+            - /reference-docs/stable/v0.0.4
 other:
   - /reference-docs/master
