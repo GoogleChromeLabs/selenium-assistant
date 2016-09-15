@@ -34,7 +34,7 @@
     "coveralls": "^2.11.12",
     "eslint": "^3.5.0",
     "eslint-config-google": "^0.6.0",
-    "istanbul": "^0.4.4",
+    "istanbul": "^0.4.5",
     "jsdoc": "^3.4.1",
     "mocha": "^3.0.2",
     "npm-publish-scripts": "1.0.8",
@@ -49,7 +49,7 @@
     "mkdirp": "^0.5.1",
     "request": "^2.72.0",
     "selenium-webdriver": "^3.0.0-beta-2",
-    "which": "^1.2.10",
+    "which": "^1.2.11",
     "yauzl": "^2.5.0"
   }
 }
