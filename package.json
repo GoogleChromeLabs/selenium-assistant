@@ -1,6 +1,6 @@
 {
   "name": "selenium-assistant",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.1",
     "mocha": "^3.0.2",
-    "npm-publish-scripts": "2.0.3",
+    "npm-publish-scripts": "2.0.4",
     "operadriver": "^0.2.2",
     "sinon": "^1.17.5"
   },
