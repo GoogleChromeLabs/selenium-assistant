@@ -1,6 +1,10 @@
 # Auto-generated from the npm-publish-scripts module
+beta:
+    latest: ./docs/reference-docs/beta/v0.5.1-beta
+    all:
+            - /reference-docs/beta/v0.5.1-beta
 stable:
-    latest: /reference-docs/stable/v0.3.0
+    latest: ./docs/reference-docs/stable/v0.3.0
     all:
             - /reference-docs/stable/v0.3.0
             - /reference-docs/stable/v0.2.0
