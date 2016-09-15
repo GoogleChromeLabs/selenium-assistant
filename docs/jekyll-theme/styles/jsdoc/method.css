@@ -1,15 +1,1 @@
-.jsdoc-method p {
-      margin-bottom: calc(var(--vertical-padding) / 4);
-}
-
-.jsdoc-params-heading, .jsdoc-returns-heading {
-  margin: 0;
-  padding: calc(var(--padding)/2);;
-
-  background-color: var(--callout);
-  color: var(--callout-text-color);
-}
-
-.jsdoc-method {
-  margin-bottom: calc(var(--padding) * 4);
-}
+.jsdoc-method p{margin-bottom:8px}.jsdoc-params-heading,.jsdoc-returns-heading{margin:0;padding:8px;background-color:#37474f;color:#fff}.jsdoc-method{margin-bottom:64px}
