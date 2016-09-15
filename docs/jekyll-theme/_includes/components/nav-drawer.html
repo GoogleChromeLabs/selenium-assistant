@@ -14,7 +14,17 @@
       {% endif %}
     {% endfor %}
 
-    {% include components/nav-drawer-docs-entry.html text='Reference Docs' docsPath=site.data.releases.stable.latest %}
+      <li class="side-nav__title">Reference Docs</li>
+
+      <li>
+        <ul>
+          {% include components/nav-drawer-docs-entry.html text='Stable' docsPath=site.data.releases.stable.latest %}
+
+          {% include components/nav-drawer-docs-entry.html text='Beta' docsPath=site.data.releases.beta.latest %}
+
+          {% include components/nav-drawer-docs-entry.html text='Alpha' docsPath=site.data.releases.alpha.latest %}
+        </ul>
+      </li>
   </ul>
 
   </nav>

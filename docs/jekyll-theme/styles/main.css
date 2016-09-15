@@ -159,7 +159,7 @@ td code {
   margin: 0;
 }
 
-.side-nav__container ul li a {
+.side-nav__container ul li a, .side-nav__container ul li.side-nav__title {
   display: block;
   padding: calc(var(--padding) * 0.75) var(--padding);
 }
