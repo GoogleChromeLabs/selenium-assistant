@@ -68,7 +68,7 @@ describe('Test Download and Usage of Browsers', function() {
     this.timeout(180000);
 
     return Promise.all([
-      seleniumAssistant.killWebDriver(globalDriver)
+      seleniumAssistant.killWebDriver(globalDriver).catch()
     ])
     .then(() => {
       globalDriver = null;
