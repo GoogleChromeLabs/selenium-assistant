@@ -140,11 +140,6 @@ describe('Test Download and Usage of Browsers', function() {
           afterDownloadPath.should.equal(originalPath);
         })
         .then(() => {
-          console.log('');
-          console.log('');
-          console.log('After Possible Download');
-          seleniumAssistant.printAvailableBrowserInfo();
-
           if (isBlackListed(specificBrowser)) {
             console.log('Skipping due to blacklist.');
             return;
@@ -189,11 +184,6 @@ describe('Test Download and Usage of Browsers', function() {
           }
         })
         .then(() => {
-          console.log('');
-          console.log('');
-          console.log('After Forced Download');
-          seleniumAssistant.printAvailableBrowserInfo();
-
           if (isBlackListed(specificBrowser)) {
             console.log('Skipping due to blacklist.');
             return;

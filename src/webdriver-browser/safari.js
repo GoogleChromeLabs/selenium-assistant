@@ -78,7 +78,7 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
       } else if (this._release === 'beta') {
         if (process.platform === 'darwin') {
           return '/Applications/Safari Technology Preview.app/' +
-            'Contents/MacOS/Safari Technology Preview'
+            'Contents/MacOS/Safari Technology Preview';
         }
       }
     } catch (err) {}
@@ -96,10 +96,11 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
     if (this._release === 'stable') {
       versionListPath = '/Applications/Safari.app/Contents/version.plist';
     } else if (this._release === 'beta') {
-      versionListPath = '/Applications/Safari Technology Preview.app/Contents/version.plist';
+      versionListPath = '/Applications/Safari Technology Preview.app/' +
+        'Contents/version.plist';
     }
     try {
-      const versionDoc = fs.readFileSync(versionList).toString();
+      const versionDoc = fs.readFileSync(versionListPath).toString();
       /* eslint-disable no-useless-escape */
       const results = new RegExp(
         '<key>CFBundleShortVersionString</key>' +

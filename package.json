@@ -9,7 +9,7 @@
     "build": "echo 'Skip Build Step.'",
     "bundle": "./project/create-release-bundle.sh",
     "build-docs": "jsdoc -c ./jsdoc.conf -d ",
-    "lint": "eslint ./**/*.js",
+    "lint": "eslint './**/*.js'",
     "test": "npm run lint && mocha",
     "istanbul": "npm run lint && istanbul cover _mocha",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
@@ -30,9 +30,9 @@
   "homepage": "https://github.com/GoogleChrome/selenium-assistant#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "chromedriver": "^2.23.1",
+    "chromedriver": "^2.24.0",
     "coveralls": "^2.11.12",
-    "eslint": "^3.2.0",
+    "eslint": "^3.5.0",
     "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.4",
     "jsdoc": "^3.4.0",

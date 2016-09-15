@@ -1,0 +1,6 @@
+docs/
+coverage/
+node_modules/
+npm-debug.log
+geckodriver
+test/test-output/
