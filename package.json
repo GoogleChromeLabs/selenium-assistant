@@ -35,7 +35,7 @@
     "eslint": "^3.5.0",
     "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.4",
-    "jsdoc": "^3.4.0",
+    "jsdoc": "^3.4.1",
     "mocha": "^3.0.2",
     "npm-publish-scripts": "1.0.8",
     "operadriver": "^0.2.2",
