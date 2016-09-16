@@ -12,12 +12,3 @@ methods to check for versions and print useful info for logs.
 <p>
   <a href="https://googlechrome.github.io/selenium-assistant/">View Docs Here</a>
 </p>
-
-# Contributing
-
-If you wish to help with this project, please feel free to raise an issue,
-raise a PR or add tests to prove bad behaviour.
-
-To run the tests simple run:
-
-    npm run test

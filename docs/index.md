@@ -1,35 +1,69 @@
 ---
 layout: index
-title: "Home"
-navigation_weight: 1
+title: "Selenium Assistant"
+navigation_weight: 0
 ---
+# Why
+
 This library is designed to make using selenium a little easier in terms
 of finding different releases of a particular browser and
-generating a web driver instance.
+generating a web driver instance for it.
 
-If you have feedback or find bugs, please feel free to file issues on the
-github repo.
+# Install
 
-# Drivers
+Installing of this module is simply:
 
-To use this package, you'll need to include / download the drivers
-for each browser yourself, this is to reduce dependencies for this project.
-For example:
+    npm install selenium-assistant --save-dev
 
-To use Google Chrome:
+Depending on the browsers you wish to test against you'll need to add
+the drivers for them.
 
-    npm install --save chromedriver
+To use **Google Chrome**:
 
-To use Opera:
+    npm install chromedriver --save-dev
 
-    npm install --save operadriver
+To use **Opera**:
 
-To use Firefox there isn't a helpful wrapper that works 100%, but you
-can use the {@link SeleniumAssistant#downloadFirefoxDriver} to make
-the appropriate driver available:
+    npm install operadriver --save-dev
+
+To use **Firefox** there isn't a helpful wrapper that works 100%, but you
+can use the `downloadFirefoxDriver()` to download the appropriate driver:
 
     const seleniumAssistant = require('selenium-assistant');
     seleniumAssistant.downloadFirefoxDriver()
     .then(() => {
       console.log('Finished downloading Firefox\'s Driver');
     });
+
+# Usage
+
+The most basic / common use of this library to get the available browsers,
+filter out any browsers you may not want and then get a web driver instance
+for that browser, this can be done like so:
+
+    const seleniumAssistant = require('selenium-assistant');
+    seleniumAssistant.printAvailableBrowserInfo();
+
+    const browsers = seleniumAssistant.getAvailableBrowsers();
+    browsers.forEach(browser => {
+      // Skip if the browser isn't stable.
+      if (browser.getReleaseName() !== 'stable') {
+        return;
+      }
+
+      // Print out the browsers name.
+      console.log(browsers.getPrettyName());
+
+      browser.getSeleniumDriver()
+      .then(webdriverInstance => {
+        return webdriverInstance.get('https://google.com/');
+      })
+      .then(() => {
+        return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+      });
+    });
+
+Make sure you checkout the reference docs for all the available APIs.
+
+For documentation on how to use the `webdriverInstace` [check out the
+selenium docs](http://seleniumhq.github.io/selenium/docs/api/javascript/).
