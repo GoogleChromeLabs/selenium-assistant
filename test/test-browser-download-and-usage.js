@@ -21,6 +21,8 @@ const path = require('path');
 const chalk = require('chalk');
 const selenium = require('selenium-webdriver');
 
+const TestServer = require('./helpers/test-server.js');
+
 require('chai').should();
 
 describe('Test Download and Usage of Browsers', function() {
@@ -50,6 +52,8 @@ describe('Test Download and Usage of Browsers', function() {
   const testPath = './test/test-output';
 
   let globalDriver = null;
+  let globalServer = new TestServer(false);
+  let localURL = '';
 
   before(function() {
     this.timeout(180000);
@@ -60,6 +64,13 @@ describe('Test Download and Usage of Browsers', function() {
     return del(seleniumAssistant.getBrowserInstallDir(), {force: true})
     .then(() => {
       return seleniumAssistant.downloadFirefoxDriver();
+    })
+    .then(() => {
+      const serverPath = path.join(__dirname, 'data', 'example-site');
+      return globalServer.startServer(serverPath);
+    })
+    .then(portNumber => {
+      localURL = `http://localhost:${portNumber}/`;
     });
   });
 
@@ -81,7 +92,10 @@ describe('Test Download and Usage of Browsers', function() {
     return Promise.all([
       del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
       seleniumAssistant.killWebDriver(globalDriver)
-    ]);
+    ])
+    .then(() => {
+      return globalServer.killServer();
+    });
   });
 
   function isBlackListed(specificBrowser) {
@@ -150,9 +164,9 @@ describe('Test Download and Usage of Browsers', function() {
             globalDriver = driver;
           })
           .then(() => {
-            return globalDriver.get('https://google.com')
+            return globalDriver.get(localURL)
             .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+              return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
             });
           })
           .then(() => {
@@ -194,9 +208,9 @@ describe('Test Download and Usage of Browsers', function() {
             globalDriver = driver;
           })
           .then(() => {
-            return globalDriver.get('https://google.com')
+            return globalDriver.get(localURL)
             .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+              return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
             })
             .then(() => {
               return seleniumAssistant.killWebDriver(globalDriver);
@@ -211,9 +225,9 @@ describe('Test Download and Usage of Browsers', function() {
               globalDriver = driver;
             })
             .then(() => {
-              return globalDriver.get('https://google.com')
+              return globalDriver.get(localURL)
               .then(() => {
-                return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
+                return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
               });
             });
           })
