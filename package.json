@@ -1,0 +1,57 @@
+{
+  "name": "selenium-assistant",
+  "version": "1.0.0",
+  "description": "A node module to help with use of selenium driver",
+  "main": "src/index.js",
+  "scripts": {
+    "publish-release": "publish-release.sh",
+    "publish-docs": "publish-docs.sh",
+    "build": "echo 'Skip Build Step.'",
+    "bundle": "./project/create-release-bundle.sh",
+    "build-docs": "jsdoc -c ./jsdoc.conf -d ",
+    "lint": "eslint './**/*.js'",
+    "test": "npm run lint && mocha",
+    "istanbul": "npm run lint && istanbul cover _mocha",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChrome/selenium-assistant.git"
+  },
+  "keywords": [
+    "selenium",
+    "webdriver"
+  ],
+  "author": "Matt Gaunt",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChrome/selenium-assistant/issues"
+  },
+  "homepage": "https://github.com/GoogleChrome/selenium-assistant#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chromedriver": "^2.24.0",
+    "coveralls": "^2.11.12",
+    "eslint": "^3.5.0",
+    "eslint-config-google": "^0.6.0",
+    "express": "^4.14.0",
+    "geckodriver": "^1.1.2",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.4.1",
+    "mocha": "^3.0.2",
+    "npm-publish-scripts": "2.0.6",
+    "operadriver": "^0.2.2",
+    "sinon": "^1.17.5"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "del": "^2.2.0",
+    "dmg": "^0.1.0",
+    "fs-extra": "^0.30.0",
+    "mkdirp": "^0.5.1",
+    "request": "^2.72.0",
+    "selenium-webdriver": "^3.0.0-beta-2",
+    "which": "^1.2.11",
+    "yauzl": "^2.5.0"
+  }
+}
