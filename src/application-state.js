@@ -36,7 +36,10 @@ class ApplicationState {
    */
   _addGeckoDriverToPath() {
     // Add geckodriver's path to process path
-    process.env.PATH += ':' + path.join(this._installDir, 'geckodriver');
+    const geckodriverPath = path.join(this._installDir, 'geckodriver');
+    if (process.env.PATH.indexOf(geckodriverPath) === -1) {
+      process.env.PATH += ':' + geckodriverPath;
+    }
   }
 
   /**
