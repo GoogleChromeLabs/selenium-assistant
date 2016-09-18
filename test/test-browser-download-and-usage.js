@@ -23,6 +23,7 @@ const selenium = require('selenium-webdriver');
 
 const TestServer = require('./helpers/test-server.js');
 
+require('geckodriver');
 require('chai').should();
 
 describe('Test Download and Usage of Browsers', function() {
@@ -63,7 +64,7 @@ describe('Test Download and Usage of Browsers', function() {
     // Ensure the test output is clear at the start
     return del(seleniumAssistant.getBrowserInstallDir(), {force: true})
     .then(() => {
-      return seleniumAssistant.downloadFirefoxDriver();
+      // return seleniumAssistant.downloadFirefoxDriver();
     })
     .then(() => {
       const serverPath = path.join(__dirname, 'data', 'example-site');
