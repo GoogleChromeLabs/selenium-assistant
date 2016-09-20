@@ -18,7 +18,6 @@
 
 const del = require('del');
 const which = require('which');
-const path = require('path');
 
 const expect = require('chai').expect;
 
