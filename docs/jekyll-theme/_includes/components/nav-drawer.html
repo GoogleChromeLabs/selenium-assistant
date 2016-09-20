@@ -8,7 +8,7 @@
       {% if nav_page['navigation_weight'] %}
       <li>
         <a href="{{ project_root_url }}{{ nav_page.url }}" {% if nav_page.url == page.url %}class="active"{% endif %}>
-          {{ nav_page.title }}
+          {% if nav_page.url == '/' %}Home{% else %}{{ nav_page.title }}{% endif %}
         </a>
       </li>
       {% endif %}
