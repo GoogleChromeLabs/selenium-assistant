@@ -19,6 +19,7 @@ describe('Test Download Manager', function() {
 
   environments.forEach(environmentName => {
     it('should be able to get firefox driver url', function() {
+      this.timeout(10000);
       Object.defineProperty(process, 'platform', {
         value: environmentName
       });

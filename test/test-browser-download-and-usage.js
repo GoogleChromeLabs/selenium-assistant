@@ -99,13 +99,6 @@ describe('Test Download and Usage of Browsers', function() {
   });
 
   function isBlackListed(specificBrowser) {
-    if (specificBrowser.getSeleniumBrowserId() === 'chrome' &&
-      specificBrowser.getVersionNumber() === 54) {
-      console.warn(chalk.red('WARNING:') + ' skipping selenium test for ' +
-        'Chrome 54 because it\'s failing to work with selenium-webbdriver');
-      return true;
-    }
-
     return false;
   }
 

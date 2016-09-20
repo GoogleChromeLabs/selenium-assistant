@@ -132,9 +132,6 @@ class DownloadManager {
     let geckoDriverPath = path.join(
       application.getInstallDirectory(), 'geckodriver');
 
-    // TODO: Should check if geckodriver is up to date but at the moment
-    // updates seem critical so probably worth always checking for latest
-
     return new Promise((resolve, reject) => {
       mkdirp(geckoDriverPath, err => {
         if (err) {

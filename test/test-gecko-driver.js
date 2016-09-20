@@ -59,24 +59,4 @@ describe('Test GeckoDriver', function() {
       }).to.not.throw();
     });
   });
-
-  it('should be able to get geckdriver from previous test', function() {
-    const seleniumAssistantModulePath = path.join(__dirname, '../src/index.js');
-    delete require.cache[seleniumAssistantModulePath];
-
-    process.env.PATH = process.env.PATH.split('geckodriver')
-      .join('breakodriver');
-
-    expect(() => {
-      which.sync('geckodriver');
-    }).to.throw();
-
-    // Selenium Assistant should add geckodriver to path
-    const seleniumAssistant = require('../src/index.js');
-    seleniumAssistant.setBrowserInstallDir(testPath);
-
-    expect(() => {
-      which.sync('geckodriver');
-    }).to.not.throw();
-  });
 });

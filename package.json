@@ -35,12 +35,13 @@
     "eslint": "^3.5.0",
     "eslint-config-google": "^0.6.0",
     "express": "^4.14.0",
+    "geckodriver": "^1.1.2",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.1",
     "mocha": "^3.0.2",
     "npm-publish-scripts": "2.0.6",
     "operadriver": "^0.2.2",
-    "sinon": "^1.17.5"
+    "sinon": "^1.17.6"
   },
   "dependencies": {
     "chalk": "^1.1.3",
