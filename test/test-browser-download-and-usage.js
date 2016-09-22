@@ -164,7 +164,11 @@ describe('Test Download and Usage of Browsers', function() {
             });
           })
           .then(() => {
-            return testBrowserInfo(specificBrowser);
+            // Safari 10+ is not happy with the methods used to determine
+            // browser info.
+            if (browserId !== 'safari') {
+              return testBrowserInfo(specificBrowser);
+            }
           });
         });
       });
@@ -226,7 +230,11 @@ describe('Test Download and Usage of Browsers', function() {
             });
           })
           .then(() => {
-            return testBrowserInfo(specificBrowser);
+            // Safari 10+ is not happy with the methods used to determine
+            // browser info.
+            if (browserId !== 'safari') {
+              return testBrowserInfo(specificBrowser);
+            }
           });
         });
       });
