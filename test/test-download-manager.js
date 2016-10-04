@@ -1,53 +1,228 @@
 'use strict';
 
+const del = require('del');
+const sinon = require('sinon');
+const storage = require('node-persist');
+const path = require('path');
+
+const WebDriverBrowser = require(
+  '../src/webdriver-browser/web-driver-browser.js');
+const seleniumAssistant = require('../src/index.js');
+const downloadManager = require('../src/download-manager.js');
+
 require('chai').should();
 
-describe('Test Download Manager', function() {
-  const originalPlatform = Object.getOwnPropertyDescriptor(process, 'platform');
+const testPath = './test/test-output';
+const stubs = [];
+let browserDownloads;
 
-  const downloadManager = require('../src/download-manager.js');
+describe('Test Download Manager - Browser Expiration', function() {
+  const performTest = (browserId, releases) => {
+    // 5 Minutes
+    const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
 
-  afterEach(function() {
-    Object.defineProperty(process, 'platform', originalPlatform);
+    releases.forEach(release => {
+      it(`should download ${browserId} - ${release} with no expiration.`, function() {
+        this.timeout(DOWNLOAD_TIMEOUT);
+
+        return downloadManager.downloadBrowser(browserId, release)
+        .then(() => {
+          browserDownloads[browserId][release].should.equal(true);
+          browserDownloads[browserId][release] = false;
+          return downloadManager.downloadBrowser(browserId, release);
+        })
+        .then(() => {
+          // The default should be 24 hours, so manipulate the DB to say older
+          // than 24 hours
+          return new Promise((resolve, reject) => {
+            storage.initSync({
+              dir: path.join(seleniumAssistant.getBrowserInstallDir(), 'database/')
+            });
+
+            const storageKey = `${browserId}:${release}`;
+
+            const lastUpdate = Date.now() - (24 * 60 * 60 * 1000);
+            storage.setItem(storageKey, lastUpdate, err => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            });
+          });
+        })
+        .then(() => {
+          return downloadManager.downloadBrowser(browserId, release, 0);
+        })
+        .then(() => {
+          browserDownloads[browserId][release].should.equal(true);
+        });
+      });
+
+      it(`should download ${browserId} - ${release} with 0 hour expiration (Force download).`, function() {
+        this.timeout(DOWNLOAD_TIMEOUT);
+
+        return downloadManager.downloadBrowser(browserId, release, 0)
+        .then(() => {
+          browserDownloads[browserId][release].should.equal(true);
+
+          browserDownloads[browserId][release] = false;
+          return downloadManager.downloadBrowser(browserId, release, 0);
+        })
+        .then(() => {
+          browserDownloads[browserId][release].should.equal(true);
+        });
+      });
+
+      it(`should download ${browserId} - ${release} with 1 hour expiration and not re-download.`, function() {
+        this.timeout(DOWNLOAD_TIMEOUT);
+        const EXPIRATION_TIME = 1;
+
+        return downloadManager.downloadBrowser(browserId, release,
+          EXPIRATION_TIME)
+        .then(() => {
+          browserDownloads[browserId][release].should.equal(true);
+
+          // Reset download for next step
+          browserDownloads[browserId][release] = false;
+
+          return downloadManager.downloadBrowser(browserId, release,
+            EXPIRATION_TIME);
+        })
+        .then(() => {
+          browserDownloads[browserId][release].should.equal(false);
+
+          // Alter DB so browser is expired and check it downloads immediately
+          return new Promise((resolve, reject) => {
+            storage.initSync({
+              dir: path.join(seleniumAssistant.getBrowserInstallDir(), 'database/')
+            });
+
+            const storageKey = `${browserId}:${release}`;
+
+            const lastUpdate = Date.now() - (EXPIRATION_TIME * 60 * 60 * 1000);
+            storage.setItem(storageKey, lastUpdate, err => {
+              if (err) {
+                reject(err);
+                return;
+              }
+
+              resolve();
+            });
+          });
+        })
+        .then(() => {
+          // Reset download for next step
+          browserDownloads[browserId][release] = false;
+
+          return downloadManager.downloadBrowser(browserId, release,
+              EXPIRATION_TIME);
+        })
+        .then(() => {
+          browserDownloads[browserId][release].should.equal(true);
+        });
+      });
+    });
+  };
+
+  before(function() {
+    seleniumAssistant.setBrowserInstallDir(testPath);
+
+    browserDownloads = {};
+    browserDownloads.chrome = {
+      stable: false,
+      beta: false,
+      unstable: false
+    };
+    browserDownloads.firefox = {
+      stable: false,
+      beta: false,
+      unstable: false
+    };
+
+    const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome',
+      (release, installDir) => {
+        browserDownloads.chrome[release] = true;
+        return Promise.resolve();
+      });
+
+    const dlFFStub = sinon.stub(downloadManager, '_downloadFirefox',
+      (release, installDir) => {
+        browserDownloads.firefox[release] = true;
+        return Promise.resolve();
+      });
+
+    const isValidStub = sinon.stub(WebDriverBrowser.prototype, 'isValid', () => {
+      return true;
+    });
+
+    stubs.push(dlChromeStub);
+    stubs.push(dlFFStub);
+    stubs.push(isValidStub);
   });
 
-  const environments = [
-    'linux',
-    'darwin',
-    'windows'
+  after(function() {
+    this.timeout(6000);
+
+    stubs.forEach(stub => {
+      stub.restore();
+    });
+
+    return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
+  });
+
+  beforeEach(function() {
+    this.timeout(6000);
+
+    // Ensure the test output is clear at the start
+    return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
+  });
+
+  const browsers = [
+    'firefox',
+    'chrome'
+  ];
+  const releases = [
+    'stable',
+    'beta',
+    'unstable'
   ];
 
-  environments.forEach(environmentName => {
-    it('should be able to get firefox driver url', function() {
-      this.timeout(10000);
-      Object.defineProperty(process, 'platform', {
-        value: environmentName
-      });
+  browsers.forEach(browserId => {
+    performTest(browserId, releases);
+  });
+});
 
-      return downloadManager._getFirefoxDriverDownloadURL()
-      .then(result => {
-        result.url.indexOf(
-          'https://github.com/mozilla/geckodriver/releases/download/'
-        ).should.not.equal(-1);
+describe('Test Download Manager - Browser Download', function() {
+  before(function() {
+    this.timeout(10 * 1000);
+    // Reset Install Directory
+    seleniumAssistant.setBrowserInstallDir(null);
 
-        switch (environmentName) {
-          case 'linux':
-            result.url.indexOf('linux').should.not.equal(-1);
-            break;
-          case 'darwin':
-            result.url.indexOf('mac').should.not.equal(-1);
-            break;
-          case 'windows':
-            result.url.indexOf('win64').should.not.equal(-1);
-            break;
-          default:
-            throw new Error('Unsupported environment: ' + environmentName);
-        }
+    return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
+  });
 
-        (typeof result.name).should.not.equal('undefined');
-        (result.name === null).should.equal(false);
-        (result.name.length > 0).should.equal(true);
-      });
+  const performDownloadTest = (browserId, release) => {
+    it(`should download ${browserId} - ${release} from the network`, function() {
+      this.timeout(5 * 60 * 1000);
+      return seleniumAssistant.downloadBrowser(browserId, release, 0);
+    });
+  };
+
+  const browsers = [
+    'firefox',
+    'chrome'
+  ];
+  const releases = [
+    'stable',
+    'beta',
+    'unstable'
+  ];
+
+  browsers.forEach(browserId => {
+    releases.forEach(release => {
+      performDownloadTest(browserId, release);
     });
   });
 });

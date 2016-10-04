@@ -26,14 +26,9 @@ To use **Opera**:
 
     npm install operadriver --save-dev
 
-To use **Firefox** there isn't a helpful wrapper that works 100%, but you
-can use the `downloadFirefoxDriver()` to download the appropriate driver:
+To use **Firefox**:
 
-    const seleniumAssistant = require('selenium-assistant');
-    seleniumAssistant.downloadFirefoxDriver()
-    .then(() => {
-      console.log('Finished downloading Firefox\'s Driver');
-    });
+    npm install geckodriver --save-dev
 
 # Usage
 

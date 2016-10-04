@@ -16,7 +16,6 @@
 
 'use strict';
 
-const del = require('del');
 const path = require('path');
 const chalk = require('chalk');
 const selenium = require('selenium-webdriver');
@@ -24,9 +23,10 @@ const selenium = require('selenium-webdriver');
 const TestServer = require('./helpers/test-server.js');
 
 require('geckodriver');
+
 require('chai').should();
 
-describe('Test Download and Usage of Browsers', function() {
+describe('Test Usage of Browsers', function() {
   this.retries(3);
 
   const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
@@ -50,22 +50,23 @@ describe('Test Download and Usage of Browsers', function() {
     browserIds.push('safari');
   }
 
-  const testPath = './test/test-output';
-
   let globalDriver = null;
   let globalServer = new TestServer(false);
   let localURL = '';
 
   before(function() {
-    this.timeout(180000);
+    this.timeout(5 * 60 * 1000);
 
-    seleniumAssistant.setBrowserInstallDir(testPath);
+    seleniumAssistant.setBrowserInstallDir(null);
 
-    // Ensure the test output is clear at the start
-    return del(seleniumAssistant.getBrowserInstallDir(), {force: true})
-    .then(() => {
-      // return seleniumAssistant.downloadFirefoxDriver();
-    })
+    return Promise.all([
+      seleniumAssistant.downloadBrowser('chrome', 'stable', 24),
+      seleniumAssistant.downloadBrowser('chrome', 'beta', 24),
+      seleniumAssistant.downloadBrowser('chrome', 'unstable', 24),
+      seleniumAssistant.downloadBrowser('firefox', 'stable', 24),
+      seleniumAssistant.downloadBrowser('firefox', 'beta', 24),
+      seleniumAssistant.downloadBrowser('firefox', 'unstable', 24)
+    ])
     .then(() => {
       const serverPath = path.join(__dirname, 'data', 'example-site');
       return globalServer.startServer(serverPath);
@@ -90,16 +91,14 @@ describe('Test Download and Usage of Browsers', function() {
   after(function() {
     this.timeout(6000);
 
-    return Promise.all([
-      del(seleniumAssistant.getBrowserInstallDir(), {force: true}),
-      seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
-    ])
+    return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
     .then(() => {
       return globalServer.killServer();
     });
   });
 
   function isBlackListed(specificBrowser) {
+    // Return true to blacklist
     return false;
   }
 
@@ -131,27 +130,40 @@ describe('Test Download and Usage of Browsers', function() {
         return;
       }
 
-      it(`should download ${browserId} - ${release} if needed and return an updated executable path`, function() {
+      it(`should be able to use ${browserId} - ${release} and return the global executable path`, function() {
         this.timeout(DOWNLOAD_TIMEOUT);
 
-        if ((!specificBrowser.isValid()) && specificBrowser.getSeleniumBrowserId() === 'safari') {
-          console.warn('Safari isn\'t available on this machine and we can\'t download it so skipping the tests.');
+        if (!specificBrowser.isValid()) {
+          if (browserId === 'opera') {
+            console.warn('Opera not available in this environment.');
+            return;
+          }
         }
 
-        let originalPath = null;
-        if (specificBrowser.isValid()) {
-          originalPath = specificBrowser.getExecutablePath();
+        let afterDownloadPath = specificBrowser.getExecutablePath();
+        if (browserId === 'opera') {
+          if (process.platform === 'darwin') {
+            afterDownloadPath.indexOf(
+              path.normalize('/Applications/Opera')
+            ).should.not.equal(-1);
+          } else {
+            console.warn('Unable to ensure location of Opera on this ' +
+              'platform.');
+          }
+        } else {
+          afterDownloadPath.indexOf(
+            path.normalize(seleniumAssistant.getBrowserInstallDir())
+          ).should.not.equal(-1);
         }
 
-        if (!originalPath) {
-          console.warn(`${specificBrowser.getPrettyName()} doesn't exist on the current machine so skipping to force download.`);
+        if (isBlackListed(specificBrowser)) {
+          console.log(`Skipping ${browserId} - ${release} due to blacklist.`);
           return;
         }
 
-        return seleniumAssistant.downloadBrowser(browserId, release)
-        .then(() => {
-          let afterDownloadPath = specificBrowser.getExecutablePath();
-          afterDownloadPath.should.equal(originalPath);
+        return specificBrowser.getSeleniumDriver()
+        .then(driver => {
+          globalDriver = driver;
         })
         .then(() => {
           if (isBlackListed(specificBrowser)) {
@@ -170,7 +182,7 @@ describe('Test Download and Usage of Browsers', function() {
             });
           })
           .then(() => {
-            return testBrowserInfo(specificBrowser);
+            return seleniumAssistant.killWebDriver(globalDriver);
           });
         });
       });
@@ -204,7 +216,10 @@ describe('Test Download and Usage of Browsers', function() {
             return;
           }
 
-          return specificBrowser.getSeleniumDriver()
+          // Test using builder manually
+          const builder = specificBrowser.getSeleniumDriverBuilder();
+
+          return builder.buildAsync()
           .then(driver => {
             globalDriver = driver;
           })
@@ -231,10 +246,10 @@ describe('Test Download and Usage of Browsers', function() {
                 return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
               });
             });
-          })
-          .then(() => {
-            return testBrowserInfo(specificBrowser);
           });
+        })
+        .then(() => {
+          return testBrowserInfo(specificBrowser);
         });
       });
     });
