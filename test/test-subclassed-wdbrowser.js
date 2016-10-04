@@ -79,6 +79,7 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
       releases.forEach(release => {
         const browser = new DriverBrowser(release);
         const rawString = browser.getRawVersionString();
+        console.log(rawString);
         if (rawString) {
           (typeof rawString).should.equal('string');
         } else {
@@ -92,6 +93,7 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
         const browser = new DriverBrowser(release);
         const versionNumber = browser.getVersionNumber();
         if (versionNumber) {
+          (versionNumber).should.not.equal(-1);
           (typeof versionNumber).should.equal('number');
         } else {
           versionNumber.should.equal(false);
@@ -146,11 +148,6 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
 const webdriverFiles = fs.readdirSync('./src/webdriver-browser');
 webdriverFiles.forEach(webdriverFile => {
   if (webdriverFile === 'web-driver-browser.js') {
-    return;
-  }
-
-  // Skip until it's properly supported
-  if (webdriverFile === 'safari.js') {
     return;
   }
 

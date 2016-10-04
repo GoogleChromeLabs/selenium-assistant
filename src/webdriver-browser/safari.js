@@ -104,7 +104,7 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
       /* eslint-disable no-useless-escape */
       const results = new RegExp(
         '<key>CFBundleShortVersionString</key>' +
-        '[\\s]+<string>([\\d]+.[\\d]+.[\\d]+)</string>', 'g')
+        '[\\s]+<string>([\\d]+.[\\d]+(?:.[\\d]+)?)</string>', 'g')
       .exec(versionDoc);
       /* eslint-enable no-useless-escape */
       if (results) {
@@ -129,7 +129,7 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
       return -1;
     }
 
-    const regexMatch = safariVersion.match(/(\d+)\.\d+\.\d+/);
+    const regexMatch = safariVersion.match(/(\d+)\.\d+(?:\.\d+)?/);
     if (regexMatch === null) {
       console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
         'from Safari: ', this.getExecutablePath());

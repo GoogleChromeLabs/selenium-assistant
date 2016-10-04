@@ -174,6 +174,7 @@ describe('Test Download and Usage of Browsers', function() {
 
         if (browserId === 'safari') {
           // Safari can't be downloaded.
+          console.log('Safari can\'t be downloaded at the moment so skipping test.');
           return;
         }
 
