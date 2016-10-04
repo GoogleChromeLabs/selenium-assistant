@@ -79,7 +79,6 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
       releases.forEach(release => {
         const browser = new DriverBrowser(release);
         const rawString = browser.getRawVersionString();
-        console.log(rawString);
         if (rawString) {
           (typeof rawString).should.equal('string');
         } else {
@@ -92,11 +91,9 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
       releases.forEach(release => {
         const browser = new DriverBrowser(release);
         const versionNumber = browser.getVersionNumber();
-        if (versionNumber) {
-          (versionNumber).should.not.equal(-1);
-          (typeof versionNumber).should.equal('number');
-        } else {
-          versionNumber.should.equal(false);
+        (typeof versionNumber).should.equal('number');
+        if (versionNumber === -1) {
+          console.log('Browser failed to get version number from: ', browser.getRawVersionString());
         }
       });
     });

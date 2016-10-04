@@ -99,7 +99,7 @@ describe('SeleniumAssistant', function() {
 
   it('should be able to print available browsers', function() {
     let consoleCalls = 0;
-    const stub = sinon.stub(console, 'log', () => {
+    const stub = sinon.stub(console, 'log', input => {
       consoleCalls++;
     });
     sinonStubs.push(stub);

@@ -142,6 +142,7 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
    */
   getVersionNumber() {
     const chromeVersion = this.getRawVersionString();
+    // console.log(chromeVersion);
     if (!chromeVersion) {
       return -1;
     }

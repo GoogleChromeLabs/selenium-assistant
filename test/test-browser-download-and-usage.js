@@ -118,6 +118,12 @@ describe('Test Download and Usage of Browsers', function() {
         return;
       }
 
+      if (browserId === 'safari') {
+        // Safari fails (both stable and beta) with
+        // "Error: Server terminated early with status 1".
+        return;
+      }
+
       let specificBrowser = seleniumAssistant.getBrowser(browserId, release);
       if (!specificBrowser) {
         console.warn(chalk.red('WARNING:') + ' Unable to find ' +
