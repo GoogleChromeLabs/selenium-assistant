@@ -270,7 +270,7 @@ describe('WebDriverBrowser', function() {
     }).to.throw('Unknown selenium options');
   });
 
-  it('should throw when gettomg a builder for a driver which isn\'t a subclass because of no executable path', function() {
+  it('should throw when getting a builder when non-overriden method is used', function() {
     expect(() => {
       var webdriver = new WebDriverBrowser(
         'Pretty Name',

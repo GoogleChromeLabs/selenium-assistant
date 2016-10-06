@@ -27,26 +27,21 @@ require('geckodriver');
 require('chai').should();
 
 describe('Test Usage of Browsers', function() {
-  this.retries(3);
+  if ((process.env.TRAVIS || process.env.RELASE)) {
+    this.retries(3);
+  }
 
   const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
   const seleniumAssistant = require('../src/index.js');
   const releases = ['stable', 'beta', 'unstable'];
   const browserIds = ['chrome', 'firefox'];
 
-  // Can't test on Opera. Sadly OS X requires manual intervention to install
-  // Linux download URL's are unique for each release.
-  // if (
-  //   // Opera on OS X requires user prompt
-  //   process.platform !== 'darwin' ||
-  //   // This isn't a release and it's not a travis run
-  //   (process.env.RELEASE !== 'true' && process.env.TRAVIS !== 'true')
-  // ) {
-  //   browserIds.push('opera');
-  // }
+  if (!(process.env.TRAVIS || process.env.RELASE)) {
+    browserIds.push('opera');
+  }
 
   // Travis has Safari, but the extension won't be installed :(
-  if ((!process.env.TRAVIS) && process.platform === 'darwin') {
+  if ((!process.env.TRAVIS || process.env.RELASE) && process.platform === 'darwin') {
     browserIds.push('safari');
   }
 
@@ -80,9 +75,7 @@ describe('Test Usage of Browsers', function() {
     // Timeout is to account for slow closing of selenium web driver browser
     this.timeout(180000);
 
-    return Promise.all([
-      seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
-    ])
+    return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
     .then(() => {
       globalDriver = null;
     });
@@ -100,6 +93,46 @@ describe('Test Usage of Browsers', function() {
   function isBlackListed(specificBrowser) {
     // Return true to blacklist
     return false;
+  }
+
+  function testNormalSeleniumUsage(specificBrowser) {
+    return specificBrowser.getSeleniumDriver()
+    .then(driver => {
+      globalDriver = driver;
+    })
+    .then(() => {
+      return globalDriver.get(localURL)
+      .then(() => {
+        return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
+      });
+    })
+    .then(() => {
+      return seleniumAssistant.killWebDriver(globalDriver);
+    })
+    .then(() => {
+      globalDriver = null;
+    });
+  }
+
+  function testBuilderSeleniumUsage(specificBrowser) {
+    const builder = specificBrowser.getSeleniumDriverBuilder();
+
+    return builder.buildAsync()
+    .then(driver => {
+      globalDriver = driver;
+    })
+    .then(() => {
+      return globalDriver.get(localURL);
+    })
+    .then(() => {
+      return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
+    })
+    .then(() => {
+      return seleniumAssistant.killWebDriver(globalDriver);
+    })
+    .then(() => {
+      globalDriver = null;
+    });
   }
 
   function testBrowserInfo(specificBrowser) {
@@ -130,7 +163,7 @@ describe('Test Usage of Browsers', function() {
         return;
       }
 
-      it(`should be able to use ${browserId} - ${release} and return the global executable path`, function() {
+      it(`should be able to use ${browserId} - ${release}`, function() {
         this.timeout(DOWNLOAD_TIMEOUT);
 
         if (!specificBrowser.isValid()) {
@@ -138,6 +171,8 @@ describe('Test Usage of Browsers', function() {
             console.warn('Opera not available in this environment.');
             return;
           }
+
+          throw new Error(`Browser is unexpectidly invalid ${browserId} - ${release}`);
         }
 
         let afterDownloadPath = specificBrowser.getExecutablePath();
@@ -161,92 +196,9 @@ describe('Test Usage of Browsers', function() {
           return;
         }
 
-        return specificBrowser.getSeleniumDriver()
-        .then(driver => {
-          globalDriver = driver;
-        })
+        return testNormalSeleniumUsage(specificBrowser)
         .then(() => {
-          if (isBlackListed(specificBrowser)) {
-            console.log('Skipping due to blacklist.');
-            return;
-          }
-
-          return specificBrowser.getSeleniumDriver()
-          .then(driver => {
-            globalDriver = driver;
-          })
-          .then(() => {
-            return globalDriver.get(localURL)
-            .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
-            });
-          })
-          .then(() => {
-            return seleniumAssistant.killWebDriver(globalDriver);
-          });
-        });
-      });
-
-      it(`should force download ${browserId} - ${release} and return the global executable path`, function() {
-        this.timeout(DOWNLOAD_TIMEOUT);
-
-        if (browserId === 'safari') {
-          // Safari can't be downloaded.
-          console.log('Safari can\'t be downloaded at the moment so skipping test.');
-          return;
-        }
-
-        return seleniumAssistant.downloadBrowser(browserId, release, {force: true})
-        .then(() => {
-          let afterDownloadPath = specificBrowser.getExecutablePath();
-
-          if (browserId === 'opera' && process.platform === 'darwin') {
-            afterDownloadPath.indexOf(
-              path.normalize('/Applications/Opera')
-            ).should.not.equal(-1);
-          } else {
-            afterDownloadPath.indexOf(
-              path.normalize(seleniumAssistant.getBrowserInstallDir())
-            ).should.not.equal(-1);
-          }
-        })
-        .then(() => {
-          if (isBlackListed(specificBrowser)) {
-            console.log('Skipping due to blacklist.');
-            return;
-          }
-
-          // Test using builder manually
-          const builder = specificBrowser.getSeleniumDriverBuilder();
-
-          return builder.buildAsync()
-          .then(driver => {
-            globalDriver = driver;
-          })
-          .then(() => {
-            return globalDriver.get(localURL)
-            .then(() => {
-              return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
-            })
-            .then(() => {
-              return seleniumAssistant.killWebDriver(globalDriver);
-            });
-          })
-          .then(() => {
-            // Test using builder manually
-            const builder = specificBrowser.getSeleniumDriverBuilder();
-
-            return builder.buildAsync()
-            .then(driver => {
-              globalDriver = driver;
-            })
-            .then(() => {
-              return globalDriver.get(localURL)
-              .then(() => {
-                return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
-              });
-            });
-          });
+          return testBuilderSeleniumUsage(specificBrowser);
         })
         .then(() => {
           return testBrowserInfo(specificBrowser);

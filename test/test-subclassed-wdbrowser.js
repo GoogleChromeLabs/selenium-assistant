@@ -29,13 +29,8 @@ const sinonStubs = [];
 
 function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
   const DriverBrowser = require(wdBrowserPath);
-  let releases;
 
   describe(name, function() {
-    before(function() {
-      releases = DriverBrowser.getAvailableReleases();
-    });
-
     afterEach(function() {
       while (sinonStubs.length > 0) {
         const stub = sinonStubs.pop();
@@ -43,100 +38,84 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
       }
     });
 
-    it('should be able to build new DriverBrowser', function() {
-      releases.forEach(release => {
-        new DriverBrowser(release);
-      });
-    });
+    let releases = DriverBrowser.getAvailableReleases();
+    releases.forEach(release => {
+      describe(`${release} Release`, function() {
+        it('should be able to build new DriverBrowser', function() {
+          new DriverBrowser(release);
+        });
 
-    it('should have a valid pretty name', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        browser.getPrettyName().indexOf(prettyNameStart).should.equal(0);
-      });
-    });
+        it('should have a valid pretty name', function() {
+          const browser = new DriverBrowser(release);
+          browser.getPrettyName().indexOf(prettyNameStart).should.equal(0);
+        });
 
-    it('should have the correct Options object', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        (browser.getSeleniumOptions() instanceof seleniumBrowser.Options).should.equal(true);
-      });
-    });
+        it('should have the correct Options object', function() {
+          const browser = new DriverBrowser(release);
+          (browser.getSeleniumOptions() instanceof seleniumBrowser.Options).should.equal(true);
+        });
 
-    it('should be able to get an executable path', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        const executablePath = browser.getExecutablePath();
-        if (executablePath) {
-          (typeof executablePath).should.equal('string');
-        } else {
-          (executablePath === null).should.equal(true);
-        }
-      });
-    });
+        it('should be able to get an executable path', function() {
+          const browser = new DriverBrowser(release);
+          const executablePath = browser.getExecutablePath();
+          if (executablePath) {
+            (typeof executablePath).should.equal('string');
+          } else {
+            (executablePath === null).should.equal(true);
+          }
+        });
 
-    it('should be able to get raw version output', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        const rawString = browser.getRawVersionString();
-        if (rawString) {
-          (typeof rawString).should.equal('string');
-        } else {
+        it('should be able to get raw version output', function() {
+          const browser = new DriverBrowser(release);
+          const rawString = browser.getRawVersionString();
+          if (rawString) {
+            (typeof rawString).should.equal('string');
+          } else {
+            (rawString === null).should.equal(true);
+          }
+        });
+
+        it('should be able to get a version number', function() {
+          const browser = new DriverBrowser(release);
+          const versionNumber = browser.getVersionNumber();
+          (typeof versionNumber).should.equal('number');
+        });
+
+        it('should get null for raw version output if no executable found', function() {
+          const browser = new DriverBrowser(release);
+          sinonStubs.push(
+            sinon.stub(browser, 'getExecutablePath', () => {
+              return null;
+            })
+          );
+
+          const rawString = browser.getRawVersionString();
           (rawString === null).should.equal(true);
-        }
-      });
-    });
+        });
 
-    it('should be able to get a version number', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        const versionNumber = browser.getVersionNumber();
-        (typeof versionNumber).should.equal('number');
-        if (versionNumber === -1) {
-          console.log('Browser failed to get version number from: ', browser.getRawVersionString());
-        }
-      });
-    });
+        it('should get -1 for version number if no executable found', function() {
+          const browser = new DriverBrowser(release);
+          sinonStubs.push(
+            sinon.stub(browser, 'getExecutablePath', () => {
+              return null;
+            })
+          );
 
-    it('should get null for raw version output if no executable found', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        sinonStubs.push(
-          sinon.stub(browser, 'getExecutablePath', () => {
-            return null;
-          })
-        );
+          const versionNumber = browser.getVersionNumber();
+          versionNumber.should.equal(-1);
+        });
 
-        const rawString = browser.getRawVersionString();
-        (rawString === null).should.equal(true);
-      });
-    });
+        it('should get -1 for an unexpected raw version string', function() {
+          const browser = new DriverBrowser(release);
+          sinonStubs.push(
+            sinon.stub(browser, 'getRawVersionString', () => {
+              return 'ImTotallyMadeUp 12345678.asdf.12345678.asdf';
+            })
+          );
 
-    it('should get -1 for version number if no executable found', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        sinonStubs.push(
-          sinon.stub(browser, 'getExecutablePath', () => {
-            return null;
-          })
-        );
-
-        const versionNumber = browser.getVersionNumber();
-        versionNumber.should.equal(-1);
-      });
-    });
-
-    it('should get -1 for an unexpected raw version string', function() {
-      releases.forEach(release => {
-        const browser = new DriverBrowser(release);
-        sinonStubs.push(
-          sinon.stub(browser, 'getRawVersionString', () => {
-            return 'ImTotallyMadeUp 12345678.asdf.12345678.asdf';
-          })
-        );
-
-        const versionNumber = browser.getVersionNumber();
-        versionNumber.should.equal(-1);
+          const versionNumber = browser.getVersionNumber();
+          versionNumber.should.equal(-1);
+        });
       });
     });
   });
@@ -172,7 +151,7 @@ webdriverFiles.forEach(webdriverFile => {
   }
 
   performTest(
-    `WebDriverBrowser/${webdriverFile}`,
+    `Subclassed WebDriverBrowser: ${webdriverFile}`,
     `./../src/webdriver-browser/${webdriverFile}`,
     prettyNameStart,
     seleniumBrowser
