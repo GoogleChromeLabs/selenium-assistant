@@ -62,6 +62,9 @@ describe('Test Usage of Browsers', function() {
       seleniumAssistant.downloadBrowser('firefox', 'beta', 24),
       seleniumAssistant.downloadBrowser('firefox', 'unstable', 24)
     ])
+    .catch(err => {
+      console.warn('There was an issue downloading the browsers: ', err);
+    })
     .then(() => {
       const serverPath = path.join(__dirname, 'data', 'example-site');
       return globalServer.startServer(serverPath);
