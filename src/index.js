@@ -146,7 +146,6 @@ class SeleniumAssistant {
       printToConsole = true;
     }
 
-    var browsers = this.getAvailableBrowsers();
     const rows = [];
     rows.push([
       'Browser Name',
@@ -154,6 +153,7 @@ class SeleniumAssistant {
       'Path'
     ]);
 
+    var browsers = this.getAvailableBrowsers();
     browsers.forEach(browser => {
       rows.push([
         browser.getPrettyName(),

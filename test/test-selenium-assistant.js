@@ -98,6 +98,8 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should be able to print available browsers', function() {
+    this.timeout(5 * 1000);
+
     let consoleCalls = 0;
     const stub = sinon.stub(console, 'log', input => {
       consoleCalls++;
@@ -114,6 +116,8 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should not print table to console', function() {
+    this.timeout(5 * 1000);
+
     let consoleCalls = 0;
     const stub = sinon.stub(console, 'log', () => {
       consoleCalls++;
