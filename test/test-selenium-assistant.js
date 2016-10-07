@@ -39,7 +39,7 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should be able to get an array of available browsers', function() {
-    this.timeout(5 * 1000);
+    this.timeout(10000);
 
     const browsers = seleniumAssistant.getAvailableBrowsers();
     (browsers instanceof Array).should.equal(true);
