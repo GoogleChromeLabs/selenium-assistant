@@ -161,7 +161,9 @@ class WebDriverBrowser {
           (Date.now() - global.TRAVIS_TEST.start));
       }
       if (minVersion) {
-        return this.getVersionNumber() >= minVersion;
+        const minVerionMet = this.getVersionNumber() >= minVersion;
+        console.log('Testing min version: ', minVerionMet);
+        return minVerionMet;
       }
       if (global.TRAVIS_TEST) {
         console.log('isValid 6: ' +
