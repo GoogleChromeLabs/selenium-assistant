@@ -86,20 +86,27 @@ class WebDriverBrowser {
    * @return {String} Raw string that identifies the browser
    */
   getRawVersionString() {
+    if (this._rawVerstionString) {
+      console.log('HERE <------------------------');
+      return this._rawVerstionString;
+    }
+
     const executablePath = this.getExecutablePath();
     if (!executablePath) {
       return null;
     }
 
+    this._rawVerstionString = null;
+
     try {
-      return execSync(`"${executablePath}" --version`)
+      this._rawVerstionString = execSync(`"${executablePath}" --version`)
         .toString();
     } catch (err) {
       console.warn(chalk.red('WARNING') + ': Unable to get a version string ' +
         'for ' + this.getPrettyName());
     }
 
-    return null;
+    return this._rawVerstionString;
   }
 
   /* eslint-disable valid-jsdoc */
