@@ -118,13 +118,23 @@ class SeleniumAssistant {
     }
 
     let webdriveBrowsers = browserManager.getSupportedBrowsers();
+    if (global.TRAVIS_TEST) {
+      console.log('getAvailableBrowsers 1: ' +
+        (Date.now() - global.TRAVIS_TEST.start));
+    }
     webdriveBrowsers = webdriveBrowsers.filter(webdriverBrowser => {
-      if (!webdriverBrowser.isValid()) {
-        return false;
+      if (global.TRAVIS_TEST) {
+        console.log('getAvailableBrowsers filter 2: ' +
+          (Date.now() - global.TRAVIS_TEST.start));
       }
 
-      return true;
+      return webdriverBrowser.isValid();
     });
+
+    if (global.TRAVIS_TEST) {
+      console.log('getAvailableBrowsers filter 3: ' +
+        (Date.now() - global.TRAVIS_TEST.start));
+    }
 
     return webdriveBrowsers;
   }

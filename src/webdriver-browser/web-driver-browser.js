@@ -131,23 +131,48 @@ class WebDriverBrowser {
    * @return {Boolean} True if a selenium driver can be produced
    */
   isValid() {
+    if (global.TRAVIS_TEST) {
+      console.log('isValid 1: ' +
+        (Date.now() - global.TRAVIS_TEST.start));
+    }
     const executablePath = this.getExecutablePath();
+    if (global.TRAVIS_TEST) {
+      console.log('isValid 2: ' +
+        (Date.now() - global.TRAVIS_TEST.start));
+    }
     if (!executablePath) {
       return false;
     }
 
     try {
+      if (global.TRAVIS_TEST) {
+        console.log('isValid 3: ' +
+          (Date.now() - global.TRAVIS_TEST.start));
+      }
       // This will throw if it's not found
       fs.lstatSync(executablePath);
-
+      if (global.TRAVIS_TEST) {
+        console.log('isValid 4: ' +
+          (Date.now() - global.TRAVIS_TEST.start));
+      }
       const minVersion = this._getMinSupportedVersion();
+      if (global.TRAVIS_TEST) {
+        console.log('isValid 5: ' +
+          (Date.now() - global.TRAVIS_TEST.start));
+      }
       if (minVersion) {
         return this.getVersionNumber() >= minVersion;
       }
-
+      if (global.TRAVIS_TEST) {
+        console.log('isValid 6: ' +
+          (Date.now() - global.TRAVIS_TEST.start));
+      }
       return true;
     } catch (error) {}
-
+    if (global.TRAVIS_TEST) {
+      console.log('isValid 7: ' +
+        (Date.now() - global.TRAVIS_TEST.start));
+    }
     return false;
   }
 
