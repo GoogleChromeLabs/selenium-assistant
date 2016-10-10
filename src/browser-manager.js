@@ -71,32 +71,18 @@ class BrowserManager {
    * @return {WebDriverBrowser} An instance of the browser you requested.
    */
   createWebDriverBrowser(browserId, release) {
-    if (global.TRAVIS_TEST) {
-      console.log('createWebDriverBrowser: ' +
-        (Date.now() - global.TRAVIS_TEST.start));
-    }
-    let browser;
     switch (browserId) {
       case 'chrome':
-        browser = new ChromeWebDriverBrowser(release);
-        break;
+        return new ChromeWebDriverBrowser(release);
       case 'firefox':
-        browser = new FirefoxWebDriverBrowser(release);
-        break;
+        return new FirefoxWebDriverBrowser(release);
       case 'opera':
-        browser = new OperaWebDriverBrowser(release);
-        break;
+        return new OperaWebDriverBrowser(release);
       case 'safari':
-        browser = new SafariWebDriverBrowser(release);
-        break;
+        return new SafariWebDriverBrowser(release);
       default:
         throw new Error('Unknown web driver browser request: ', browserId);
     }
-    if (global.TRAVIS_TEST) {
-      console.log('createWebDriverBrowser END: ' +
-        (Date.now() - global.TRAVIS_TEST.start));
-    }
-    return browser;
   }
 }
 
