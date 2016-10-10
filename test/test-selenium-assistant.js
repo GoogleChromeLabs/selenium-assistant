@@ -20,8 +20,11 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const path = require('path');
 
+const browserManager = require('../src/browser-manager.js');
+
 require('chai').should();
 
+const NUM_OF_BROWSERS = browserManager.getSupportedBrowsers().length;
 const sinonStubs = [];
 
 describe('SeleniumAssistant', function() {
@@ -39,10 +42,8 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should be able to get an array of available browsers', function() {
-    this.timeout(10000);
-    global.TRAVIS_TEST = {
-      start: Date.now()
-    };
+    this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
+
     const browsers = seleniumAssistant.getAvailableBrowsers();
     (browsers instanceof Array).should.equal(true);
 
@@ -99,7 +100,7 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should be able to print available browsers', function() {
-    this.timeout(5 * 1000);
+    this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
     const stub = sinon.stub(console, 'log', input => {
@@ -117,7 +118,7 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should not print table to console', function() {
-    this.timeout(5 * 1000);
+    this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
     const stub = sinon.stub(console, 'log', () => {
