@@ -87,10 +87,16 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
   }
 
   getRawVersionString() {
+    if (this._rawVerstionString) {
+      return this._rawVerstionString;
+    }
+
     const executablePath = this.getExecutablePath();
     if (!executablePath) {
       return null;
     }
+
+    this._rawVerstionString = null;
 
     let versionListPath;
     if (this._release === 'stable') {
@@ -108,14 +114,14 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
       .exec(versionDoc);
       /* eslint-enable no-useless-escape */
       if (results) {
-        return results[1];
+        this._rawVerstionString = results[1];
       }
     } catch (err) {
       console.warn(chalk.red('WARNING') + ': Unable to get a version string ' +
         'for ' + this.getPrettyName());
     }
 
-    return null;
+    return this._rawVerstionString;
   }
 
   /**

@@ -87,7 +87,6 @@ class WebDriverBrowser {
    */
   getRawVersionString() {
     if (this._rawVerstionString) {
-      console.log('HERE <------------------------');
       return this._rawVerstionString;
     }
 
