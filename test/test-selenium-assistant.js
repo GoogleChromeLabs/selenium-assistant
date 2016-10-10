@@ -40,7 +40,9 @@ describe('SeleniumAssistant', function() {
 
   it('should be able to get an array of available browsers', function() {
     this.timeout(10000);
-
+    global.TRAVIS_TEST = {
+      start: Date.now()
+    };
     const browsers = seleniumAssistant.getAvailableBrowsers();
     (browsers instanceof Array).should.equal(true);
 
