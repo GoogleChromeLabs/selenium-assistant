@@ -76,24 +76,15 @@ class SeleniumAssistant {
    *                            to download.
    * @param  {String} release   String of the release channel, can be
    *                            'stable', 'beta' or 'unstable'
-   * @param  {Boolean} [force=false]  Force download of a browser regardless
-   *                                  of whether it exists already or not.
+   * @param  {int} [expirationInHours=24] This is how long until a browser
+   *                             download is regarded as expired and Should
+   *                             be updated. A value of 0 will force a download.
    * @return {Promise}          A promise is returned which resolves
    *                            once the browser has been downloaded.
    */
-  downloadBrowser(browserId, release, force) {
-    return downloadManager.downloadBrowser(browserId, release, force);
-  }
-
-  /**
-   * At the time of writing Firefox doesn't have a friendly node wrapper
-   * for it's selenium driver (June 2016), so this method will get it
-   * and install it in the current directory so tests can find it.
-   * @return {Promise} Resolves when the requires Firefox driver is
-   *                   doesnloaded.
-   */
-  downloadFirefoxDriver() {
-    return downloadManager.downloadFirefoxDriver();
+  downloadBrowser(browserId, release, expirationInHours) {
+    return downloadManager.downloadBrowser(
+      browserId, release, expirationInHours);
   }
 
   /**
@@ -127,13 +118,23 @@ class SeleniumAssistant {
     }
 
     let webdriveBrowsers = browserManager.getSupportedBrowsers();
+    if (global.TRAVIS_TEST) {
+      console.log('getAvailableBrowsers 1: ' +
+        (Date.now() - global.TRAVIS_TEST.start));
+    }
     webdriveBrowsers = webdriveBrowsers.filter(webdriverBrowser => {
-      if (!webdriverBrowser.isValid()) {
-        return false;
+      if (global.TRAVIS_TEST) {
+        console.log('getAvailableBrowsers filter 2: ' +
+          (Date.now() - global.TRAVIS_TEST.start));
       }
 
-      return true;
+      return webdriverBrowser.isValid();
     });
+
+    if (global.TRAVIS_TEST) {
+      console.log('getAvailableBrowsers filter 3: ' +
+        (Date.now() - global.TRAVIS_TEST.start));
+    }
 
     return webdriveBrowsers;
   }
@@ -155,7 +156,6 @@ class SeleniumAssistant {
       printToConsole = true;
     }
 
-    var browsers = this.getAvailableBrowsers();
     const rows = [];
     rows.push([
       'Browser Name',
@@ -163,6 +163,7 @@ class SeleniumAssistant {
       'Path'
     ]);
 
+    const browsers = this.getAvailableBrowsers();
     browsers.forEach(browser => {
       rows.push([
         browser.getPrettyName(),

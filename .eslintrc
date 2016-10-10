@@ -1,3 +1,6 @@
 {
-  "extends": "google"
+  "extends": "google",
+  "rules": {
+    "no-var": 2
+    }
 }

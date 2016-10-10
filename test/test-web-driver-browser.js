@@ -207,7 +207,7 @@ describe('WebDriverBrowser', function() {
 
   it('should throw for non-overriden getExecutablePath()', function() {
     expect(() => {
-      var webdriver = new WebDriverBrowser(
+      const webdriver = new WebDriverBrowser(
         'Pretty Name',
         'stable',
         'chrome',
@@ -220,7 +220,7 @@ describe('WebDriverBrowser', function() {
 
   it('should throw for non-overriden getRawVersionString()', function() {
     expect(() => {
-      var webdriver = new WebDriverBrowser(
+      const webdriver = new WebDriverBrowser(
         'Pretty Name',
         'stable',
         'chrome',
@@ -233,7 +233,7 @@ describe('WebDriverBrowser', function() {
 
   it('should throw for non-overriden getVersionNumber()', function() {
     expect(() => {
-      var webdriver = new WebDriverBrowser(
+      const webdriver = new WebDriverBrowser(
         'Pretty Name',
         'stable',
         'chrome',
@@ -246,7 +246,7 @@ describe('WebDriverBrowser', function() {
 
   it('should throw for isValid when non-overriden method is used', function() {
     expect(() => {
-      var webdriver = new WebDriverBrowser(
+      const webdriver = new WebDriverBrowser(
         'Pretty Name',
         'stable',
         'chrome',
@@ -259,7 +259,7 @@ describe('WebDriverBrowser', function() {
 
   it('should throw for when invalid options object is used to get builder', function() {
     expect(() => {
-      var webdriver = new WebDriverBrowser(
+      const webdriver = new WebDriverBrowser(
         'Pretty Name',
         'stable',
         'chrome',
@@ -270,9 +270,9 @@ describe('WebDriverBrowser', function() {
     }).to.throw('Unknown selenium options');
   });
 
-  it('should throw when gettomg a builder for a driver which isn\'t a subclass because of no executable path', function() {
+  it('should throw when getting a builder when non-overriden method is used', function() {
     expect(() => {
-      var webdriver = new WebDriverBrowser(
+      const webdriver = new WebDriverBrowser(
         'Pretty Name',
         'stable',
         'chrome',
@@ -284,7 +284,7 @@ describe('WebDriverBrowser', function() {
   });
 
   it('should reject when invalid options object is used to get driver', function() {
-    var webdriver = new WebDriverBrowser(
+    const webdriver = new WebDriverBrowser(
       'Pretty Name',
       'stable',
       'chrome',
@@ -300,7 +300,7 @@ describe('WebDriverBrowser', function() {
   });
 
   it('should reject when building a driver which isn\'t a subclass', function() {
-    var webdriver = new WebDriverBrowser(
+    const webdriver = new WebDriverBrowser(
       'Pretty Name',
       'stable',
       'chrome',

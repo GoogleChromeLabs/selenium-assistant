@@ -25,6 +25,7 @@ const del = require('del');
 const dmg = require('dmg');
 const fse = require('fs-extra');
 const yauzl = require('yauzl');
+const storage = require('node-persist');
 
 const application = require('./application-state.js');
 const browserManager = require('./browser-manager.js');
@@ -38,165 +39,16 @@ const browserManager = require('./browser-manager.js');
  */
 class DownloadManager {
 
-  _getFirefoxDriverDownloadURL() {
-    return new Promise((resolve, reject) => {
-      const requestOptions = {
-        url: 'https://api.github.com/repos/mozilla/geckodriver/releases',
-        headers: {
-          'User-Agent': 'request'
-        }
-      };
-      if (process.env.GH_TOKEN) {
-        requestOptions.url = requestOptions.url + '?access_token=' +
-          process.env.GH_TOKEN;
-      }
-      request(requestOptions,
-      (err, response) => {
-        if (err) {
-          return reject(err);
-        }
-
-        if (response.statusCode !== 200) {
-          return reject(new Error('Unable to get valid response for Github. ' +
-            JSON.parse(response.body).message));
-        }
-        const allReleases = JSON.parse(response.body);
-        let selectedRelease;
-        const blackList = [
-          // v0.10.0 requires selenium-webdriver 3.0.0
-          // 'v0.10.0'
-        ];
-        for (let i = 0; i < allReleases.length; i++) {
-          const release = allReleases[i];
-
-          // Block releases here if needed
-          if (blackList.indexOf(release['tag_name']) !== -1) { // eslint-disable-line dot-notation
-            continue;
-          }
-
-          if (!selectedRelease) {
-            selectedRelease = release;
-          }
-        }
-        const releaseAssets = selectedRelease.assets;
-        switch (process.platform) {
-          case 'linux':
-            releaseAssets.forEach(download => {
-              if (download.name.indexOf('linux64') !== -1) {
-                return resolve({
-                  url: download.browser_download_url,
-                  name: download.name
-                });
-              }
-            });
-            break;
-          case 'darwin':
-            releaseAssets.forEach(download => {
-              if (download.name.indexOf('mac') !== -1) {
-                return resolve({
-                  url: download.browser_download_url,
-                  name: download.name
-                });
-              }
-            });
-            break;
-          case 'windows':
-            releaseAssets.forEach(download => {
-              if (download.name.indexOf('win64') !== -1) {
-                return resolve({
-                  url: download.browser_download_url,
-                  name: download.name
-                });
-              }
-            });
-            break;
-          default:
-            return reject(new Error('Unsupported platform: ' +
-              process.platform));
-        }
-
-        return reject(new Error('Unable to find appropriate download for ' +
-          'this environment.'));
-      });
-    });
+  get defaultExpiration() {
+    return 24;
   }
 
-  /**
-   * This method retrieves the Firefox Gecko driver, and makes it
-   * executable. It's installed to the directory defined via the
-   * application get/setInstallDir() and it's added to the processes
-   * PATH for use by selenium-webdriver.
-   * @return {Promise}              Resolves when the driver is downloaded
-   */
-  downloadFirefoxDriver() {
-    let geckoDriverPath = path.join(
-      application.getInstallDirectory(), 'geckodriver');
-
-    return new Promise((resolve, reject) => {
-      mkdirp(geckoDriverPath, err => {
-        if (err) {
-          return reject(err);
-        }
-        resolve();
-      });
-    })
-    .then(() => {
-      return this._getFirefoxDriverDownloadURL();
-    })
-    .then(downloadInfo => {
-      return new Promise((resolve, reject) => {
-        // Make sure we know what we are dealing with
-        const expectExtension = '.tar.gz';
-        if (downloadInfo.name.indexOf(expectExtension) !==
-          (downloadInfo.name.length - expectExtension.length)) {
-          return reject(new Error(`Unexpected file extension for ` +
-            `${downloadInfo.name}`));
-        }
-
-        const filePath = path.join(geckoDriverPath, downloadInfo.name);
-        const file = fs.createWriteStream(filePath);
-
-        request(downloadInfo.url, err => {
-          if (err) {
-            return reject(err);
-          }
-
-          resolve({
-            filename: downloadInfo.name,
-            filePath: filePath
-          });
-        })
-        .pipe(file);
-      });
-    })
-    .then(fileInfo => {
-      return new Promise(function(resolve, reject) {
-        const untarProcess = spawn('tar', [
-          'xvzf',
-          fileInfo.filePath,
-          '-C',
-          geckoDriverPath
-        ]);
-
-        untarProcess.on('exit', code => {
-          if (code === 0) {
-            try {
-              const extractedFileName = 'geckodriver';
-              fs.chmodSync(path.join(geckoDriverPath, extractedFileName),
-                '755');
-              return resolve(fileInfo.filePath);
-            } catch (err) {
-              return reject(err);
-            }
-          }
-
-          reject(new Error('Unable to extract tar'));
-        });
-      });
-    })
-    .then(filePath => {
-      return del(filePath, {force: true});
+  _getStorage() {
+    storage.initSync({
+      dir: path.join(application.getInstallDirectory(), 'database')
     });
+
+    return storage;
   }
 
   /**
@@ -206,34 +58,83 @@ class DownloadManager {
    *                            to download ('chrome', 'firefox', 'opera').
    * @param  {String} release   This downloads the browser on a particular track
    *                            and can be 'stable', 'beta' or 'unstable'
-   * @param  {Boolean} [force=false]
+   * @param  {Number} [expirationInHours=24] This is how long until a browser
+   *                             download is regarded and expired and Should
+   *                             be updated. A value of 0 will force a download.
    *         										 If you want to install the browser regardless
    *                             of any existing installs of the process, pass
    *                             in true.
    * @return {Promise}           Promise resolves once the browser has been
    *                             downloaded and ready for use.
    */
-  downloadBrowser(browserId, release, force) {
-    let forceDownload = force || false;
+  downloadBrowser(browserId, release, expirationInHours) {
     let installDir = application.getInstallDirectory();
 
-    const browserInstance = browserManager
-      .createWebDriverBrowser(browserId, release);
-    if (!forceDownload && browserInstance.isValid()) {
-      return Promise.resolve();
-    }
+    const storage = this._getStorage();
+    const storageKey = `${browserId}:${release}`;
 
-    switch (browserId) {
-      case 'chrome':
-        return this._downlaodChrome(release, installDir);
-      case 'firefox':
-        return this._downloadFirefox(release, installDir);
-      case 'opera':
-        return this._downloadOpera(release, installDir);
-      default:
-        throw new Error(`Apologies, but ${browserId} can't be downloaded ` +
-          `with this tool`);
-    }
+    return new Promise((resolve, reject) => {
+      storage.getItem(storageKey, (err, value) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(value);
+      });
+    })
+    .then(lastBrowserUpdate => {
+      if (lastBrowserUpdate) {
+        if (typeof expirationInHours === 'undefined') {
+          expirationInHours = this.defaultExpiration;
+        }
+
+        const expirationInMillis = expirationInHours * 60 * 60 * 1000;
+        const dateComparison = Date.now() - expirationInMillis;
+
+        if (lastBrowserUpdate > dateComparison) {
+          const browserInstance = browserManager
+            .createWebDriverBrowser(browserId, release);
+          return !browserInstance.isValid();
+        }
+      }
+
+      return true;
+    })
+    .catch(() => {
+      // In case of error download browser.
+      return true;
+    })
+    .then(browserNeedsDownloading => {
+      if (!browserNeedsDownloading) {
+        return;
+      }
+
+      let downloadPromise;
+      switch (browserId) {
+        case 'chrome':
+          downloadPromise = this._downlaodChrome(release, installDir);
+          break;
+        case 'firefox':
+          downloadPromise = this._downloadFirefox(release, installDir);
+          break;
+        default:
+          throw new Error(`Apologies, but ${browserId} can't be downloaded ` +
+            `with this tool`);
+      }
+
+      return downloadPromise.then(() => {
+        return new Promise((resolve, reject) => {
+          storage.setItem(storageKey, Date.now(), err => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve();
+          });
+        });
+      });
+    });
   }
 
   _downlaodChrome(release, installDir) {
@@ -253,7 +154,7 @@ class DownloadManager {
         chromeProduct = 'google-chrome-unstable';
         break;
       default:
-        throw new Error('Unknown release.', release);
+        throw new Error(`Unknown release: '${release}'`);
     }
 
     switch (process.platform) {
@@ -283,7 +184,7 @@ class DownloadManager {
             chromeOSXAppName = 'Google Chrome.app';
             break;
           default:
-            throw new Error('Unknown release type: ' + release);
+            throw new Error(`Unknown release: '${release}'`);
         }
         break;
       default:
@@ -394,7 +295,7 @@ class DownloadManager {
         ffProduct = 'firefox-nightly-latest';
         break;
       default:
-        throw new Error('Unknown release.', release);
+        throw new Error(`Unknown release: '${release}'`);
     }
 
     switch (process.platform) {
@@ -511,7 +412,7 @@ class DownloadManager {
         operaProduct = 'opera-unstable';
         break;
       default:
-        throw new Error('Unknown release.', release);
+        throw new Error(`Unknown release: '${release}'`);
     }
 
     switch (process.platform) {
@@ -528,7 +429,7 @@ class DownloadManager {
             downloadUrl = 'http://www.opera.com/download/get/?id=39580&location=413&nothanks=yes&sub=marine';
             break;
           default:
-            throw new Error('Unknown release.', release);
+            throw new Error(`Unknown release: '${release}'`);
         }
         break;**/
       case 'darwin':
@@ -547,7 +448,7 @@ class DownloadManager {
             downloadUrl = 'http://net.geo.opera.com/opera/developer/mac';
             break;
           default:
-            throw new Error('Unknown release.', release);
+            throw new Error(`Unknown release: '${release}'`);
         }
         break;
       default:
