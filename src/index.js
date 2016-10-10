@@ -146,7 +146,7 @@ class SeleniumAssistant {
       printToConsole = true;
     }
 
-    var browsers = this.getAvailableBrowsers();
+    const browsers = this.getAvailableBrowsers();
     const rows = [];
     rows.push([
       'Browser Name',

@@ -38,9 +38,14 @@ const browserManager = require('./browser-manager.js');
  * @private
  */
 class DownloadManager {
+
+  get defaultExpiration() {
+    return 24;
+  }
+
   _getStorage() {
     storage.initSync({
-      dir: path.join(application.getInstallDirectory(), 'database/')
+      dir: path.join(application.getInstallDirectory(), 'database')
     });
 
     return storage;
@@ -53,7 +58,7 @@ class DownloadManager {
    *                            to download ('chrome', 'firefox', 'opera').
    * @param  {String} release   This downloads the browser on a particular track
    *                            and can be 'stable', 'beta' or 'unstable'
-   * @param  {int} [expirationInHours=24] This is how long until a browser
+   * @param  {Number} [expirationInHours=24] This is how long until a browser
    *                             download is regarded and expired and Should
    *                             be updated. A value of 0 will force a download.
    *         										 If you want to install the browser regardless
@@ -81,7 +86,7 @@ class DownloadManager {
     .then(lastBrowserUpdate => {
       if (lastBrowserUpdate) {
         if (typeof expirationInHours === 'undefined') {
-          expirationInHours = 24;
+          expirationInHours = this.defaultExpiration;
         }
 
         const expirationInMillis = expirationInHours * 60 * 60 * 1000;
@@ -90,15 +95,14 @@ class DownloadManager {
         if (lastBrowserUpdate > dateComparison) {
           const browserInstance = browserManager
             .createWebDriverBrowser(browserId, release);
-          if (browserInstance.isValid()) {
-            // No need to re-download
-            return false;
-          }
+          return !browserInstance.isValid();
         }
       }
 
       return true;
-    }, () => {
+    })
+    .catch(() => {
+      // In case of error download browser.
       return true;
     })
     .then(browserNeedsDownloading => {
@@ -119,8 +123,7 @@ class DownloadManager {
             `with this tool`);
       }
 
-      return downloadPromise
-      .then(() => {
+      return downloadPromise.then(() => {
         return new Promise((resolve, reject) => {
           storage.setItem(storageKey, Date.now(), err => {
             if (err) {

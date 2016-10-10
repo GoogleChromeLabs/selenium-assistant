@@ -158,8 +158,8 @@ describe('Test Usage of Browsers', function() {
 
       let specificBrowser = seleniumAssistant.getBrowser(browserId, release);
       if (!specificBrowser) {
-        console.warn(chalk.red('WARNING:') + ' Unable to find ' +
-          browserId + ' ' + release);
+        console.warn(`${chalk.red('WARNING:')} Unable to find ${browserId} ` +
+          ` ${release}`);
         return;
       }
 
@@ -197,12 +197,8 @@ describe('Test Usage of Browsers', function() {
         }
 
         return testNormalSeleniumUsage(specificBrowser)
-        .then(() => {
-          return testBuilderSeleniumUsage(specificBrowser);
-        })
-        .then(() => {
-          return testBrowserInfo(specificBrowser);
-        });
+        .then(() => testBuilderSeleniumUsage(specificBrowser))
+        .then(() => testBrowserInfo(specificBrowser));
       });
     });
   });

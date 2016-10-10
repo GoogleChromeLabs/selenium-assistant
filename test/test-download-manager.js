@@ -41,7 +41,8 @@ describe('Test Download Manager - Browser Expiration', function() {
 
             const storageKey = `${browserId}:${release}`;
 
-            const lastUpdate = Date.now() - (24 * 60 * 60 * 1000);
+            const lastUpdate = Date.now() -
+              (downloadManager.defaultExpiration * 60 * 60 * 1000);
             storage.setItem(storageKey, lastUpdate, err => {
               if (err) {
                 reject(err);
