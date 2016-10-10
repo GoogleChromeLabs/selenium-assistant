@@ -36,7 +36,7 @@ describe('Test Download Manager - Browser Expiration', function() {
           // than 24 hours
           return new Promise((resolve, reject) => {
             storage.initSync({
-              dir: path.join(seleniumAssistant.getBrowserInstallDir(), 'database/')
+              dir: path.join(seleniumAssistant.getBrowserInstallDir(), 'database')
             });
 
             const storageKey = `${browserId}:${release}`;

@@ -55,12 +55,12 @@ describe('Test Usage of Browsers', function() {
     seleniumAssistant.setBrowserInstallDir(null);
 
     return Promise.all([
-      seleniumAssistant.downloadBrowser('chrome', 'stable', 24),
-      seleniumAssistant.downloadBrowser('chrome', 'beta', 24),
-      seleniumAssistant.downloadBrowser('chrome', 'unstable', 24),
-      seleniumAssistant.downloadBrowser('firefox', 'stable', 24),
-      seleniumAssistant.downloadBrowser('firefox', 'beta', 24),
-      seleniumAssistant.downloadBrowser('firefox', 'unstable', 24)
+      seleniumAssistant.downloadBrowser('chrome', 'stable'),
+      seleniumAssistant.downloadBrowser('chrome', 'beta'),
+      seleniumAssistant.downloadBrowser('chrome', 'unstable'),
+      seleniumAssistant.downloadBrowser('firefox', 'stable'),
+      seleniumAssistant.downloadBrowser('firefox', 'beta'),
+      seleniumAssistant.downloadBrowser('firefox', 'unstable')
     ])
     .catch(err => {
       console.warn('There was an issue downloading the browsers: ', err);
@@ -109,9 +109,7 @@ describe('Test Usage of Browsers', function() {
         return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
       });
     })
-    .then(() => {
-      return seleniumAssistant.killWebDriver(globalDriver);
-    })
+    .then(() => seleniumAssistant.killWebDriver(globalDriver))
     .then(() => {
       globalDriver = null;
     });
@@ -159,7 +157,7 @@ describe('Test Usage of Browsers', function() {
         return;
       }
 
-      let specificBrowser = seleniumAssistant.getBrowser(browserId, release);
+      const specificBrowser = seleniumAssistant.getBrowser(browserId, release);
       if (!specificBrowser) {
         console.warn(`${chalk.red('WARNING:')} Unable to find ${browserId} ` +
           ` ${release}`);
