@@ -39,12 +39,11 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should be able to get an array of available browsers', function() {
+    this.timeout(10000);
+
     const browsers = seleniumAssistant.getAvailableBrowsers();
     (browsers instanceof Array).should.equal(true);
-  });
 
-  it('should return only browsers with executables in available browsers', function() {
-    const browsers = seleniumAssistant.getAvailableBrowsers();
     browsers.forEach(browser => {
       browser.isValid().should.equal(true);
     });
@@ -98,6 +97,8 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should be able to print available browsers', function() {
+    this.timeout(5 * 1000);
+
     let consoleCalls = 0;
     const stub = sinon.stub(console, 'log', input => {
       consoleCalls++;
@@ -114,6 +115,8 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should not print table to console', function() {
+    this.timeout(5 * 1000);
+
     let consoleCalls = 0;
     const stub = sinon.stub(console, 'log', () => {
       consoleCalls++;
