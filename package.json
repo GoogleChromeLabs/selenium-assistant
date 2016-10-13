@@ -49,7 +49,7 @@
     "dmg": "^0.1.0",
     "fs-extra": "^0.30.0",
     "mkdirp": "^0.5.1",
-    "node-persist": "^2.0.2",
+    "node-persist": "^2.0.6",
     "request": "^2.72.0",
     "selenium-webdriver": "^3.0.0-beta-3",
     "which": "^1.2.11",
