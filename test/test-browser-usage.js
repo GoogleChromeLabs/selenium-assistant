@@ -95,6 +95,11 @@ describe('Test Usage of Browsers', function() {
 
   function isBlackListed(specificBrowser) {
     // Return true to blacklist
+    if (specificBrowser.getSeleniumBrowserId() === 'opera' &&
+      specificBrowser.getVersionNumber() === 41) {
+      // Opera 41 is broken with Opera driver v0.2.2
+      return true;
+    }
     return false;
   }
 
@@ -183,7 +188,7 @@ describe('Test Usage of Browsers', function() {
               path.normalize('/Applications/Opera')
             ).should.not.equal(-1);
           } else {
-            console.warn('Unable to ensure location of Opera on this ' +
+            console.warn('        Unable to ensure location of Opera on this ' +
               'platform.');
           }
         } else {
