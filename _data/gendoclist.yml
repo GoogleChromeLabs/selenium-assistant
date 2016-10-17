@@ -1,7 +1,0 @@
-# Auto-generated from the npm-publish-scripts module
-releases:
-    stable:
-        latest: v
-        all:
-docs:
-  - master
