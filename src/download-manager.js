@@ -43,14 +43,6 @@ class DownloadManager {
     return 24;
   }
 
-  _getStorage() {
-    storage.initSync({
-      dir: path.join(application.getInstallDirectory(), 'database')
-    });
-
-    return storage;
-  }
-
   /**
    * This method will download a browser if it is needed (i.e. can't be found
    * in the usual system location or in the install directory).
@@ -69,19 +61,13 @@ class DownloadManager {
    */
   downloadBrowser(browserId, release, expirationInHours) {
     let installDir = application.getInstallDirectory();
-
-    const storage = this._getStorage();
     const storageKey = `${browserId}:${release}`;
 
-    return new Promise((resolve, reject) => {
-      storage.getItem(storageKey, (err, value) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve(value);
-      });
+    return storage.init({
+      dir: path.join(application.getInstallDirectory(), 'database')
+    })
+    .then(() => {
+      return storage.getItem(storageKey);
     })
     .then(lastBrowserUpdate => {
       if (lastBrowserUpdate) {
@@ -124,15 +110,7 @@ class DownloadManager {
       }
 
       return downloadPromise.then(() => {
-        return new Promise((resolve, reject) => {
-          storage.setItem(storageKey, Date.now(), err => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            resolve();
-          });
-        });
+        return storage.setItem(storageKey, Date.now());
       });
     });
   }
