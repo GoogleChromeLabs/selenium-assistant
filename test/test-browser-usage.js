@@ -54,6 +54,7 @@ describe('Test Usage of Browsers', function() {
 
     seleniumAssistant.setBrowserInstallDir(null);
 
+    console.log('Downloading browsers....');
     return Promise.all([
       seleniumAssistant.downloadBrowser('chrome', 'stable'),
       seleniumAssistant.downloadBrowser('chrome', 'beta'),
@@ -66,6 +67,7 @@ describe('Test Usage of Browsers', function() {
       console.warn('There was an issue downloading the browsers: ', err);
     })
     .then(() => {
+      console.log('Download of browsers complete.');
       const serverPath = path.join(__dirname, 'data', 'example-site');
       return globalServer.startServer(serverPath);
     })
