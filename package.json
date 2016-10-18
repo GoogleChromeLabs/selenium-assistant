@@ -1,13 +1,12 @@
 {
   "name": "selenium-assistant",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
     "publish-release": "publish-release.sh",
     "publish-docs": "publish-docs.sh",
     "build": "echo 'Skip Build Step.'",
-    "bundle": "./project/create-release-bundle.sh",
     "build-docs": "jsdoc -c ./jsdoc.conf -d ",
     "lint": "eslint './**/*.js'",
     "test": "npm run lint && mocha",
@@ -39,7 +38,7 @@
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.1",
     "mocha": "^3.1.2",
-    "npm-publish-scripts": "2.0.6",
+    "npm-publish-scripts": "2.1.4",
     "operadriver": "^0.2.2",
     "sinon": "^1.17.6"
   },
@@ -54,5 +53,8 @@
     "selenium-webdriver": "^3.0.0-beta-3",
     "which": "^1.2.11",
     "yauzl": "^2.5.0"
-  }
+  },
+  "files": [
+    "src/"
+  ]
 }
