@@ -1,11 +1,26 @@
 # Auto-generated from the npm-publish-scripts module
 alpha:
-    latest: /reference-docs/alpha/v
+    latest: /reference-docs/alpha/v2.0.4-alpha
     all:
+            - /reference-docs/alpha/v2.0.4-alpha
+            - /reference-docs/alpha/v2.0.2-alpha
+            - /reference-docs/alpha/v2.0.1-alpha
 beta:
-    latest: /reference-docs/beta/v
+    latest: /reference-docs/beta/v0.5.3-beta
     all:
+            - /reference-docs/beta/v0.5.3-beta
+            - /reference-docs/beta/v0.5.2-beta
+            - /reference-docs/beta/v0.5.1-beta
 stable:
-    latest: /reference-docs/stable/v
+    latest: /reference-docs/stable/v1.0.0
     all:
+            - /reference-docs/stable/v1.0.0
+            - /reference-docs/stable/v0.3.0
+            - /reference-docs/stable/v0.2.0
+            - /reference-docs/stable/v0.1.6
+            - /reference-docs/stable/v0.1.4
+            - /reference-docs/stable/v0.1.2
+            - /reference-docs/stable/v0.1.1
+            - /reference-docs/stable/v0.1.0
+            - /reference-docs/stable/v0.0.4
 other:
