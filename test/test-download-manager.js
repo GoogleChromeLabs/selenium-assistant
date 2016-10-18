@@ -92,15 +92,11 @@ describe('Test Download Manager - Browser Expiration', function() {
         .then(() => {
           // Reset download for next step
           browserDownloads[browserId][release] = false;
-          console.log('browserId: ', browserId);
-          console.log('release: ', release);
-          console.log('browserDownloads[browserId][release]: ', browserDownloads[browserId][release]);
 
           return downloadManager.downloadBrowser(browserId, release,
               EXPIRATION_TIME);
         })
         .then(() => {
-          console.log('browserDownloads[browserId][release]: ', browserDownloads[browserId][release]);
           browserDownloads[browserId][release].should.equal(true);
         });
       });
@@ -124,7 +120,6 @@ describe('Test Download Manager - Browser Expiration', function() {
 
     const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome',
       (release, installDir) => {
-        console.log('Download Chrome release');
         browserDownloads.chrome[release] = true;
         return Promise.resolve();
       });
