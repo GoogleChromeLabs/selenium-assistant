@@ -25,7 +25,7 @@ const del = require('del');
 const dmg = require('dmg');
 const fse = require('fs-extra');
 const yauzl = require('yauzl');
-const storage = require('node-persist');
+const LocalStorage = require('node-localstorage').LocalStorage;
 
 const application = require('./application-state.js');
 const browserManager = require('./browser-manager.js');
@@ -62,14 +62,21 @@ class DownloadManager {
   downloadBrowser(browserId, release, expirationInHours) {
     let installDir = application.getInstallDirectory();
     const storageKey = `${browserId}:${release}`;
+    const localstoragePath =
+      path.join(application.getInstallDirectory(), 'localstorage');
+    let localStorage = null;
 
-    return storage.init({
-      dir: path.join(application.getInstallDirectory(), 'database')
+    return new Promise((resolve, reject) => {
+      mkdirp(localstoragePath, err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
     })
     .then(() => {
-      return storage.getItem(storageKey);
-    })
-    .then(lastBrowserUpdate => {
+      localStorage = new LocalStorage(localstoragePath);
+      const lastBrowserUpdate = localStorage.getItem(storageKey);
       if (lastBrowserUpdate) {
         if (typeof expirationInHours === 'undefined') {
           expirationInHours = this.defaultExpiration;
@@ -78,7 +85,7 @@ class DownloadManager {
         const expirationInMillis = expirationInHours * 60 * 60 * 1000;
         const dateComparison = Date.now() - expirationInMillis;
 
-        if (lastBrowserUpdate > dateComparison) {
+        if (parseInt(lastBrowserUpdate, 10) > dateComparison) {
           const browserInstance = browserManager
             .createWebDriverBrowser(browserId, release);
           return !browserInstance.isValid();
@@ -110,7 +117,9 @@ class DownloadManager {
       }
 
       return downloadPromise.then(() => {
-        return storage.setItem(storageKey, Date.now());
+        if (localStorage) {
+          return localStorage.setItem(storageKey, Date.now());
+        }
       });
     });
   }

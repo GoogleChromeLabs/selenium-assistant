@@ -2,8 +2,9 @@
 
 const del = require('del');
 const sinon = require('sinon');
-const storage = require('node-persist');
+const LocalStorage = require('node-localstorage').LocalStorage;
 const path = require('path');
+const mkdirp = require('mkdirp');
 
 const WebDriverBrowser = require(
   '../src/webdriver-browser/web-driver-browser.js');
@@ -13,6 +14,7 @@ const downloadManager = require('../src/download-manager.js');
 require('chai').should();
 
 const testPath = './test/test-output';
+const localStoragePath = path.join(testPath, 'localstorage');
 const stubs = [];
 let browserDownloads;
 
@@ -34,24 +36,11 @@ describe('Test Download Manager - Browser Expiration', function() {
         .then(() => {
           // The default should be 24 hours, so manipulate the DB to say older
           // than 24 hours
-          return new Promise((resolve, reject) => {
-            storage.initSync({
-              dir: path.join(seleniumAssistant.getBrowserInstallDir(), 'database')
-            });
-
-            const storageKey = `${browserId}:${release}`;
-
-            const lastUpdate = Date.now() -
-              (downloadManager.defaultExpiration * 60 * 60 * 1000);
-            storage.setItem(storageKey, lastUpdate, err => {
-              if (err) {
-                reject(err);
-                return;
-              }
-
-              resolve();
-            });
-          });
+          const localStorage = new LocalStorage(localStoragePath);
+          const storageKey = `${browserId}:${release}`;
+          const lastUpdate = Date.now() -
+            (downloadManager.defaultExpiration * 60 * 60 * 1000);
+          localStorage.setItem(storageKey, lastUpdate);
         })
         .then(() => {
           return downloadManager.downloadBrowser(browserId, release, 0);
@@ -95,32 +84,23 @@ describe('Test Download Manager - Browser Expiration', function() {
           browserDownloads[browserId][release].should.equal(false);
 
           // Alter DB so browser is expired and check it downloads immediately
-          return new Promise((resolve, reject) => {
-            storage.initSync({
-              dir: path.join(seleniumAssistant.getBrowserInstallDir(), 'database/')
-            });
-
-            const storageKey = `${browserId}:${release}`;
-
-            const lastUpdate = Date.now() - (EXPIRATION_TIME * 60 * 60 * 1000);
-            storage.setItem(storageKey, lastUpdate, err => {
-              if (err) {
-                reject(err);
-                return;
-              }
-
-              resolve();
-            });
-          });
+          const storageKey = `${browserId}:${release}`;
+          const localStorage = new LocalStorage(localStoragePath);
+          const lastUpdate = Date.now() - (EXPIRATION_TIME * 60 * 60 * 1000);
+          localStorage.setItem(storageKey, lastUpdate);
         })
         .then(() => {
           // Reset download for next step
           browserDownloads[browserId][release] = false;
+          console.log('browserId: ', browserId);
+          console.log('release: ', release);
+          console.log('browserDownloads[browserId][release]: ', browserDownloads[browserId][release]);
 
           return downloadManager.downloadBrowser(browserId, release,
               EXPIRATION_TIME);
         })
         .then(() => {
+          console.log('browserDownloads[browserId][release]: ', browserDownloads[browserId][release]);
           browserDownloads[browserId][release].should.equal(true);
         });
       });
@@ -144,6 +124,7 @@ describe('Test Download Manager - Browser Expiration', function() {
 
     const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome',
       (release, installDir) => {
+        console.log('Download Chrome release');
         browserDownloads.chrome[release] = true;
         return Promise.resolve();
       });
@@ -161,6 +142,8 @@ describe('Test Download Manager - Browser Expiration', function() {
     stubs.push(dlChromeStub);
     stubs.push(dlFFStub);
     stubs.push(isValidStub);
+
+    return mkdirp(localStoragePath);
   });
 
   after(function() {
