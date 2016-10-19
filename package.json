@@ -11,7 +11,9 @@
     "lint": "eslint './**/*.js'",
     "test": "npm run lint && mocha",
     "istanbul": "npm run lint && istanbul cover _mocha",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "postpublish-release": "track-pkg-size",
+    "track-pkg-size": "sh ./test/helpers/package-size.sh"
   },
   "repository": {
     "type": "git",

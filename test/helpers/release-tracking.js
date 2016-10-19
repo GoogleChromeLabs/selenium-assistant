@@ -25,16 +25,19 @@ const fs = require('fs');
 const firebase = require('firebase');
 
 class ReleaseTracking {
-  checkRelease() {
+  trackRelease() {
     return new Promise((resolve, reject) => {
       glob(path.join(process.argv[3], '**', '*'), (err, files) => {
         if (err) {
           console.warn(err);
-          return;
+          return reject(err);
         }
 
-        this.trackFiles(files);
+        resolve(files);
       });
+    })
+    .then((files) => {
+      return this.trackFiles(files);
     });
   }
 
@@ -57,21 +60,32 @@ class ReleaseTracking {
       })
     )
     .then((fileStats) => {
-      console.log(fileStats);
-      const config = {
-        databaseURL: 'https://release-tracking.firebaseio.com',
-        databaseAuthVariableOverride: {
-          uid: process.env.FIREBASE_UID,
-        },
+      const totalSize = fileStats.reduce((cumulative, stats) => {
+        return cumulative + stats.size;
+      }, 0);
+
+      const data = {
+        totalSize: totalSize,
+        fileStats: fileStats,
       };
-      firebase.initializeApp(config);
+
+      firebase.initializeApp({
+        databaseURL: 'https://release-tracking.firebaseio.com',
+      });
       const db = firebase.database();
-      const ref = db.ref('release-tracking/branch/master/');
-      // TODO: Write to firebase.
-      console.log(ref);
+      const masterListRef = db.ref('/branch/master/');
+      const newEntryRef = masterListRef.push();
+      newEntryRef.set(data);
     });
   }
 }
 
 const releaseTracking = new ReleaseTracking();
-releaseTracking.checkRelease();
+releaseTracking.trackRelease()
+.then(() => {
+  process.exit(0);
+})
+.catch((err) => {
+  console.error('Unable to track release: ', err);
+  process.exit(1);
+});
