@@ -54,7 +54,7 @@ class BrowserManager {
       this.createWebDriverBrowser('opera', 'unstable'),
 
       this.createWebDriverBrowser('safari', 'stable'),
-      this.createWebDriverBrowser('safari', 'beta')
+      this.createWebDriverBrowser('safari', 'beta'),
     ];
   }
 

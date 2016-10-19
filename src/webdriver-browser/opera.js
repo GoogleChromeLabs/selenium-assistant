@@ -19,7 +19,6 @@
 const fs = require('fs');
 const path = require('path');
 const which = require('which');
-const chalk = require('chalk');
 const seleniumOpera = require('selenium-webdriver/opera');
 const WebDriverBrowser = require('./web-driver-browser');
 const application = require('../application-state.js');
@@ -56,6 +55,10 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
     );
   }
 
+  /**
+   * @return {string|null} The install directory with selenium-assistant's
+   * reserved directory for installing browsers and operating files.
+   */
   _findInInstallDir() {
     let defaultDir = application.getInstallDirectory();
     let expectedPath;
@@ -79,7 +82,9 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
       // This will throw if it's not found
       fs.lstatSync(expectedPath);
       return expectedPath;
-    } catch (error) {}
+    } catch (error) {
+      // NOOP
+    }
     return null;
   }
 
@@ -117,7 +122,9 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
           return which.sync('opera-developer');
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      // NOOP
+    }
 
     return null;
   }
@@ -135,8 +142,6 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
 
     const regexMatch = operaVersion.match(/(\d+)\.\d+\.\d+\.\d+/);
     if (regexMatch === null) {
-      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Opera: ', this.getExecutablePath());
       return -1;
     }
 

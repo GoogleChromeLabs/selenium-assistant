@@ -112,10 +112,10 @@ class TestServer {
     this._app.use('/', express.static(path, {
       setHeaders: function(res) {
         res.setHeader('Service-Worker-Allowed', '/');
-      }
+      },
     }));
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       // Start service on desired port
       this._server = this._app.listen(portNumber, host, () => {
         resolve(this._server.address().port);

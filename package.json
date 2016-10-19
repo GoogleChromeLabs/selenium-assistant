@@ -11,7 +11,9 @@
     "lint": "eslint './**/*.js'",
     "test": "npm run lint && mocha",
     "istanbul": "npm run lint && istanbul cover _mocha",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "postpublish-release": "track-pkg-size",
+    "track-pkg-size": "sh ./test/helpers/package-size.sh"
   },
   "repository": {
     "type": "git",
@@ -32,9 +34,11 @@
     "chromedriver": "^2.24.0",
     "coveralls": "^2.11.12",
     "eslint": "^3.5.0",
-    "eslint-config-google": "^0.6.0",
+    "eslint-config-google": "^0.7.0",
     "express": "^4.14.0",
+    "firebase": "^3.5.0",
     "geckodriver": "^1.1.2",
+    "glob": "^7.1.1",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.1",
     "mocha": "^3.1.2",

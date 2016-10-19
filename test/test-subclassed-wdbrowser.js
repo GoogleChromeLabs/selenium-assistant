@@ -39,7 +39,7 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
     });
 
     let releases = DriverBrowser.getAvailableReleases();
-    releases.forEach(release => {
+    releases.forEach((release) => {
       describe(`${release} Release`, function() {
         it('should be able to build new DriverBrowser', function() {
           new DriverBrowser(release);
@@ -122,7 +122,7 @@ function performTest(name, wdBrowserPath, prettyNameStart, seleniumBrowser) {
 }
 
 const webdriverFiles = fs.readdirSync('./src/webdriver-browser');
-webdriverFiles.forEach(webdriverFile => {
+webdriverFiles.forEach((webdriverFile) => {
   if (webdriverFile === 'web-driver-browser.js') {
     return;
   }

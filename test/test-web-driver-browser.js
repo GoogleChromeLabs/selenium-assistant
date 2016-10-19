@@ -294,7 +294,7 @@ describe('WebDriverBrowser', function() {
     return webdriver.getSeleniumDriver()
     .then(() => {
       throw new Error('Unexpected promise resolve');
-    }, err => {
+    }, (err) => {
       (err.message.indexOf('Unknown selenium options')).should.not.equal(-1);
     });
   });
@@ -310,7 +310,7 @@ describe('WebDriverBrowser', function() {
     return webdriver.getSeleniumDriver()
     .then(() => {
       throw new Error('Unexpected promise resolve');
-    }, err => {
+    }, (err) => {
       (err.message.indexOf('overriden')).should.not.equal(-1);
     });
   });

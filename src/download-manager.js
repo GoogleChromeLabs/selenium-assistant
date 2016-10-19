@@ -39,6 +39,10 @@ const browserManager = require('./browser-manager.js');
  */
 class DownloadManager {
 
+  /**
+   * Get the default expiration for downloaded browsers.
+   * @return {number} Returns the default expiration of 24 hours.
+   */
   get defaultExpiration() {
     return 24;
   }
@@ -67,7 +71,7 @@ class DownloadManager {
     let localStorage = null;
 
     return new Promise((resolve, reject) => {
-      mkdirp(localstoragePath, err => {
+      mkdirp(localstoragePath, (err) => {
         if (err) {
           return reject(err);
         }
@@ -98,7 +102,7 @@ class DownloadManager {
       // In case of error download browser.
       return true;
     })
-    .then(browserNeedsDownloading => {
+    .then((browserNeedsDownloading) => {
       if (!browserNeedsDownloading) {
         return;
       }
@@ -124,6 +128,12 @@ class DownloadManager {
     });
   }
 
+  /**
+   * Download a version of Chrome to a specific directory.
+   * @param {string} release This should be 'stable', 'beta' or 'unstable'.
+   * @param {string} installDir The path to install Chrome into.
+   * @return {Promise} Promise that resolves once the download has completed.
+   */
   _downlaodChrome(release, installDir) {
     let downloadUrl;
     let fileExtension = null;
@@ -180,7 +190,7 @@ class DownloadManager {
 
     const finalBrowserPath = path.join(installDir, 'chrome', release);
     return new Promise((resolve, reject) => {
-      mkdirp(installDir, err => {
+      mkdirp(installDir, (err) => {
         if (err) {
           return reject(err);
         }
@@ -192,7 +202,7 @@ class DownloadManager {
         const filePath = path.join(installDir, chromeProduct + '.' +
           fileExtension);
         const file = fs.createWriteStream(filePath);
-        request(downloadUrl, err => {
+        request(downloadUrl, (err) => {
           if (err) {
             return reject(err);
           }
@@ -202,9 +212,9 @@ class DownloadManager {
         .pipe(file);
       });
     })
-    .then(filePath => {
+    .then((filePath) => {
       return new Promise((resolve, reject) => {
-        mkdirp(finalBrowserPath, err => {
+        mkdirp(finalBrowserPath, (err) => {
           if (err) {
             return reject(err);
           }
@@ -212,7 +222,7 @@ class DownloadManager {
         });
       });
     })
-    .then(filePath => {
+    .then((filePath) => {
       switch (fileExtension) {
         case 'deb':
           return new Promise(function(resolve, reject) {
@@ -220,10 +230,10 @@ class DownloadManager {
             const dpkgProcess = spawn('dpkg', [
               '-x',
               filePath,
-              finalBrowserPath
+              finalBrowserPath,
             ], {stdio: 'inherit'});
 
-            dpkgProcess.on('exit', code => {
+            dpkgProcess.on('exit', (code) => {
               if (code === 0) {
                 return resolve(filePath);
               }
@@ -243,9 +253,8 @@ class DownloadManager {
                 path.join(installDir, 'chrome', release, chromeOSXAppName)
               );
 
-              dmg.unmount(mountedPath, err => {
+              dmg.unmount(mountedPath, (err) => {
                 if (err) {
-                  console.error('Unable to unmount dmg.');
                   reject(err);
                 }
 
@@ -257,11 +266,17 @@ class DownloadManager {
           throw new Error('Unknown file extension: ', fileExtension);
       }
     })
-    .then(filePath => {
+    .then((filePath) => {
       return del(filePath, {force: true});
     });
   }
 
+  /**
+   * Download a version of Firefox to a specific directory.
+   * @param {string} release This should be 'stable', 'beta' or 'unstable'.
+   * @param {string} installDir The path to install Firefox into.
+   * @return {Promise} Promise that resolves once the download has completed.
+   */
   _downloadFirefox(release, installDir) {
     let ffProduct = null;
     let ffPlatformId = null;
@@ -300,7 +315,7 @@ class DownloadManager {
 
     const downloadUrl = `https://download.mozilla.org/?product=${ffProduct}&lang=en-US&os=${ffPlatformId}`;
     return new Promise((resolve, reject) => {
-      mkdirp(installDir, err => {
+      mkdirp(installDir, (err) => {
         if (err) {
           return reject(err);
         }
@@ -311,7 +326,7 @@ class DownloadManager {
       return new Promise((resolve, reject) => {
         const filePath = path.join(installDir, ffProduct + fileExtension);
         const file = fs.createWriteStream(filePath);
-        request(downloadUrl, err => {
+        request(downloadUrl, (err) => {
           if (err) {
             return reject(err);
           }
@@ -321,9 +336,9 @@ class DownloadManager {
         .pipe(file);
       });
     })
-    .then(filePath => {
+    .then((filePath) => {
       return new Promise((resolve, reject) => {
-        mkdirp(path.join(installDir, 'firefox', release), err => {
+        mkdirp(path.join(installDir, 'firefox', release), (err) => {
           if (err) {
             return reject(err);
           }
@@ -331,7 +346,7 @@ class DownloadManager {
         });
       });
     })
-    .then(filePath => {
+    .then((filePath) => {
       if (fileExtension === '.tar.gz') {
         return new Promise((resolve, reject) => {
           const untarProcess = spawn('tar', [
@@ -340,10 +355,10 @@ class DownloadManager {
             '--directory',
             path.join(installDir, 'firefox', release),
             '--strip-components',
-            1
+            1,
           ]);
 
-          untarProcess.on('exit', code => {
+          untarProcess.on('exit', (code) => {
             if (code === 0) {
               return resolve(filePath);
             }
@@ -363,9 +378,8 @@ class DownloadManager {
               path.join(installDir, 'firefox', release, firefoxMacApp)
             );
 
-            dmg.unmount(mountedPath, err => {
+            dmg.unmount(mountedPath, (err) => {
               if (err) {
-                console.error('Unable to unmount dmg.');
                 reject(err);
               }
 
@@ -377,11 +391,17 @@ class DownloadManager {
 
       throw new Error('Unable to handle downloaded file: ', downloadUrl);
     })
-    .then(filePath => {
+    .then((filePath) => {
       return del(filePath, {force: true});
     });
   }
 
+  /**
+   * Download a version of Opera to a specific directory.
+   * @param {string} release This should be 'stable', 'beta' or 'unstable'.
+   * @param {string} installDir The path to install Opera into.
+   * @return {Promise} Promise that resolves once the download has completed.
+   */
   _downloadOpera(release, installDir) {
     let downloadUrl;
     let fileExtension = null;
@@ -444,7 +464,7 @@ class DownloadManager {
 
     const finalBrowserPath = path.join(installDir, 'opera', release);
     return new Promise((resolve, reject) => {
-      mkdirp(installDir, err => {
+      mkdirp(installDir, (err) => {
         if (err) {
           return reject(err);
         }
@@ -456,7 +476,7 @@ class DownloadManager {
         const filePath = path.join(installDir, operaProduct + '.' +
           fileExtension);
         const file = fs.createWriteStream(filePath);
-        request(downloadUrl, err => {
+        request(downloadUrl, (err) => {
           if (err) {
             return reject(err);
           }
@@ -466,11 +486,11 @@ class DownloadManager {
         .pipe(file);
       });
     })
-    .then(filePath => {
+    .then((filePath) => {
       // On Os X, the Installer runs so you can't define where to save it.
       if (process.platform !== 'darwin') {
         return new Promise((resolve, reject) => {
-          mkdirp(finalBrowserPath, err => {
+          mkdirp(finalBrowserPath, (err) => {
             if (err) {
               return reject(err);
             }
@@ -481,7 +501,7 @@ class DownloadManager {
 
       return filePath;
     })
-    .then(filePath => {
+    .then((filePath) => {
       switch (fileExtension) {
         case 'deb':
           return new Promise(function(resolve, reject) {
@@ -489,10 +509,10 @@ class DownloadManager {
             const dpkgProcess = spawn('dpkg', [
               '-x',
               filePath,
-              finalBrowserPath
+              finalBrowserPath,
             ], {stdio: 'inherit'});
 
-            dpkgProcess.on('exit', code => {
+            dpkgProcess.on('exit', (code) => {
               if (code === 0) {
                 return resolve(filePath);
               }
@@ -508,7 +528,7 @@ class DownloadManager {
               }
 
               zipfile.readEntry();
-              zipfile.on('entry', entry => {
+              zipfile.on('entry', (entry) => {
                 try {
                   // directory file names end with '/'
                   if (/\/$/.test(entry.fileName)) {
@@ -560,16 +580,16 @@ class DownloadManager {
               });
             });
           })
-          .then(filePath => {
+          .then((filePath) => {
             const currentAppPath = path.join(application.getInstallDirectory(),
               operaOSXAppName);
             return new Promise((resolve, reject) => {
               const openProcess = spawn('open', [
                 '--wait-apps',
-                currentAppPath
+                currentAppPath,
               ], {stdio: 'inherit'});
 
-              openProcess.on('exit', code => {
+              openProcess.on('exit', (code) => {
                 if (code === 0) {
                   // It worked
                   return resolve(filePath);
@@ -578,7 +598,7 @@ class DownloadManager {
                 reject(new Error('Unable to open installer ' + code));
               });
             })
-            .then(filePath => {
+            .then((filePath) => {
               return del(currentAppPath, {force: true})
               .then(() => filePath);
             });
@@ -587,7 +607,7 @@ class DownloadManager {
           throw new Error('Unknown file extension');
       }
     })
-    .then(filePath => {
+    .then((filePath) => {
       return del(filePath, {force: true});
     });
   }

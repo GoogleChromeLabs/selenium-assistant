@@ -17,7 +17,6 @@
 'use strict';
 
 const fs = require('fs');
-const chalk = require('chalk');
 const seleniumSafari = require('selenium-webdriver/safari');
 const WebDriverBrowser = require('./web-driver-browser');
 
@@ -54,6 +53,10 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
     );
   }
 
+  /**
+   * @return {string|null} The install directory with selenium-assistant's
+   * reserved directory for installing browsers and operating files.
+   */
   _findInInstallDir() {
     return null;
   }
@@ -81,11 +84,18 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
             'Contents/MacOS/Safari Technology Preview';
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      // NOOP
+    }
 
     return null;
   }
 
+  /**
+   * Get the version string from the browser itself. From Safari this is from
+   * `version.plist` file.
+   * @return {string} The version string for this Safari release.
+   */
   getRawVersionString() {
     if (this._rawVerstionString) {
       return this._rawVerstionString;
@@ -117,8 +127,7 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
         this._rawVerstionString = results[1];
       }
     } catch (err) {
-      console.warn(chalk.red('WARNING') + ': Unable to get a version string ' +
-        'for ' + this.getPrettyName());
+      // NOOP
     }
 
     return this._rawVerstionString;
@@ -137,14 +146,16 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
 
     const regexMatch = safariVersion.match(/(\d+)\.\d+(?:\.\d+)?/);
     if (regexMatch === null) {
-      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Safari: ', this.getExecutablePath());
       return -1;
     }
 
     return parseInt(regexMatch[1], 10);
   }
 
+  /**
+   * Get the available releases for this browser.
+   * @return {Array<string>} Array of releases supported.
+   */
   static getAvailableReleases() {
     return ['stable', 'beta'];
   }

@@ -61,9 +61,9 @@ describe('Test Usage of Browsers', function() {
       seleniumAssistant.downloadBrowser('chrome', 'unstable'),
       seleniumAssistant.downloadBrowser('firefox', 'stable'),
       seleniumAssistant.downloadBrowser('firefox', 'beta'),
-      seleniumAssistant.downloadBrowser('firefox', 'unstable')
+      seleniumAssistant.downloadBrowser('firefox', 'unstable'),
     ])
-    .catch(err => {
+    .catch((err) => {
       console.warn('There was an issue downloading the browsers: ', err);
     })
     .then(() => {
@@ -71,7 +71,7 @@ describe('Test Usage of Browsers', function() {
       const serverPath = path.join(__dirname, 'data', 'example-site');
       return globalServer.startServer(serverPath);
     })
-    .then(portNumber => {
+    .then((portNumber) => {
       localURL = `http://localhost:${portNumber}/`;
     });
   });
@@ -107,7 +107,7 @@ describe('Test Usage of Browsers', function() {
 
   function testNormalSeleniumUsage(specificBrowser) {
     return specificBrowser.getSeleniumDriver()
-    .then(driver => {
+    .then((driver) => {
       globalDriver = driver;
     })
     .then(() => {
@@ -126,7 +126,7 @@ describe('Test Usage of Browsers', function() {
     const builder = specificBrowser.getSeleniumDriverBuilder();
 
     return builder.buildAsync()
-    .then(driver => {
+    .then((driver) => {
       globalDriver = driver;
     })
     .then(() => {
@@ -151,8 +151,8 @@ describe('Test Usage of Browsers', function() {
     versionNumber.should.not.equal(-1);
   }
 
-  browserIds.forEach(browserId => {
-    releases.forEach(release => {
+  browserIds.forEach((browserId) => {
+    releases.forEach((release) => {
       if (browserId === 'safari' && release === 'unstable') {
         // Safari unstable doesn't exist so skip it.
         return;

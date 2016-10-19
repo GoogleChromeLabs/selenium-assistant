@@ -47,7 +47,7 @@ describe('SeleniumAssistant', function() {
     const browsers = seleniumAssistant.getAvailableBrowsers();
     (browsers instanceof Array).should.equal(true);
 
-    browsers.forEach(browser => {
+    browsers.forEach((browser) => {
       browser.isValid().should.equal(true);
     });
   });
@@ -55,8 +55,8 @@ describe('SeleniumAssistant', function() {
   it('should return a browser for valid browser and release names', function() {
     const possibleBrowsers = ['chrome', 'firefox', 'opera'];
     const releases = ['stable', 'beta', 'unstable'];
-    possibleBrowsers.forEach(browserId => {
-      releases.forEach(release => {
+    possibleBrowsers.forEach((browserId) => {
+      releases.forEach((release) => {
         const browser = seleniumAssistant.getBrowser(browserId, release);
         (typeof browser).should.equal('object');
       });
@@ -103,7 +103,7 @@ describe('SeleniumAssistant', function() {
     this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
-    const stub = sinon.stub(console, 'log', input => {
+    const stub = sinon.stub(console, 'log', (input) => {
       consoleCalls++;
     });
     sinonStubs.push(stub);
@@ -166,7 +166,7 @@ describe('SeleniumAssistant', function() {
         return new Promise((resolve, reject) => {
           resolve();
         });
-      }
+      },
     });
     (killPromise instanceof Promise).should.equal(true);
     return killPromise;
@@ -181,7 +181,7 @@ describe('SeleniumAssistant', function() {
         return new Promise((resolve, reject) => {
           reject();
         });
-      }
+      },
     });
     (killPromise instanceof Promise).should.equal(true);
     return killPromise;
@@ -194,7 +194,7 @@ describe('SeleniumAssistant', function() {
     const killPromise = seleniumAssistant.killWebDriver({
       quit: () => {
         return new Promise((resolve, reject) => {});
-      }
+      },
     });
     (killPromise instanceof Promise).should.equal(true);
     return killPromise;

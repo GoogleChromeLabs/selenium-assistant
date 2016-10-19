@@ -18,17 +18,18 @@
 
 const execSync = require('child_process').execSync;
 const fs = require('fs');
-const chalk = require('chalk');
 const webdriver = require('selenium-webdriver');
 
 /**
  * <p>A base class that is designed to be extended to handle browser specific
  * values.</p>
  *
- * <p>An instance of this class helps find and start browsers using selenium.</p>
+ * <p>An instance of this class helps find and start browsers using selenium.
+ * </p>
  *
  * <p>Instances of this class are returned by
- * [automatedBrowserTesting.getDiscoverableBrowsers()]{@link AutomatedBrowserTesting#getDiscoverableBrowsers}</p>
+ * [automatedBrowserTesting.getDiscoverableBrowsers()]{@link
+ * AutomatedBrowserTesting#getDiscoverableBrowsers}</p>
  */
 class WebDriverBrowser {
   /**
@@ -101,8 +102,7 @@ class WebDriverBrowser {
       this._rawVerstionString = execSync(`"${executablePath}" --version`)
         .toString();
     } catch (err) {
-      console.warn(chalk.red('WARNING') + ': Unable to get a version string ' +
-        'for ' + this.getPrettyName());
+      // NOOP
     }
 
     return this._rawVerstionString;
@@ -123,6 +123,10 @@ class WebDriverBrowser {
   }
   /* eslint-enable valid-jsdoc */
 
+  /**
+   * Get the minimum supported browser version for this browser.
+   * @return {number} The minimum supported version number.
+   */
   _getMinSupportedVersion() {
     return false;
   }
@@ -152,7 +156,9 @@ class WebDriverBrowser {
       }
 
       return true;
-    } catch (error) {}
+    } catch (error) {
+      // NOOP
+    }
 
     return false;
   }
@@ -169,8 +175,8 @@ class WebDriverBrowser {
    * <p>The release name for this browser, either 'stable', 'beta',
    * 'unstable'.</p>
    *
-   * <p>Useful if you only want to test <i>or</i> not test on a particular release
-   * type.</p>
+   * <p>Useful if you only want to test <i>or</i> not test on a particular
+   * release type.</p>
    * @return {String} Release name of browser. 'stable', 'beta' or 'unstable'
    */
   getReleaseName() {
@@ -209,10 +215,11 @@ class WebDriverBrowser {
   }
 
   /**
-   * <p>This method returns the preconfigured builder used by getSeleniumDriver().</p>
+   * <p>This method returns the preconfigured builder used by
+   * getSeleniumDriver().</p>
    *
-   * <p>This is useful if you wish to customise the builder with additional options
-   * (i.e. customise the proxy of the driver.)</p>
+   * <p>This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)</p>
    *
    * <p>For more info, see:
    * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
@@ -246,7 +253,8 @@ class WebDriverBrowser {
   }
 
   /**
-   * <p>This method resolves to a webdriver instance of this browser instance.</p>
+   * <p>This method resolves to a webdriver instance of this browser i
+   * nstance.</p>
    *
    * <p>For more info, see:
    * {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver Docs}</p>
@@ -262,6 +270,11 @@ class WebDriverBrowser {
     }
   }
 
+  /**
+   * This returns the available releases for this browser (i.e. stable, beta
+   * and unstable).
+   * @return {Array<String>} Array of releases for this browser type.
+   */
   static getAvailableReleases() {
     return ['stable', 'beta', 'unstable'];
   }
