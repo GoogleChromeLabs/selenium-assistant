@@ -23,7 +23,7 @@ describe('Test Download Manager - Browser Expiration', function() {
     // 5 Minutes
     const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
 
-    releases.forEach(release => {
+    releases.forEach((release) => {
       it(`should download ${browserId} - ${release} with no expiration.`, function() {
         this.timeout(DOWNLOAD_TIMEOUT);
 
@@ -110,12 +110,12 @@ describe('Test Download Manager - Browser Expiration', function() {
     browserDownloads.chrome = {
       stable: false,
       beta: false,
-      unstable: false
+      unstable: false,
     };
     browserDownloads.firefox = {
       stable: false,
       beta: false,
-      unstable: false
+      unstable: false,
     };
 
     const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome',
@@ -144,7 +144,7 @@ describe('Test Download Manager - Browser Expiration', function() {
   after(function() {
     this.timeout(6000);
 
-    stubs.forEach(stub => {
+    stubs.forEach((stub) => {
       stub.restore();
     });
 
@@ -160,15 +160,15 @@ describe('Test Download Manager - Browser Expiration', function() {
 
   const browsers = [
     'firefox',
-    'chrome'
+    'chrome',
   ];
   const releases = [
     'stable',
     'beta',
-    'unstable'
+    'unstable',
   ];
 
-  browsers.forEach(browserId => {
+  browsers.forEach((browserId) => {
     performTest(browserId, releases);
   });
 });
@@ -191,16 +191,16 @@ describe('Test Download Manager - Browser Download', function() {
 
   const browsers = [
     'firefox',
-    'chrome'
+    'chrome',
   ];
   const releases = [
     'stable',
     'beta',
-    'unstable'
+    'unstable',
   ];
 
-  browsers.forEach(browserId => {
-    releases.forEach(release => {
+  browsers.forEach((browserId) => {
+    releases.forEach((release) => {
       performDownloadTest(browserId, release);
     });
   });

@@ -118,23 +118,9 @@ class SeleniumAssistant {
     }
 
     let webdriveBrowsers = browserManager.getSupportedBrowsers();
-    if (global.TRAVIS_TEST) {
-      console.log('getAvailableBrowsers 1: ' +
-        (Date.now() - global.TRAVIS_TEST.start));
-    }
-    webdriveBrowsers = webdriveBrowsers.filter(webdriverBrowser => {
-      if (global.TRAVIS_TEST) {
-        console.log('getAvailableBrowsers filter 2: ' +
-          (Date.now() - global.TRAVIS_TEST.start));
-      }
-
+    webdriveBrowsers = webdriveBrowsers.filter((webdriverBrowser) => {
       return webdriverBrowser.isValid();
     });
-
-    if (global.TRAVIS_TEST) {
-      console.log('getAvailableBrowsers filter 3: ' +
-        (Date.now() - global.TRAVIS_TEST.start));
-    }
 
     return webdriveBrowsers;
   }
@@ -160,15 +146,15 @@ class SeleniumAssistant {
     rows.push([
       'Browser Name',
       'Browser Version',
-      'Path'
+      'Path',
     ]);
 
     const browsers = this.getAvailableBrowsers();
-    browsers.forEach(browser => {
+    browsers.forEach((browser) => {
       rows.push([
         browser.getPrettyName(),
         browser.getVersionNumber().toString(),
-        browser.getExecutablePath()
+        browser.getExecutablePath(),
       ]);
     });
 
@@ -176,7 +162,7 @@ class SeleniumAssistant {
     const rowLengths = [];
     for (let i = 0; i < noOfColumns; i++) {
       let currentRowMaxLength = 0;
-      rows.forEach(row => {
+      rows.forEach((row) => {
         currentRowMaxLength = Math.max(
           currentRowMaxLength, row[i].length);
       });
@@ -207,7 +193,9 @@ class SeleniumAssistant {
     outputString += chalk.gray('-'.repeat(totalRowLength)) + '\n';
 
     if (printToConsole) {
+      /* eslint-disable no-console */
       console.log(outputString);
+      /* eslint-enable no-console */
     }
 
     return outputString;
@@ -221,7 +209,8 @@ class SeleniumAssistant {
    * driver to account for shutdown time and the issues that can cause.</p>
    *
    * @param  {WebDriver} driver Instance of a {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver}
-   * @return {Promise}          Promise that resolves once the browser is killed.
+   * @return {Promise}          Promise that resolves once the browser is
+   * killed.
    */
   killWebDriver(driver) {
     if (typeof driver === 'undefined' || driver === null) {
@@ -236,7 +225,7 @@ class SeleniumAssistant {
     // Sometimes calling driver.quit() on Chrome, doesn't work,
     // so this timeout offers a semi-decent fallback
     let quitTimeout;
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       quitTimeout = setTimeout(resolve, 2000);
 
       driver.quit()

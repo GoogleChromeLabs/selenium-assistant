@@ -19,7 +19,6 @@
 const fs = require('fs');
 const path = require('path');
 const which = require('which');
-const chalk = require('chalk');
 const seleniumFirefox = require('selenium-webdriver/firefox');
 const WebDriverBrowser = require('./web-driver-browser');
 const application = require('../application-state.js');
@@ -61,6 +60,10 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
     );
   }
 
+  /**
+   * @return {string|null} The install directory with selenium-assistant's
+   * reserved directory for installing browsers and operating files.
+   */
   _findInInstallDir() {
     let defaultDir = application.getInstallDirectory();
     if (process.platform === 'linux') {
@@ -71,7 +74,9 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
         // This will throw if it's not found
         fs.lstatSync(expectedPath);
         return expectedPath;
-      } catch (error) {}
+      } catch (error) {
+        // NOOP
+      }
     } else if (process.platform === 'darwin') {
       // Find OS X expected path
       let firefoxAppName;
@@ -90,7 +95,9 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
         // This will throw if it's not found
         fs.lstatSync(expectedPath);
         return expectedPath;
-      } catch (error) {}
+      } catch (error) {
+        // NOOP
+      }
     }
 
     return null;
@@ -129,7 +136,9 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
         default:
           throw new Error('Sorry, this platform isn\'t supported');
       }
-    } catch (err) {}
+    } catch (err) {
+      // NOOP
+    }
 
     return null;
   }
@@ -147,14 +156,16 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
 
     const regexMatch = firefoxVersion.match(/(\d+)\.\d/);
     if (regexMatch === null) {
-      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Firefox: ', this.getExecutablePath());
       return -1;
     }
 
     return parseInt(regexMatch[1], 10);
   }
 
+  /**
+   * Get the minimum support version of Firefox with selenium-assistant.
+   * @return {number} Minimum supported Firefox version.
+   */
   _getMinSupportedVersion() {
     // Firefox Marionette only works on Firefox 47+
     return 47;

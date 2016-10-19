@@ -9,6 +9,7 @@
     "max-len": 0,
     "no-unused-expression": 0,
     "max-nested-callbacks": 0,
-    "require-jsdoc": 0
+    "require-jsdoc": 0,
+    "no-invalid-this": 0
   }
 }

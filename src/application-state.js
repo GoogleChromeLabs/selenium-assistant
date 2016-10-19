@@ -25,21 +25,12 @@ const path = require('path');
  * @private
  */
 class ApplicationState {
+  /**
+   * This constructor is never used directly, but this class stores the
+   * overall current state of selenium-assistant while in use.
+   */
   constructor() {
     this._installDir = this.getDefaultInstallLocation();
-    this._addGeckoDriverToPath();
-  }
-
-  /**
-   * This method is required until geckodriver can be installed
-   * and added to the path as an NPM module.
-   */
-  _addGeckoDriverToPath() {
-    // Add geckodriver's path to process path
-    const geckodriverPath = path.join(this._installDir, 'geckodriver');
-    if (process.env.PATH.indexOf(geckodriverPath) === -1) {
-      process.env.PATH += ':' + geckodriverPath;
-    }
   }
 
   /**
@@ -53,8 +44,6 @@ class ApplicationState {
     } else {
       this._installDir = this.getDefaultInstallLocation();
     }
-
-    this._addGeckoDriverToPath();
   }
 
   /**
