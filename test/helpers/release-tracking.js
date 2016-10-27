@@ -41,9 +41,9 @@ class ReleaseTracking {
     });
   }
 
-  trackFiles(files) {
+  getPathStats(filePaths) {
     return Promise.all(
-      files.map((filePath) => {
+      filePaths.map((filePath) => {
         return new Promise((resolve, reject) => {
           fs.stat(filePath, (err, stat) => {
             if (err) {
@@ -58,16 +58,62 @@ class ReleaseTracking {
           });
         });
       })
-    )
-    .then((fileStats) => {
-      const totalSize = fileStats.reduce((cumulative, stats) => {
+    );
+  }
+
+  trackFiles(files) {
+    const nodeModules = files.filter((filePath) => {
+      return (filePath.indexOf('package/node_modules/') === 0);
+    });
+    const projectFiles = files.filter((filePath) => {
+      return (filePath.indexOf('package/node_modules/') !== 0);
+    });
+    return Promise.all([
+      this.getPathStats(nodeModules)
+      .then((stats) => {
+        const moduleGroups = {};
+        stats.forEach((fileStats) => {
+          const parts = fileStats.path.split('/');
+          const moduleName = parts[2];
+          if (!moduleGroups[moduleName]) {
+            moduleGroups[moduleName] = {
+              moduleName: moduleName,
+              size: 0,
+            };
+          }
+
+          moduleGroups[moduleName].size += fileStats.size;
+        });
+
+        return Object.keys(moduleGroups).map((key) => {
+          return moduleGroups[key];
+        });
+      }),
+      this.getPathStats(projectFiles),
+    ])
+    .then((results) => {
+      const nodeModuleStats = results[0];
+      const projectStats = results[1];
+
+      const totalModuleSize = nodeModuleStats.reduce((cumulative, stats) => {
         return cumulative + stats.size;
       }, 0);
 
+      const totalProjectSize = projectStats.reduce((cumulative, stats) => {
+        return cumulative + stats.size;
+      }, 0);
+
+      const totalSize = totalProjectSize + totalModuleSize;
+
       const data = {
+        totalNodeModuleSize: totalModuleSize,
+        totalProjectSize: totalProjectSize,
         totalSize: totalSize,
-        fileStats: fileStats,
+        projectStats: projectStats,
+        nodeModuleStats: nodeModuleStats,
       };
+
+      console.log(data);
 
       firebase.initializeApp({
         databaseURL: 'https://release-tracking.firebaseio.com',
