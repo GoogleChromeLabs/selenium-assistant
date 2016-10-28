@@ -29,6 +29,41 @@ const SafariWebDriverBrowser = require('./webdriver-browser/safari');
  * @private
  */
 class BrowserManager {
+
+  /**
+   * Before attempting to use a Saucelabs browser, you must
+   * call this method with your Saucelabs Username and Access Key.
+   * @param {String} username Your Saucelabs username.
+   * @param {String} accessKey Your Saucelabs accessKey.
+   */
+  setSaucelabDetails(username, accessKey) {
+    this._saucelabs = this._saucelabs || {};
+    this._saucelabs.name = username;
+    this._saucelabs.accessKey = accessKey;
+  }
+
+  // Details from:
+  // https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BrowserVersion
+  /**
+   * This method will return a browser instance tied to a saucelabs hosted
+   * browser.
+   *
+   * @param {String} browserId The browser ID you wish to control.
+   * @param {String} browserVersion The browser verions you wish to target.
+   * This is the saucelabs version, not release name. Can be "latest",
+   * "latest-1", "latest-2", "45.0"
+   */
+  getSaucelabsBrowser(browserId, browserVersion) {
+    // const browser = this.createWebDriverBrowser(browserId, releaseName);
+    const browser = null;
+    browser.addSuacelabsDetails({
+      browserVersion: 'latest',
+      username: this._saucelabs.username,
+      accessKey: this._saucelabs.accessKey,
+    });
+    return browser;
+  }
+
   /**
    * <p>This method returns the full list of browsers this library supports,
    * regardless of whether the current environment has access to them or not.
