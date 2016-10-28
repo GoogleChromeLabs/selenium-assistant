@@ -23,6 +23,8 @@ const selenium = require('selenium-webdriver');
 const TestServer = require('./helpers/test-server.js');
 
 require('geckodriver');
+require('chromedriver');
+require('operadriver');
 
 require('chai').should();
 
@@ -56,18 +58,21 @@ describe('Test Usage of Browsers', function() {
 
     console.log('Downloading browsers....');
     return Promise.all([
-      seleniumAssistant.downloadBrowser('chrome', 'stable'),
-      seleniumAssistant.downloadBrowser('chrome', 'beta'),
-      seleniumAssistant.downloadBrowser('chrome', 'unstable'),
-      seleniumAssistant.downloadBrowser('firefox', 'stable'),
-      seleniumAssistant.downloadBrowser('firefox', 'beta'),
-      seleniumAssistant.downloadBrowser('firefox', 'unstable'),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'stable'),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'beta'),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'unstable'),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'stable'),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'beta'),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'unstable'),
     ])
     .catch((err) => {
       console.warn('There was an issue downloading the browsers: ', err);
     })
     .then(() => {
       console.log('Download of browsers complete.');
+
+      seleniumAssistant.printAvailableBrowserInfo();
+
       const serverPath = path.join(__dirname, 'data', 'example-site');
       return globalServer.startServer(serverPath);
     })
@@ -164,7 +169,7 @@ describe('Test Usage of Browsers', function() {
         return;
       }
 
-      const specificBrowser = seleniumAssistant.getBrowser(browserId, release);
+      const specificBrowser = seleniumAssistant.getLocalBrowser(browserId, release);
       if (!specificBrowser) {
         console.warn(`${chalk.red('WARNING:')} Unable to find ${browserId} ` +
           ` ${release}`);

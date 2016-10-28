@@ -31,7 +31,7 @@ const downloadManager = require('./download-manager.js');
  * const seleniumAssistant = require('selenium-assistant');
  * seleniumAssistant.printAvailableBrowserInfo();
  *
- * const browsers = seleniumAssistant.getAvailableBrowsers();
+ * const browsers = seleniumAssistant.getLocalBrowsers();
  * browsers.forEach(browser => {
  *   console.log(browsers.getPrettyName());
  *   console.log(browsers.getReleaseName());
@@ -50,7 +50,7 @@ class SeleniumAssistant {
   /**
    * To change where browsers are downloaded to, call this method
    * before calling {@link downloadBrowser} and
-   * {@link getAvailableBrowsers}.
+   * {@link getLocalBrowsers}.
    *
    * By default, this will install under `.selenium-assistant` in
    * your home directory on OS X and Linux, or just `selenium-assistant`
@@ -64,7 +64,7 @@ class SeleniumAssistant {
   }
 
   /**
-   * <p>The downloadBrowser() function is a helper method what will
+   * <p>The downloadLocalBrowser() function is a helper method what will
    * grab a browser on a specific release channel.</p>
    *
    * <p>If the request browser is already installed, it will resolve
@@ -82,8 +82,8 @@ class SeleniumAssistant {
    * @return {Promise}          A promise is returned which resolves
    *                            once the browser has been downloaded.
    */
-  downloadBrowser(browserId, release, expirationInHours) {
-    return downloadManager.downloadBrowser(
+  downloadLocalBrowser(browserId, release, expirationInHours) {
+    return downloadManager.downloadLocalBrowser(
       browserId, release, expirationInHours);
   }
 
@@ -98,7 +98,7 @@ class SeleniumAssistant {
    * @return {WebDriverBrowser} The WebDriverBrowser instance that represents
    *                            your request.
    */
-  getBrowser(browserId, release) {
+  getLocalBrowser(browserId, release) {
     return browserManager.createWebDriverBrowser(browserId, release);
   }
 
@@ -112,7 +112,7 @@ class SeleniumAssistant {
    * @return {Array<WebDriverBrowser>} Array of browsers discovered in the
    * current environment.
    */
-  getAvailableBrowsers() {
+  getLocalBrowsers() {
     if (process.platform !== 'darwin' && process.platform !== 'linux') {
       throw new Error('Sorry this library only supports OS X and Linux.');
     }
@@ -149,7 +149,7 @@ class SeleniumAssistant {
       'Path',
     ]);
 
-    const browsers = this.getAvailableBrowsers();
+    const browsers = this.getLocalBrowsers();
     browsers.forEach((browser) => {
       rows.push([
         browser.getPrettyName(),

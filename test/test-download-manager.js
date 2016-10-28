@@ -27,11 +27,11 @@ describe('Test Download Manager - Browser Expiration', function() {
       it(`should download ${browserId} - ${release} with no expiration.`, function() {
         this.timeout(DOWNLOAD_TIMEOUT);
 
-        return downloadManager.downloadBrowser(browserId, release)
+        return downloadManager.downloadLocalBrowser(browserId, release)
         .then(() => {
           browserDownloads[browserId][release].should.equal(true);
           browserDownloads[browserId][release] = false;
-          return downloadManager.downloadBrowser(browserId, release);
+          return downloadManager.downloadLocalBrowser(browserId, release);
         })
         .then(() => {
           // The default should be 24 hours, so manipulate the DB to say older
@@ -43,7 +43,7 @@ describe('Test Download Manager - Browser Expiration', function() {
           localStorage.setItem(storageKey, lastUpdate);
         })
         .then(() => {
-          return downloadManager.downloadBrowser(browserId, release, 0);
+          return downloadManager.downloadLocalBrowser(browserId, release, 0);
         })
         .then(() => {
           browserDownloads[browserId][release].should.equal(true);
@@ -53,12 +53,12 @@ describe('Test Download Manager - Browser Expiration', function() {
       it(`should download ${browserId} - ${release} with 0 hour expiration (Force download).`, function() {
         this.timeout(DOWNLOAD_TIMEOUT);
 
-        return downloadManager.downloadBrowser(browserId, release, 0)
+        return downloadManager.downloadLocalBrowser(browserId, release, 0)
         .then(() => {
           browserDownloads[browserId][release].should.equal(true);
 
           browserDownloads[browserId][release] = false;
-          return downloadManager.downloadBrowser(browserId, release, 0);
+          return downloadManager.downloadLocalBrowser(browserId, release, 0);
         })
         .then(() => {
           browserDownloads[browserId][release].should.equal(true);
@@ -69,7 +69,7 @@ describe('Test Download Manager - Browser Expiration', function() {
         this.timeout(DOWNLOAD_TIMEOUT);
         const EXPIRATION_TIME = 1;
 
-        return downloadManager.downloadBrowser(browserId, release,
+        return downloadManager.downloadLocalBrowser(browserId, release,
           EXPIRATION_TIME)
         .then(() => {
           browserDownloads[browserId][release].should.equal(true);
@@ -77,7 +77,7 @@ describe('Test Download Manager - Browser Expiration', function() {
           // Reset download for next step
           browserDownloads[browserId][release] = false;
 
-          return downloadManager.downloadBrowser(browserId, release,
+          return downloadManager.downloadLocalBrowser(browserId, release,
             EXPIRATION_TIME);
         })
         .then(() => {
@@ -93,7 +93,7 @@ describe('Test Download Manager - Browser Expiration', function() {
           // Reset download for next step
           browserDownloads[browserId][release] = false;
 
-          return downloadManager.downloadBrowser(browserId, release,
+          return downloadManager.downloadLocalBrowser(browserId, release,
               EXPIRATION_TIME);
         })
         .then(() => {
