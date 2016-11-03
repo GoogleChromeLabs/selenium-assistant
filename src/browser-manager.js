@@ -52,15 +52,15 @@ class BrowserManager {
    * @param {String} browserVersion The browser verions you wish to target.
    * This is the saucelabs version, not release name. Can be "latest",
    * "latest-1", "latest-2", "45.0"
+   * @return {WebDriverBrowser} browser A WebDriverBrowser instance pointing
+   * to a Saucelabs hosted browser.
    */
   getSaucelabsBrowser(browserId, browserVersion) {
-    // const browser = this.createWebDriverBrowser(browserId, releaseName);
-    const browser = null;
-    browser.addSuacelabsDetails({
-      browserVersion: 'latest',
-      username: this._saucelabs.username,
-      accessKey: this._saucelabs.accessKey,
-    });
+    const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
+    // browser.addCapability('browserName', browserId);
+    browser.addCapability('version', browserVersion);
+    browser.addCapability('username', this._saucelabs.username);
+    browser.addCapability('accessKey', this._saucelabs.accessKey);
     return browser;
   }
 
@@ -102,7 +102,7 @@ class BrowserManager {
    *
    * @param  {String} browserId The selenium browser Id 'chrome', 'firefox', etc
    * @param  {String} release   The release you want the browser to be on
-   *                            'stable', 'beta' or 'unstable'
+   *                            'stable', 'beta', 'unstable' or 'saucelabs'
    * @return {WebDriverBrowser} An instance of the browser you requested.
    */
   createWebDriverBrowser(browserId, release) {

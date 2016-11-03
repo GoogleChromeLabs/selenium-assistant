@@ -66,6 +66,23 @@ class WebDriverBrowser {
     this._release = release;
     this._seleniumBrowserId = seleniumBrowserId;
     this._seleniumOptions = seleniumOptions;
+    this._capabilities = null;
+  }
+
+  /**
+   * This is a simple method to define capabilities that'll be
+   * passed to the WebDriver builder when you call getSeleniumDriverBuilder()
+   * or getSeleniumDriver().
+   *
+   * @param {string} key The capability key.
+   * @param {string} value The Value of the capability.
+   */
+  addCapability(key, value) {
+    if (!this._capabilities) {
+      this._capabilities = {};
+    }
+
+    this._capabilities[key] = value;
   }
 
   /* eslint-disable valid-jsdoc */
@@ -245,6 +262,7 @@ class WebDriverBrowser {
     return new webdriver
       .Builder()
       .forBrowser(this.getSeleniumBrowserId())
+      .withCapabilities(this._capabilities)
       .setChromeOptions(seleniumOptions)
       .setFirefoxOptions(seleniumOptions)
       .setOperaOptions(seleniumOptions)

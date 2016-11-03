@@ -185,7 +185,7 @@ describe('Test Download Manager - Browser Download', function() {
   const performDownloadTest = (browserId, release) => {
     it(`should download ${browserId} - ${release} from the network`, function() {
       this.timeout(5 * 60 * 1000);
-      return seleniumAssistant.downloadBrowser(browserId, release, 0);
+      return seleniumAssistant.downloadLocalBrowser(browserId, release, 0);
     });
   };
 

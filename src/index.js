@@ -49,7 +49,7 @@ class SeleniumAssistant {
 
   /**
    * To change where browsers are downloaded to, call this method
-   * before calling {@link downloadBrowser} and
+   * before calling {@link downloadLocalBrowser} and
    * {@link getLocalBrowsers}.
    *
    * By default, this will install under `.selenium-assistant` in
