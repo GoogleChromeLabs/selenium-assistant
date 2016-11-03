@@ -19,6 +19,9 @@
     "type": "git",
     "url": "git+https://github.com/GoogleChrome/selenium-assistant.git"
   },
+  "engines": {
+    "node": ">= 6.9.0"
+  },
   "keywords": [
     "selenium",
     "webdriver"
