@@ -23,6 +23,7 @@ const selenium = require('selenium-webdriver');
 const TestServer = require('./helpers/test-server.js');
 
 require('geckodriver');
+require('chromedriver');
 
 require('chai').should();
 
@@ -125,7 +126,7 @@ describe('Test Usage of Browsers', function() {
   function testBuilderSeleniumUsage(specificBrowser) {
     const builder = specificBrowser.getSeleniumDriverBuilder();
 
-    return builder.buildAsync()
+    return builder.build()
     .then((driver) => {
       globalDriver = driver;
     })

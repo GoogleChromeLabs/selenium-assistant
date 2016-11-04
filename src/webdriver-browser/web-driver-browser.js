@@ -264,7 +264,7 @@ class WebDriverBrowser {
   getSeleniumDriver() {
     try {
       const builder = this.getSeleniumDriverBuilder();
-      return builder.buildAsync();
+      return builder.build();
     } catch (err) {
       return Promise.reject(err);
     }
