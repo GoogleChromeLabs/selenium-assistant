@@ -13,8 +13,9 @@ beta:
             - /reference-docs/beta/v0.5.2-beta
             - /reference-docs/beta/v0.5.1-beta
 stable:
-    latest: /reference-docs/stable/v1.0.0
+    latest: /reference-docs/stable/v3.0.0
     all:
+            - /reference-docs/stable/v3.0.0
             - /reference-docs/stable/v1.0.0
             - /reference-docs/stable/v0.3.0
             - /reference-docs/stable/v0.2.0
