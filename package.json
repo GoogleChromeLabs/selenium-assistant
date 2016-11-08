@@ -1,6 +1,6 @@
 {
   "name": "selenium-assistant",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
@@ -18,6 +18,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GoogleChrome/selenium-assistant.git"
+  },
+  "engines": {
+    "node": ">= 6.9.0"
   },
   "keywords": [
     "selenium",
@@ -50,11 +53,11 @@
     "chalk": "^1.1.3",
     "del": "^2.2.0",
     "dmg": "^0.1.0",
-    "fs-extra": "^0.30.0",
+    "fs-extra": "^1.0.0",
     "mkdirp": "^0.5.1",
     "node-localstorage": "^1.3.0",
-    "request": "^2.76.0",
-    "selenium-webdriver": "^3.0.0-beta-3",
+    "request": "^2.78.0",
+    "selenium-webdriver": "3.0.0",
     "which": "^1.2.11",
     "yauzl": "^2.7.0"
   },
