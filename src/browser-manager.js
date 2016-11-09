@@ -38,7 +38,7 @@ class BrowserManager {
    */
   setSaucelabDetails(username, accessKey) {
     this._saucelabs = this._saucelabs || {};
-    this._saucelabs.name = username;
+    this._saucelabs.username = username;
     this._saucelabs.accessKey = accessKey;
   }
 
@@ -55,12 +55,14 @@ class BrowserManager {
    * @return {WebDriverBrowser} browser A WebDriverBrowser instance pointing
    * to a Saucelabs hosted browser.
    */
-  getSaucelabsBrowser(browserId, browserVersion) {
+  getSaucelabsBrowser(browserId, browserVersion, options) {
     const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
-    // browser.addCapability('browserName', browserId);
     browser.addCapability('version', browserVersion);
     browser.addCapability('username', this._saucelabs.username);
     browser.addCapability('accessKey', this._saucelabs.accessKey);
+    if (options.name) {
+      browser.addCapability('name', options.name);
+    }
     return browser;
   }
 

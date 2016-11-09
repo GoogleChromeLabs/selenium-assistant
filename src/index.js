@@ -202,6 +202,27 @@ class SeleniumAssistant {
   }
 
   /**
+   * The Saucelabs details to be used by Saucelab browsers.
+   * @param {string} username The Saucelabs username.
+   * @param {string} accessKey The Saucelabs access key.
+   */
+  setSaucelabDetails(username, accessKey) {
+    return browserManager.setSaucelabDetails(username, accessKey);
+  }
+
+  /**
+   * Get a Saucelab browser for a particular browser ID and a particular
+   * browser version.
+   * @param {string} browserId The selenium browser ID.
+   * @param {string} browserVersion This is a Saucelabs browser version like
+   * "latest" or "latest-2".
+   */
+  getSaucelabsBrowser(browserId, browserVersion, options) {
+    return browserManager.getSaucelabsBrowser(browserId, browserVersion,
+      options);
+  }
+
+  /**
    * <p>Once a web driver is no longer needed call this method to kill it. The
    * promise resolves once the browser is closed and clean up has been done.</p>
    *

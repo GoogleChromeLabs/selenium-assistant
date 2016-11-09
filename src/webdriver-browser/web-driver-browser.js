@@ -49,7 +49,8 @@ class WebDriverBrowser {
       throw new Error('Invalid prettyName value: ', prettyName);
     }
 
-    if (release !== 'stable' && release !== 'beta' && release !== 'unstable') {
+    if (release !== 'stable' && release !== 'beta' && release !== 'unstable' &&
+      release !== 'saucelabs') {
       throw new Error('Unexpected browser release given: ', release);
     }
 
@@ -259,15 +260,22 @@ class WebDriverBrowser {
       throw new Error('Unknown selenium options object');
     }
 
-    return new webdriver
+    const builder = new webdriver
       .Builder()
-      .forBrowser(this.getSeleniumBrowserId())
       .withCapabilities(this._capabilities)
+      .forBrowser(this.getSeleniumBrowserId())
       .setChromeOptions(seleniumOptions)
       .setFirefoxOptions(seleniumOptions)
       .setOperaOptions(seleniumOptions)
       .setSafariOptions(seleniumOptions)
       .setEdgeOptions(seleniumOptions);
+
+    if (this.getReleaseName() === 'saucelabs') {
+      builder.usingServer('https://' + this._capabilities.username + ':' +
+        this._capabilities.accessKey + '@ondemand.saucelabs.com:443/wd/hub');
+    }
+
+    return builder;
   }
 
   /**
