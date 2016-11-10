@@ -6,6 +6,17 @@ const selenium = require('selenium-webdriver');
 function addTests(username, accessKey) {
   describe('Test Saucelabs', function() {
 
+    const badSaucelabBrowsers = [
+      'firefox'
+    ];
+
+    const saucelabBrowsers = [
+      'chrome',
+      'safari',
+      'edge',
+      'ie',
+    ];
+
     let globalDriver;
     let globalServer = new TestServer(false);
 
@@ -27,22 +38,15 @@ function addTests(username, accessKey) {
     });
 
     function testNormalSeleniumUsage(specificBrowser) {
-      console.log('Getting the selenium driver');
       return specificBrowser.getSeleniumDriver()
       .then((driver) => {
-        console.log('Got driver.');
         globalDriver = driver;
       })
       .then(() => {
-        console.log('Getting the URL');
         return globalDriver.get('https://gauntface.com/')
         .then(() => {
-          console.log('Got the URL.');
           return globalDriver.wait(selenium.until.titleIs('Gaunt Face | Matt Gaunt'), 1000);
         });
-      })
-      .then(() => {
-        console.log('Got the page title');
       })
       .then(() => seleniumAssistant.killWebDriver(globalDriver))
       .then(() => {
@@ -62,15 +66,18 @@ function addTests(username, accessKey) {
 
     });
 
-    it('should be able to use saucelab browser', function() {
-      this.timeout(30 * 60 * 1000);
+    saucelabBrowsers.forEach((browser) => {
+      const version = 'latest';
+      it(`should be able to use saucelab browser ${browser} - ${version}`, function() {
+        this.timeout(5 * 60 * 1000);
 
-      seleniumAssistant.setSaucelabDetails(username, accessKey);
-      const browser = seleniumAssistant.getSaucelabsBrowser('chrome',
-        'latest',{
-          name: 'selenium-assistant/unit-test'
-        });
-      return testNormalSeleniumUsage(browser);
+        seleniumAssistant.setSaucelabDetails(username, accessKey);
+        const webdriverBrowser = seleniumAssistant.getSaucelabsBrowser(browser,
+          version, {
+            name: `selenium-assistant/unit-test/${browser}/${version}`,
+          });
+        return testNormalSeleniumUsage(webdriverBrowser);
+      });
     });
   });
 }
@@ -79,4 +86,6 @@ if (process.env['SAUCELABS_USERNAME'] &&
   process.env['SAUCELABS_ACCESS_KEY']) {
   addTests(process.env['SAUCELABS_USERNAME'],
     process.env['SAUCELABS_ACCESS_KEY']);
+} else {
+  console.warn('Skipping saucelabs tests due to no credentials in environment');
 }

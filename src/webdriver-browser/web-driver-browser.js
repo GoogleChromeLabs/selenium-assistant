@@ -58,7 +58,9 @@ class WebDriverBrowser {
       seleniumBrowserId !== 'chrome' &&
       seleniumBrowserId !== 'firefox' &&
       seleniumBrowserId !== 'opera' &&
-      seleniumBrowserId !== 'safari'
+      seleniumBrowserId !== 'safari' &&
+      seleniumBrowserId !== 'MicrosoftEdge' &&
+      seleniumBrowserId !== 'internet explorer'
     ) {
       throw new Error('Unexpected browser ID given: ', seleniumBrowserId);
     }
@@ -257,18 +259,25 @@ class WebDriverBrowser {
       // This is a safari options, there is no way we can define
       // an executable path :(
     } else {
-      throw new Error('Unknown selenium options object');
+      // throw new Error('Unknown selenium options object');
+    }
+
+    // this.addCapability('platform', 'Windows 10');
+    // this.addCapability('version', '14.14393');
+
+    let capabilities = this._capabilities;
+    if (this.getSeleniumBrowserId() === 'edge') {
+      capabilities = seleniumOptions.toCapabilities(this._capabilities);
     }
 
     const builder = new webdriver
       .Builder()
-      .withCapabilities(this._capabilities)
+      .withCapabilities(capabilities)
       .forBrowser(this.getSeleniumBrowserId())
       .setChromeOptions(seleniumOptions)
       .setFirefoxOptions(seleniumOptions)
       .setOperaOptions(seleniumOptions)
-      .setSafariOptions(seleniumOptions)
-      .setEdgeOptions(seleniumOptions);
+      .setSafariOptions(seleniumOptions);
 
     if (this.getReleaseName() === 'saucelabs') {
       builder.usingServer('https://' + this._capabilities.username + ':' +
@@ -290,7 +299,11 @@ class WebDriverBrowser {
   getSeleniumDriver() {
     try {
       const builder = this.getSeleniumDriverBuilder();
-      return builder.build();
+      const buildResult = builder.build();
+      if (buildResult.then) {
+        return buildResult;
+      }
+      return Promise.resolve(buildResult);
     } catch (err) {
       return Promise.reject(err);
     }

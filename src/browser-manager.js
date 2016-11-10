@@ -20,6 +20,8 @@ const ChromeWebDriverBrowser = require('./webdriver-browser/chrome');
 const FirefoxWebDriverBrowser = require('./webdriver-browser/firefox');
 const OperaWebDriverBrowser = require('./webdriver-browser/opera');
 const SafariWebDriverBrowser = require('./webdriver-browser/safari');
+const EdgeWebDriverBrowser = require('./webdriver-browser/edge');
+const IEWebDriverBrowser = require('./webdriver-browser/ie');
 
 /**
  * This class is a simple helper to define the possible permutations of
@@ -52,16 +54,31 @@ class BrowserManager {
    * @param {String} browserVersion The browser verions you wish to target.
    * This is the saucelabs version, not release name. Can be "latest",
    * "latest-1", "latest-2", "45.0"
+   * @param {Object} options Add additional options for the saucelabs browser.
    * @return {WebDriverBrowser} browser A WebDriverBrowser instance pointing
    * to a Saucelabs hosted browser.
    */
   getSaucelabsBrowser(browserId, browserVersion, options) {
     const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
-    browser.addCapability('version', browserVersion);
+    // browser.addCapability('version', browserVersion);
     browser.addCapability('username', this._saucelabs.username);
     browser.addCapability('accessKey', this._saucelabs.accessKey);
+
+    // This is the name that is shown on saucelabs.
     if (options.name) {
       browser.addCapability('name', options.name);
+    }
+
+    // These values are largely from:
+    // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
+    if (browserId === 'edge') {
+      // Set default platform to windows 10 otherwise it will fail.
+      browser.addCapability('platform', 'Windows 10');
+    }
+
+    if (browserId === 'safari') {
+      // Set default platform to windows 10 otherwise it will fail.
+      browser.addCapability('platform', 'Windows 10');
     }
     return browser;
   }
@@ -117,6 +134,10 @@ class BrowserManager {
         return new OperaWebDriverBrowser(release);
       case 'safari':
         return new SafariWebDriverBrowser(release);
+      case 'edge':
+        return new EdgeWebDriverBrowser(release);
+      case 'ie':
+        return new IEWebDriverBrowser(release);
       default:
         throw new Error('Unknown web driver browser request: ', browserId);
     }
