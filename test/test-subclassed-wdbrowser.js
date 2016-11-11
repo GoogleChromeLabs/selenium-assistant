@@ -22,6 +22,8 @@ const seleniumChrome = require('selenium-webdriver/chrome');
 const seleniumFirefox = require('selenium-webdriver/firefox');
 const seleniumOpera = require('selenium-webdriver/opera');
 const seleniumSafari = require('selenium-webdriver/safari');
+const seleniumEdge = require('selenium-webdriver/edge');
+const seleniumIE = require('selenium-webdriver/ie');
 
 require('chai').should();
 
@@ -145,6 +147,14 @@ webdriverFiles.forEach((webdriverFile) => {
     case 'safari.js':
       prettyNameStart = 'Safari ';
       seleniumBrowser = seleniumSafari;
+      break;
+    case 'edge.js':
+      prettyNameStart = 'Microsoft Edge';
+      seleniumBrowser = seleniumEdge;
+      break;
+    case 'ie.js':
+      prettyNameStart = 'Internet Explorer';
+      seleniumBrowser = seleniumIE;
       break;
     default:
       throw new Error('Unable to find options for: ', webdriverFile);
