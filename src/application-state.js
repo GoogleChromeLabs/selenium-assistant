@@ -17,6 +17,7 @@
 'use strict';
 
 const path = require('path');
+const sauceConnectLauncher = require('sauce-connect-launcher');
 
 /**
  * This class is a super basic class that stores shared state across the
@@ -73,6 +74,79 @@ class ApplicationState {
     const folderName = process.platform === 'win32' ?
       'selenium-assistant' : '.selenium-assistant';
     return path.join(installLocation, folderName);
+  }
+
+  /**
+   * Before attempting to use a Saucelabs browser, you must
+   * call this method with your Saucelabs Username and Access Key.
+   * @param {String} username Your Saucelabs username.
+   * @param {String} accessKey Your Saucelabs accessKey.
+   */
+  setSaucelabsDetails(username, accessKey) {
+    this._saucelabs = this._saucelabs || {};
+    this._saucelabs.username = username;
+    this._saucelabs.accessKey = accessKey;
+  }
+
+  /**
+   * @return {Object} Returns an object containing the username and accessKey
+   * for saucelabs.
+   */
+  getSaucelabsDetails() {
+    if (!this._saucelabs) {
+      throw new Error('Saucelab details not defined.');
+    }
+
+    return this._saucelabs;
+  }
+
+  /**
+   * @return {Promise} Returns a promise that resolves once the connection is
+   * open.
+   */
+  enableSaucelabsConnect() {
+    if (this._sauceConnect) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      const options = {
+        username: this._saucelabs.username,
+        accessKey: this._saucelabs.accessKey,
+        doctor: true,
+        tunnelIdentifier:
+          `selenium-assistant/sauce-connect-tunnel/${Date.now()}`,
+        connectRetries: 3,
+      };
+
+      sauceConnectLauncher(options, (err, sauceConnectProcess) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        resolve(sauceConnectProcess);
+      });
+    })
+    .then((sauceConnectProcess) => {
+      this._sauceConnect = sauceConnectProcess;
+    });
+  }
+
+  /**
+   * @return {Promise} A promise that resolves once the connection is closed.
+   */
+  disableSaucelabsConnect() {
+    if (!this._sauceConnect) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve) => {
+      this._sauceConnect.close(resolve);
+    })
+    .then(() => {
+      this._sauceConnect = null;
+    });
   }
 }
 

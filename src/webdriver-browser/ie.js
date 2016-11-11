@@ -51,16 +51,6 @@ class IEWebDriverBrowser extends WebDriverBrowser {
   }
 
   /**
-   * A version number for the browser. This is the major version number
-   * (i.e. for 48.0.1293, this would return 18)
-   * @return {Integer} The major version number of this browser
-   */
-  getVersionNumber() {
-    console.warn('This is not implemented.');
-    return -1;
-  }
-
-  /**
    * Get the available releases for this browser.
    * @return {Array<string>} Array of releases supported.
    */

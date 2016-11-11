@@ -5,10 +5,9 @@ const selenium = require('selenium-webdriver');
 
 function addTests(username, accessKey) {
   describe('Test Saucelabs', function() {
-
-    const badSaucelabBrowsers = [
+    /** const badSaucelabBrowsers = [
       'firefox'
-    ];
+    ];**/
 
     const saucelabBrowsers = [
       'chrome',
@@ -19,12 +18,19 @@ function addTests(username, accessKey) {
 
     let globalDriver;
     let globalServer = new TestServer(false);
+    let localURL;
 
     before(function() {
+      this.timeout(60 * 1000);
+
       const serverPath = path.join(__dirname, 'data', 'example-site');
       return globalServer.startServer(serverPath)
       .then((portNumber) => {
         localURL = `http://localhost:${portNumber}/`;
+      })
+      .then(() => {
+        seleniumAssistant.setSaucelabsDetails(username, accessKey);
+        return seleniumAssistant.enableSaucelabsConnect();
       });
     });
 
@@ -32,6 +38,9 @@ function addTests(username, accessKey) {
       this.timeout(6000);
 
       return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
+      .then(() => {
+        return seleniumAssistant.disableSaucelabsConnect();
+      })
       .then(() => {
         return globalServer.killServer();
       });
@@ -43,9 +52,9 @@ function addTests(username, accessKey) {
         globalDriver = driver;
       })
       .then(() => {
-        return globalDriver.get('https://gauntface.com/')
+        return globalDriver.get(localURL)
         .then(() => {
-          return globalDriver.wait(selenium.until.titleIs('Gaunt Face | Matt Gaunt'), 1000);
+          return globalDriver.wait(selenium.until.titleIs('Example Site'), 10000);
         });
       })
       .then(() => seleniumAssistant.killWebDriver(globalDriver))
@@ -71,7 +80,6 @@ function addTests(username, accessKey) {
       it(`should be able to use saucelab browser ${browser} - ${version}`, function() {
         this.timeout(5 * 60 * 1000);
 
-        seleniumAssistant.setSaucelabDetails(username, accessKey);
         const webdriverBrowser = seleniumAssistant.getSaucelabsBrowser(browser,
           version, {
             name: `selenium-assistant/unit-test/${browser}/${version}`,

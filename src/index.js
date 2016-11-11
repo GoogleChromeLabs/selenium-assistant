@@ -206,8 +206,8 @@ class SeleniumAssistant {
    * @param {string} username The Saucelabs username.
    * @param {string} accessKey The Saucelabs access key.
    */
-  setSaucelabDetails(username, accessKey) {
-    return browserManager.setSaucelabDetails(username, accessKey);
+  setSaucelabsDetails(username, accessKey) {
+    application.setSaucelabsDetails(username, accessKey);
   }
 
   /**
@@ -216,10 +216,34 @@ class SeleniumAssistant {
    * @param {string} browserId The selenium browser ID.
    * @param {string} browserVersion This is a Saucelabs browser version like
    * "latest" or "latest-2".
+   * @param {Object} options The options to set for saucelabs.
+   * @return {WebDriverBrowser} A selenium-assistant web driver instance.
    */
   getSaucelabsBrowser(browserId, browserVersion, options) {
+    if (!options.saucelabs || !options.saucelabs.username ||
+      !options.saucelabs.accessKey) {
+      options.saucelabs = application.getSaucelabsDetails();
+    }
+
     return browserManager.getSaucelabsBrowser(browserId, browserVersion,
       options);
+  }
+
+  /**
+   * This will enable the saucelabs connect proxy.
+   * @return {Promise} Returns a promise that resolves once the proxy is
+   * set up.
+   */
+  enableSaucelabsConnect() {
+    return application.enableSaucelabsConnect();
+  }
+
+  /**
+   * This will disable the saucelabs connect proxy.
+   * @return {Promise} Returns a promise that resolves once the proxy is closed.
+   */
+  disableSaucelabsConnect() {
+    return application.disableSaucelabsConnect();
   }
 
   /**

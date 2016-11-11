@@ -32,18 +32,6 @@ const IEWebDriverBrowser = require('./webdriver-browser/ie');
  */
 class BrowserManager {
 
-  /**
-   * Before attempting to use a Saucelabs browser, you must
-   * call this method with your Saucelabs Username and Access Key.
-   * @param {String} username Your Saucelabs username.
-   * @param {String} accessKey Your Saucelabs accessKey.
-   */
-  setSaucelabDetails(username, accessKey) {
-    this._saucelabs = this._saucelabs || {};
-    this._saucelabs.username = username;
-    this._saucelabs.accessKey = accessKey;
-  }
-
   // Details from:
   // https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BrowserVersion
   /**
@@ -61,8 +49,8 @@ class BrowserManager {
   getSaucelabsBrowser(browserId, browserVersion, options) {
     const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
     // browser.addCapability('version', browserVersion);
-    browser.addCapability('username', this._saucelabs.username);
-    browser.addCapability('accessKey', this._saucelabs.accessKey);
+    browser.addCapability('username', options.saucelabs.username);
+    browser.addCapability('accessKey', options.saucelabs.accessKey);
 
     // This is the name that is shown on saucelabs.
     if (options.name) {
@@ -80,6 +68,7 @@ class BrowserManager {
       // Set default platform to windows 10 otherwise it will fail.
       browser.addCapability('platform', 'Windows 10');
     }
+
     return browser;
   }
 
