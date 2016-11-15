@@ -28,9 +28,7 @@ require('chromedriver');
 require('chai').should();
 
 describe('Test Usage of Browsers', function() {
-  if ((process.env.TRAVIS || process.env.RELASE)) {
-    this.retries(3);
-  }
+  this.retries(3);
 
   const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
   const seleniumAssistant = require('../src/index.js');

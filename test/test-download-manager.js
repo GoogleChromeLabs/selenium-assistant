@@ -174,6 +174,8 @@ describe('Test Download Manager - Browser Expiration', function() {
 });
 
 describe('Test Download Manager - Browser Download', function() {
+  this.retries(3);
+
   before(function() {
     this.timeout(10 * 1000);
     // Reset Install Directory
