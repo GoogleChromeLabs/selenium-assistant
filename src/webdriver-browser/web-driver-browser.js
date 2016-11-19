@@ -16,8 +16,6 @@
 
 'use strict';
 
-const execSync = require('child_process').execSync;
-const fs = require('fs');
 const webdriver = require('selenium-webdriver');
 
 /**
@@ -90,46 +88,6 @@ class WebDriverBrowser {
 
   /* eslint-disable valid-jsdoc */
   /**
-   * To get the path of the browsers executable file, call this method.
-   * @return {String} Path of the browsers executable file or null if
-   * it can't be found.
-   */
-  getExecutablePath() {
-    throw new Error('getExecutablePath() must be overriden by subclasses');
-  }
-  /* eslint-enable valid-jsdoc */
-
-  /**
-   * If you need to identify a browser based on it's version number but
-   * the high level version number isn't specific enough, you can use the
-   * raw version string (this will be the result of calling the browser
-   * executable with an appropriate flag to get the version)
-   * @return {String} Raw string that identifies the browser
-   */
-  getRawVersionString() {
-    if (this._rawVerstionString) {
-      return this._rawVerstionString;
-    }
-
-    const executablePath = this.getExecutablePath();
-    if (!executablePath) {
-      return null;
-    }
-
-    this._rawVerstionString = null;
-
-    try {
-      this._rawVerstionString = execSync(`"${executablePath}" --version`)
-        .toString();
-    } catch (err) {
-      // NOOP
-    }
-
-    return this._rawVerstionString;
-  }
-
-  /* eslint-disable valid-jsdoc */
-  /**
    * <p>This method returns an integer if it can be determined from
    * the browser executable or -1 if the version is unknown.</p>
    *
@@ -148,38 +106,6 @@ class WebDriverBrowser {
    * @return {number} The minimum supported version number.
    */
   _getMinSupportedVersion() {
-    return false;
-  }
-
-  /**
-   * <p>This method returns true if the instance can be found and can create a
-   * selenium driver that will launch the expected browser.</p>
-   *
-   * <p>A scenario where it will be unable to produce a valid selenium driver
-   * is if the browsers executable path can't be found.</p>
-   *
-   * @return {Boolean} True if a selenium driver can be produced
-   */
-  isValid() {
-    const executablePath = this.getExecutablePath();
-    if (!executablePath) {
-      return false;
-    }
-
-    try {
-      // This will throw if it's not found
-      fs.lstatSync(executablePath);
-
-      const minVersion = this._getMinSupportedVersion();
-      if (minVersion) {
-        return this.getVersionNumber() >= minVersion;
-      }
-
-      return true;
-    } catch (error) {
-      // NOOP
-    }
-
     return false;
   }
 

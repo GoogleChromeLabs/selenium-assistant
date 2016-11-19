@@ -16,12 +16,10 @@
 
 'use strict';
 
-const ChromeWebDriverBrowser = require('./webdriver-browser/chrome');
-const FirefoxWebDriverBrowser = require('./webdriver-browser/firefox');
-const OperaWebDriverBrowser = require('./webdriver-browser/opera');
-const SafariWebDriverBrowser = require('./webdriver-browser/safari');
-const EdgeWebDriverBrowser = require('./webdriver-browser/edge');
-const IEWebDriverBrowser = require('./webdriver-browser/ie');
+const LocalChromeBrowser = require('./local-browsers/chrome');
+const LocalFirefoxBrowser = require('./local-browsers/firefox');
+const LocalOperaBrowser = require('./local-browsers/opera');
+const LocalSafariBrowser = require('./local-browsers/safari');
 
 /**
  * This class is a simple helper to define the possible permutations of
@@ -116,17 +114,13 @@ class BrowserManager {
   createWebDriverBrowser(browserId, release) {
     switch (browserId) {
       case 'chrome':
-        return new ChromeWebDriverBrowser(release);
+        return new LocalChromeBrowser(release);
       case 'firefox':
-        return new FirefoxWebDriverBrowser(release);
+        return new LocalFirefoxBrowser(release);
       case 'opera':
-        return new OperaWebDriverBrowser(release);
+        return new LocalOperaBrowser(release);
       case 'safari':
-        return new SafariWebDriverBrowser(release);
-      case 'edge':
-        return new EdgeWebDriverBrowser(release);
-      case 'ie':
-        return new IEWebDriverBrowser(release);
+        return new LocalSafariBrowser(release);
       default:
         throw new Error('Unknown web driver browser request: ', browserId);
     }

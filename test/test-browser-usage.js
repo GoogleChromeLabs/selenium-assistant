@@ -44,7 +44,7 @@ describe('Test Usage of Browsers', function() {
 
   // Travis has Safari, but the extension won't be installed :(
   if ((!process.env.TRAVIS || process.env.RELASE) && process.platform === 'darwin') {
-    browserIds.push('safari');
+    // browserIds.push('safari');
   }
 
   let globalDriver = null;
@@ -58,12 +58,12 @@ describe('Test Usage of Browsers', function() {
 
     console.log('Downloading browsers....');
     return Promise.all([
-      seleniumAssistant.downloadLocalBrowser('chrome', 'stable'),
+      /** seleniumAssistant.downloadLocalBrowser('chrome', 'stable'),
       seleniumAssistant.downloadLocalBrowser('chrome', 'beta'),
       seleniumAssistant.downloadLocalBrowser('chrome', 'unstable'),
       seleniumAssistant.downloadLocalBrowser('firefox', 'stable'),
       seleniumAssistant.downloadLocalBrowser('firefox', 'beta'),
-      seleniumAssistant.downloadLocalBrowser('firefox', 'unstable'),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'unstable'),**/
     ])
     .catch((err) => {
       console.warn('There was an issue downloading the browsers: ', err);
@@ -71,7 +71,7 @@ describe('Test Usage of Browsers', function() {
     .then(() => {
       console.log('Download of browsers complete.');
 
-      seleniumAssistant.printAvailableBrowserInfo();
+      // seleniumAssistant.printAvailableBrowserInfo();
 
       const serverPath = path.join(__dirname, 'data', 'example-site');
       return globalServer.startServer(serverPath);
@@ -102,7 +102,7 @@ describe('Test Usage of Browsers', function() {
 
   function isBlackListed(specificBrowser) {
     // Return true to blacklist
-    if (specificBrowser.getSeleniumBrowserId() === 'opera' &&
+    if (specificBrowser.getId() === 'opera' &&
       specificBrowser.getVersionNumber() === 41) {
       // Opera 41 is broken with Opera driver v0.2.2
       return true;
