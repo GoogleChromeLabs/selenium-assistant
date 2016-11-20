@@ -59,8 +59,14 @@
     "request": "^2.78.0",
     "sauce-connect-launcher": "^1.0.0",
     "selenium-webdriver": "3.0.0",
+    "semver": "^5.3.0",
     "which": "^1.2.11",
     "yauzl": "^2.7.0"
+  },
+  "optionalDependencies": {
+    "chromedriver": "^2.24.0",
+    "geckodriver": "^1.2.0",
+    "operadriver": "^0.2.2"
   },
   "files": [
     "src/"

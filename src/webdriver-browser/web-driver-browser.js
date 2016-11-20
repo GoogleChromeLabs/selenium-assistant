@@ -102,14 +102,6 @@ class WebDriverBrowser {
   /* eslint-enable valid-jsdoc */
 
   /**
-   * Get the minimum supported browser version for this browser.
-   * @return {number} The minimum supported version number.
-   */
-  _getMinSupportedVersion() {
-    return false;
-  }
-
-  /**
    * A user friendly name for the browser
    * @return {String} A user friendly name for the browser
    */

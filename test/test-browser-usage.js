@@ -16,99 +16,25 @@
 
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
 const selenium = require('selenium-webdriver');
-
+const seleniumAssistant = require('../src/index.js');
 const TestServer = require('./helpers/test-server.js');
-
-require('geckodriver');
-require('chromedriver');
-require('operadriver');
 
 require('chai').should();
 
+const TIMEOUT = 5 * 60 * 1000;
+const RETRIES = 3;
+const RELEASES = ['stable', 'beta', 'unstable'];
+
 describe('Test Usage of Browsers', function() {
-  if ((process.env.TRAVIS || process.env.RELASE)) {
-    this.retries(3);
-  }
-
-  const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
-  const seleniumAssistant = require('../src/index.js');
-  const releases = ['stable', 'beta', 'unstable'];
-  const browserIds = ['chrome', 'firefox'];
-
-  if (!(process.env.TRAVIS || process.env.RELASE)) {
-    browserIds.push('opera');
-  }
-
-  // Travis has Safari, but the extension won't be installed :(
-  if ((!process.env.TRAVIS || process.env.RELASE) && process.platform === 'darwin') {
-    // browserIds.push('safari');
-  }
+  this.timeout(TIMEOUT);
+  this.retries(RETRIES);
 
   let globalDriver = null;
   let globalServer = new TestServer(false);
   let localURL = '';
-
-  before(function() {
-    this.timeout(5 * 60 * 1000);
-
-    seleniumAssistant.setBrowserInstallDir(null);
-
-    console.log('Downloading browsers....');
-    return Promise.all([
-      /** seleniumAssistant.downloadLocalBrowser('chrome', 'stable'),
-      seleniumAssistant.downloadLocalBrowser('chrome', 'beta'),
-      seleniumAssistant.downloadLocalBrowser('chrome', 'unstable'),
-      seleniumAssistant.downloadLocalBrowser('firefox', 'stable'),
-      seleniumAssistant.downloadLocalBrowser('firefox', 'beta'),
-      seleniumAssistant.downloadLocalBrowser('firefox', 'unstable'),**/
-    ])
-    .catch((err) => {
-      console.warn('There was an issue downloading the browsers: ', err);
-    })
-    .then(() => {
-      console.log('Download of browsers complete.');
-
-      // seleniumAssistant.printAvailableBrowserInfo();
-
-      const serverPath = path.join(__dirname, 'data', 'example-site');
-      return globalServer.startServer(serverPath);
-    })
-    .then((portNumber) => {
-      localURL = `http://localhost:${portNumber}/`;
-    });
-  });
-
-  beforeEach(function() {
-    // Timeout is to account for slow closing of selenium web driver browser
-    this.timeout(180000);
-
-    return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
-    .then(() => {
-      globalDriver = null;
-    });
-  });
-
-  after(function() {
-    this.timeout(6000);
-
-    return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
-    .then(() => {
-      return globalServer.killServer();
-    });
-  });
-
-  function isBlackListed(specificBrowser) {
-    // Return true to blacklist
-    if (specificBrowser.getId() === 'opera' &&
-      specificBrowser.getVersionNumber() === 41) {
-      // Opera 41 is broken with Opera driver v0.2.2
-      return true;
-    }
-    return false;
-  }
 
   function testNormalSeleniumUsage(specificBrowser) {
     return specificBrowser.getSeleniumDriver()
@@ -151,68 +77,76 @@ describe('Test Usage of Browsers', function() {
   function testBrowserInfo(specificBrowser) {
     const versionString = specificBrowser.getRawVersionString();
     (versionString === null).should.equal(false);
+    versionString.length.should.gt(0);
 
     const versionNumber = specificBrowser.getVersionNumber();
     versionNumber.should.not.equal(-1);
   }
 
-  browserIds.forEach((browserId) => {
-    releases.forEach((release) => {
-      if (browserId === 'safari' && release === 'unstable') {
-        // Safari unstable doesn't exist so skip it.
+  function setupTest(localBrowser) {
+    it(`should be able to use ${localBrowser.getId()} - ${localBrowser.getReleaseName()}`, function() {
+      if (localBrowser.isBlackListed()) {
+        console.warn(`Browser is blacklisted ${localBrowser.getId()} - ${localBrowser.getReleaseName()}`);
         return;
       }
 
-      if (browserId === 'safari') {
-        // Safari fails (both stable and beta) with
-        // "Error: Server terminated early with status 1".
+      if (!localBrowser.isValid()) {
+        console.warn(`Browser is invalid ${localBrowser.getId()} - ${localBrowser.getReleaseName()}`);
         return;
       }
 
-      const specificBrowser = seleniumAssistant.getLocalBrowser(browserId, release);
-      if (!specificBrowser) {
-        console.warn(`${chalk.red('WARNING:')} Unable to find ${browserId} ` +
-          ` ${release}`);
-        return;
-      }
+      return testNormalSeleniumUsage(localBrowser)
+      .then(() => testBuilderSeleniumUsage(localBrowser))
+      .then(() => testBrowserInfo(localBrowser));
+    });
+  }
 
-      it(`should be able to use ${browserId} - ${release}`, function() {
-        this.timeout(DOWNLOAD_TIMEOUT);
+  before(function() {
+    seleniumAssistant.setBrowserInstallDir(null);
 
-        if (!specificBrowser.isValid()) {
-          if (browserId === 'opera') {
-            console.warn('Opera not available in this environment.');
-            return;
-          }
+    console.log('Downloading browsers....');
+    return Promise.all([
+      seleniumAssistant.downloadLocalBrowser('chrome', 'stable'),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'beta'),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'unstable'),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'stable'),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'beta'),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'unstable'),
+    ])
+    .catch((err) => {
+      console.warn('There was an issue downloading the browsers: ', err);
+    })
+    .then(() => {
+      console.log('Download of browsers complete.');
 
-          throw new Error(`Browser is unexpectidly invalid ${browserId} - ${release}`);
-        }
+      const serverPath = path.join(__dirname, 'data', 'example-site');
+      return globalServer.startServer(serverPath);
+    })
+    .then((portNumber) => {
+      localURL = `http://localhost:${portNumber}/`;
+    });
+  });
 
-        let afterDownloadPath = specificBrowser.getExecutablePath();
-        if (browserId === 'opera') {
-          if (process.platform === 'darwin') {
-            afterDownloadPath.indexOf(
-              path.normalize('/Applications/Opera')
-            ).should.not.equal(-1);
-          } else {
-            console.warn('        Unable to ensure location of Opera on this ' +
-              'platform.');
-          }
-        } else {
-          afterDownloadPath.indexOf(
-            path.normalize(seleniumAssistant.getBrowserInstallDir())
-          ).should.not.equal(-1);
-        }
+  afterEach(function() {
+    return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
+    .then(() => {
+      globalDriver = null;
+    });
+  });
 
-        if (isBlackListed(specificBrowser)) {
-          console.log(`Skipping ${browserId} - ${release} due to blacklist.`);
-          return;
-        }
+  after(function() {
+    return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
+    .then(() => {
+      return globalServer.killServer();
+    });
+  });
 
-        return testNormalSeleniumUsage(specificBrowser)
-        .then(() => testBuilderSeleniumUsage(specificBrowser))
-        .then(() => testBrowserInfo(specificBrowser));
-      });
+  const localBrowserFiles = fs.readdirSync('./src/local-browsers');
+  localBrowserFiles.forEach((localBrowserFile) => {
+    const LocalBrowserClass = require(`./../src/local-browsers/${localBrowserFile}`);
+    RELEASES.forEach((release) => {
+      const localBrowser = new LocalBrowserClass(release);
+      setupTest(localBrowser);
     });
   });
 });
