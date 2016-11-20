@@ -82,20 +82,20 @@ class BrowserManager {
    */
   getSupportedBrowsers() {
     return [
-      this.createWebDriverBrowser('chrome', 'stable'),
-      this.createWebDriverBrowser('chrome', 'beta'),
-      this.createWebDriverBrowser('chrome', 'unstable'),
+      this.getLocalBrowser('chrome', 'stable'),
+      this.getLocalBrowser('chrome', 'beta'),
+      this.getLocalBrowser('chrome', 'unstable'),
 
-      this.createWebDriverBrowser('firefox', 'stable'),
-      this.createWebDriverBrowser('firefox', 'beta'),
-      this.createWebDriverBrowser('firefox', 'unstable'),
+      this.getLocalBrowser('firefox', 'stable'),
+      this.getLocalBrowser('firefox', 'beta'),
+      this.getLocalBrowser('firefox', 'unstable'),
 
-      this.createWebDriverBrowser('opera', 'stable'),
-      this.createWebDriverBrowser('opera', 'beta'),
-      this.createWebDriverBrowser('opera', 'unstable'),
+      this.getLocalBrowser('opera', 'stable'),
+      this.getLocalBrowser('opera', 'beta'),
+      this.getLocalBrowser('opera', 'unstable'),
 
-      this.createWebDriverBrowser('safari', 'stable'),
-      this.createWebDriverBrowser('safari', 'beta'),
+      this.getLocalBrowser('safari', 'stable'),
+      this.getLocalBrowser('safari', 'beta'),
     ];
   }
 
@@ -111,7 +111,13 @@ class BrowserManager {
    *                            'stable', 'beta', 'unstable' or 'saucelabs'
    * @return {WebDriverBrowser} An instance of the browser you requested.
    */
-  createWebDriverBrowser(browserId, release) {
+  getLocalBrowser(browserId, release) {
+    if (release !== 'stable' &&
+      release !== 'beta' &&
+      release !== 'unstable') {
+      throw new Error('Unknown release type.');
+    }
+
     switch (browserId) {
       case 'chrome':
         return new LocalChromeBrowser(release);

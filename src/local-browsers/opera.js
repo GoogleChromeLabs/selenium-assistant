@@ -20,6 +20,7 @@ const fs = require('fs');
 const path = require('path');
 const which = require('which');
 const webdriver = require('selenium-webdriver');
+const semver = require('semver');
 
 const LocalBrowser = require('../local-browser.js');
 const application = require('../application-state.js');

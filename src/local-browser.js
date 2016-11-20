@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const semver = require('semver');
 const execSync = require('child_process').execSync;
 const Browser = require('./browser.js');
 
@@ -11,13 +10,27 @@ const Browser = require('./browser.js');
 class LocalBrowser extends Browser {
   /**
    * Constructs new local browser.
-   * @param {Object} options TODO This should be a shared webdriver config
+   * @param {Object} config TODO This should be a shared webdriver config
    * class.
    * @param {string} release Release name must be 'stable', 'beta' or
    * 'unstable'.
    */
-  constructor(options, release, blacklist) {
-    super(options);
+  constructor(config, release, blacklist) {
+    super(config);
+
+    if (typeof config._prettyName !== 'string' ||
+      config._prettyName.length === 0) {
+      throw new Error('Invalid prettyName value: ', config._prettyName);
+    }
+
+    if (release !== 'stable' && release !== 'beta' && release !== 'unstable') {
+      throw new Error('Unexpected browser release given: ', release);
+    }
+
+    this._prettyName = `${config._prettyName}`;
+    if (config._prettyReleaseNames[release]) {
+      this._prettyName += ` ${config._prettyReleaseNames[release]}`;
+    }
     this._release = release;
     this._blacklist = blacklist;
   }
@@ -73,6 +86,14 @@ class LocalBrowser extends Browser {
   }
 
   /**
+   * A user friendly name for the browser
+   * @return {String} A user friendly name for the browser
+   */
+  getPrettyName() {
+    return this._prettyName;
+  }
+
+  /**
    * If you need to identify a browser based on it's version number but
    * the high level version number isn't specific enough, you can use the
    * raw version string (this will be the result of calling the browser
@@ -101,6 +122,25 @@ class LocalBrowser extends Browser {
     return this._rawVerstionString;
   }
 
+  /* eslint-disable valid-jsdoc */
+  /**
+   * <p>This method returns an integer if it can be determined from
+   * the browser executable or -1 if the version is unknown.</p>
+   *
+   * <p>A scenario where it will be unable to produce a valid version
+   * is if the browsers executable path can't be found.</p>
+   *
+   * @return {Integer} Version number if it can be found
+   */
+  getVersionNumber() {
+    throw new Error('getVersionNumber() must be overriden by subclasses');
+  }
+  /* eslint-enable valid-jsdoc */
+
+  getSeleniumDriverBuilder() {
+    throw new Error('getSeleniumDriverBuilder() must be overriden by subclasses');
+  }
+
   /**
    * <p>This method resolves to a webdriver instance of this browser i
    * nstance.</p>
@@ -115,21 +155,18 @@ class LocalBrowser extends Browser {
       try {
         // This will require the necessary driver module that will add the
         // driver executable to the current path.
-        const moduleThing = require(this.getDriverModule());
+        const driverModule = require(this.getDriverModule());
         // The operadriver module DOESNT add the driver to the current path.
         if (this.getId() === 'opera') {
           // Operadriver.path includes the executable name which upsets
           // selenium and finding the operadriver executable.
-          process.env.PATH += path.delimiter + path.dirname(moduleThing.path);
+          process.env.PATH += path.delimiter + path.dirname(driverModule.path);
         }
       } catch (err) {
-        /* eslint-disable no-console */
-        console.warn(`You are attempting to use ${this.getPrettyName} but ` +
-          `the node module '${this.getDriverModule()}' was not found. Make ` +
-          `sure it's in your dependency list.`);
-        /* eslint-enable no-console */
+        // NOOP
       }
     }
+
     try {
       const builder = this.getSeleniumDriverBuilder();
       const buildResult = builder.build();

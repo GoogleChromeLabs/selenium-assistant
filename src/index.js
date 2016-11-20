@@ -99,7 +99,7 @@ class SeleniumAssistant {
    *                            your request.
    */
   getLocalBrowser(browserId, release) {
-    return browserManager.createWebDriverBrowser(browserId, release);
+    return browserManager.getLocalBrowser(browserId, release);
   }
 
   /**

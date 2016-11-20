@@ -6,12 +6,15 @@ const LocalStorage = require('node-localstorage').LocalStorage;
 const path = require('path');
 const mkdirp = require('mkdirp');
 
-const WebDriverBrowser = require(
-  '../src/webdriver-browser/web-driver-browser.js');
+const LocalBrowser = require(
+  '../src/local-browser.js');
 const seleniumAssistant = require('../src/index.js');
 const downloadManager = require('../src/download-manager.js');
 
 require('chai').should();
+
+const TIMEOUT = 5 * 60 * 1000;
+const RETRIES = 3;
 
 const testPath = './test/test-output';
 const localStoragePath = path.join(testPath, 'localstorage');
@@ -19,14 +22,12 @@ const stubs = [];
 let browserDownloads;
 
 describe('Test Download Manager - Browser Expiration', function() {
-  const performTest = (browserId, releases) => {
-    // 5 Minutes
-    const DOWNLOAD_TIMEOUT = 5 * 60 * 1000;
+  this.timeout(TIMEOUT);
+  this.retries(RETRIES);
 
+  const performTest = (browserId, releases) => {
     releases.forEach((release) => {
       it(`should download ${browserId} - ${release} with no expiration.`, function() {
-        this.timeout(DOWNLOAD_TIMEOUT);
-
         return downloadManager.downloadLocalBrowser(browserId, release)
         .then(() => {
           browserDownloads[browserId][release].should.equal(true);
@@ -51,8 +52,6 @@ describe('Test Download Manager - Browser Expiration', function() {
       });
 
       it(`should download ${browserId} - ${release} with 0 hour expiration (Force download).`, function() {
-        this.timeout(DOWNLOAD_TIMEOUT);
-
         return downloadManager.downloadLocalBrowser(browserId, release, 0)
         .then(() => {
           browserDownloads[browserId][release].should.equal(true);
@@ -66,7 +65,6 @@ describe('Test Download Manager - Browser Expiration', function() {
       });
 
       it(`should download ${browserId} - ${release} with 1 hour expiration and not re-download.`, function() {
-        this.timeout(DOWNLOAD_TIMEOUT);
         const EXPIRATION_TIME = 1;
 
         return downloadManager.downloadLocalBrowser(browserId, release,
@@ -106,18 +104,6 @@ describe('Test Download Manager - Browser Expiration', function() {
   before(function() {
     seleniumAssistant.setBrowserInstallDir(testPath);
 
-    browserDownloads = {};
-    browserDownloads.chrome = {
-      stable: false,
-      beta: false,
-      unstable: false,
-    };
-    browserDownloads.firefox = {
-      stable: false,
-      beta: false,
-      unstable: false,
-    };
-
     const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome',
       (release, installDir) => {
         browserDownloads.chrome[release] = true;
@@ -130,7 +116,7 @@ describe('Test Download Manager - Browser Expiration', function() {
         return Promise.resolve();
       });
 
-    const isValidStub = sinon.stub(WebDriverBrowser.prototype, 'isValid', () => {
+    const isValidStub = sinon.stub(LocalBrowser.prototype, 'isValid', () => {
       return true;
     });
 
@@ -139,6 +125,20 @@ describe('Test Download Manager - Browser Expiration', function() {
     stubs.push(isValidStub);
 
     return mkdirp(localStoragePath);
+  });
+
+  beforeEach(function() {
+    browserDownloads = {};
+    browserDownloads.chrome = {
+      stable: false,
+      beta: false,
+      unstable: false,
+    };
+    browserDownloads.firefox = {
+      stable: false,
+      beta: false,
+      unstable: false,
+    };
   });
 
   after(function() {
@@ -170,38 +170,5 @@ describe('Test Download Manager - Browser Expiration', function() {
 
   browsers.forEach((browserId) => {
     performTest(browserId, releases);
-  });
-});
-
-describe('Test Download Manager - Browser Download', function() {
-  before(function() {
-    this.timeout(10 * 1000);
-    // Reset Install Directory
-    seleniumAssistant.setBrowserInstallDir(null);
-
-    return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
-  });
-
-  const performDownloadTest = (browserId, release) => {
-    it(`should download ${browserId} - ${release} from the network`, function() {
-      this.timeout(5 * 60 * 1000);
-      return seleniumAssistant.downloadLocalBrowser(browserId, release, 0);
-    });
-  };
-
-  const browsers = [
-    'firefox',
-    'chrome',
-  ];
-  const releases = [
-    'stable',
-    'beta',
-    'unstable',
-  ];
-
-  browsers.forEach((browserId) => {
-    releases.forEach((release) => {
-      performDownloadTest(browserId, release);
-    });
   });
 });

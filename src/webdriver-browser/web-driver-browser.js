@@ -86,72 +86,6 @@ class WebDriverBrowser {
     this._capabilities[key] = value;
   }
 
-  /* eslint-disable valid-jsdoc */
-  /**
-   * <p>This method returns an integer if it can be determined from
-   * the browser executable or -1 if the version is unknown.</p>
-   *
-   * <p>A scenario where it will be unable to produce a valid version
-   * is if the browsers executable path can't be found.</p>
-   *
-   * @return {Integer} Version number if it can be found
-   */
-  getVersionNumber() {
-    throw new Error('getVersionNumber() must be overriden by subclasses');
-  }
-  /* eslint-enable valid-jsdoc */
-
-  /**
-   * A user friendly name for the browser
-   * @return {String} A user friendly name for the browser
-   */
-  getPrettyName() {
-    return this._prettyName;
-  }
-
-  /**
-   * <p>The release name for this browser, either 'stable', 'beta',
-   * 'unstable'.</p>
-   *
-   * <p>Useful if you only want to test <i>or</i> not test on a particular
-   * release type.</p>
-   * @return {String} Release name of browser. 'stable', 'beta' or 'unstable'
-   */
-  getReleaseName() {
-    return this._release;
-  }
-
-  /**
-   * This returns the browser ID that Selenium recognises.
-   *
-   * @return {String} The Selenium ID of this browser
-   */
-  getSeleniumBrowserId() {
-    return this._seleniumBrowserId;
-  }
-
-  /**
-   * The selenium options passed to webdriver's `Builder` method. This
-   * will have the executable path set for the browser so you should
-   * manipulate these options rather than create entirely new objects.
-   *
-   * @return {SeleniumOptions} An instance of either
-   * `selenium-webdriver/firefox` or `selenium-webdriver/chrome`
-   */
-  getSeleniumOptions() {
-    return this._seleniumOptions;
-  }
-
-  /**
-   * If changes are made to the selenium options, call this method to
-   * set them before calling {@link getSeleniumDriver}.
-   * @param {SeleniumOptions} options An instance of
-   * `selenium-webdriver/firefox` or `selenium-webdriver/chrome`
-   */
-  setSeleniumOptions(options) {
-    this._seleniumOptions = options;
-  }
-
   /**
    * <p>This method returns the preconfigured builder used by
    * getSeleniumDriver().</p>
@@ -203,37 +137,6 @@ class WebDriverBrowser {
     }
 
     return builder;
-  }
-
-  /**
-   * <p>This method resolves to a webdriver instance of this browser i
-   * nstance.</p>
-   *
-   * <p>For more info, see:
-   * {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver Docs}</p>
-   *
-   * @return {Promise<WebDriver>} [description]
-   */
-  getSeleniumDriver() {
-    try {
-      const builder = this.getSeleniumDriverBuilder();
-      const buildResult = builder.build();
-      if (buildResult.then) {
-        return buildResult;
-      }
-      return Promise.resolve(buildResult);
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
-
-  /**
-   * This returns the available releases for this browser (i.e. stable, beta
-   * and unstable).
-   * @return {Array<String>} Array of releases for this browser type.
-   */
-  static getAvailableReleases() {
-    return ['stable', 'beta', 'unstable'];
   }
 }
 

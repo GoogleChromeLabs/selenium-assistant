@@ -1,16 +1,27 @@
 class Browser {
   constructor(config) {
-    this._id = config._id;
-    this._seleniumOptions = config._options;
-    this._driverModule = config._driverModule;
+    if (typeof config === 'undefined' || config === null ||
+      typeof config !== 'object') {
+      throw new Error('No browser config provided.');
+    }
+
+    this._config = config;
   }
 
   getId() {
-    return this._id;
+    return this._config._id;
   }
 
   getDriverModule() {
-    return this._driverModule;
+    return this._config._driverModule;
+  }
+
+  /**
+   * A user friendly name for the browser
+   * @return {String} A user friendly name for the browser
+   */
+  getPrettyName() {
+    return this._config._prettyName;
   }
 
   /**
@@ -22,7 +33,17 @@ class Browser {
    * `selenium-webdriver/firefox` or `selenium-webdriver/chrome`
    */
   getSeleniumOptions() {
-    return this._seleniumOptions;
+    return this._config._options;
+  }
+
+  /**
+   * If changes are made to the selenium options, call this method to
+   * set them before calling {@link getSeleniumDriver}.
+   * @param {SeleniumOptions} options An instance of
+   * `selenium-webdriver/firefox` or `selenium-webdriver/chrome`
+   */
+  setSeleniumOptions(options) {
+    this._config._options = options;
   }
 }
 
