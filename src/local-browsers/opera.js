@@ -165,6 +165,11 @@ class LocalOperaBrowser extends LocalBrowser {
     return parseInt(regexMatch[1], 10);
   }
 
+  /**
+   * The blacklist allows blocking use of a browser with
+   * a specific version with a particular driver version.
+   * @return {Boolean} Whether to blacklist this browser.
+   */
   isBlackListed() {
     if (!this._blacklist) {
       return false;

@@ -61,6 +61,7 @@ class BrowserManager {
     }
 
     return browser;**/
+    return null;
   }
 
   /**

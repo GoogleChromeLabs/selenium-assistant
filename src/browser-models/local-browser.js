@@ -1,3 +1,21 @@
+/*
+  Copyright 2016 Google Inc. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
+
+'use strict';
+
 const fs = require('fs');
 const path = require('path');
 const execSync = require('child_process').execSync;
@@ -14,6 +32,8 @@ class LocalBrowser extends Browser {
    * class.
    * @param {string} release Release name must be 'stable', 'beta' or
    * 'unstable'.
+   * @param {Object} blacklist This is a list of browser versions: driver
+   * versions used to blacklist a browser.
    */
   constructor(config, release, blacklist) {
     super(config);
@@ -81,6 +101,9 @@ class LocalBrowser extends Browser {
     return false;
   }
 
+  /**
+   * @return {Boolean} Whether this browser is blacklisted or not.
+   */
   isBlackListed() {
     return false;
   }
@@ -137,8 +160,12 @@ class LocalBrowser extends Browser {
   }
   /* eslint-enable valid-jsdoc */
 
+  /**
+   * @private
+   */
   getSeleniumDriverBuilder() {
-    throw new Error('getSeleniumDriverBuilder() must be overriden by subclasses');
+    throw new Error('getSeleniumDriverBuilder() must be overriden by ' +
+      'subclasses');
   }
 
   /**
