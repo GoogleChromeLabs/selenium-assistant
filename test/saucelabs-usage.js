@@ -95,10 +95,6 @@ describe('Test Saucelabs', function() {
 
   const saucelabBrowserFiles = fs.readdirSync('./src/saucelabs-browsers');
   saucelabBrowserFiles.forEach((saucelabsBrowserFile) => {
-    if (saucelabsBrowserFile !== 'edge.js') {
-      return;
-    }
-
     const SaucelabBrowserClass = require(`./../src/saucelabs-browsers/${saucelabsBrowserFile}`);
     RELEASES.forEach((release) => {
       const saucelabsBrowser = new SaucelabBrowserClass(release);

@@ -17,7 +17,7 @@
 'use strict';
 
 const SaucelabsBrowser = require('../browser-models/saucelabs-browser');
-const IEConfig = require('../webdriver-config/ie');
+const ChromeConfig = require('../webdriver-config/chrome');
 
 /**
  * <p>Handles the prettyName and executable path for Chrome browser.</p>
@@ -25,14 +25,14 @@ const IEConfig = require('../webdriver-config/ie');
  * @private
  * @extends WebDriverBrowser
  */
-class IEWebDriverBrowser extends SaucelabsBrowser {
+class ChromeWebDriverBrowser extends SaucelabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
    * @param {string} version The release name for this browser instance.
    */
   constructor(version) {
-    super(new IEConfig(), version);
+    super(new ChromeConfig(), version);
   }
 
   /**
@@ -51,7 +51,7 @@ class IEWebDriverBrowser extends SaucelabsBrowser {
     let builder = super.getSeleniumDriverBuilder();
 
     builder = builder
-      .setIeOptions(this.getSeleniumOptions())
+      .setChromeOptions(this.getSeleniumOptions())
       .withCapabilities(this._capabilities)
       .forBrowser(this.getId());
 
@@ -59,4 +59,4 @@ class IEWebDriverBrowser extends SaucelabsBrowser {
   }
 }
 
-module.exports = IEWebDriverBrowser;
+module.exports = ChromeWebDriverBrowser;

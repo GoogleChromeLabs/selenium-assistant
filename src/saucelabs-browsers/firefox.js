@@ -17,7 +17,7 @@
 'use strict';
 
 const SaucelabsBrowser = require('../browser-models/saucelabs-browser');
-const IEConfig = require('../webdriver-config/ie');
+const FirefoxConfig = require('../webdriver-config/firefox');
 
 /**
  * <p>Handles the prettyName and executable path for Chrome browser.</p>
@@ -25,14 +25,14 @@ const IEConfig = require('../webdriver-config/ie');
  * @private
  * @extends WebDriverBrowser
  */
-class IEWebDriverBrowser extends SaucelabsBrowser {
+class FirefoxWebDriverBrowser extends SaucelabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
    * @param {string} version The release name for this browser instance.
    */
   constructor(version) {
-    super(new IEConfig(), version);
+    super(new FirefoxConfig(), version);
   }
 
   /**
@@ -49,9 +49,9 @@ class IEWebDriverBrowser extends SaucelabsBrowser {
    */
   getSeleniumDriverBuilder() {
     let builder = super.getSeleniumDriverBuilder();
-
     builder = builder
-      .setIeOptions(this.getSeleniumOptions())
+      // Saucelabs + Firefox is simple broken if I pass in the options
+      // .setFirefoxOptions(this.getSeleniumOptions())
       .withCapabilities(this._capabilities)
       .forBrowser(this.getId());
 
@@ -59,4 +59,4 @@ class IEWebDriverBrowser extends SaucelabsBrowser {
   }
 }
 
-module.exports = IEWebDriverBrowser;
+module.exports = FirefoxWebDriverBrowser;
