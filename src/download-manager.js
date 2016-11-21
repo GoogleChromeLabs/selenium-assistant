@@ -91,14 +91,14 @@ class DownloadManager {
 
         if (parseInt(lastBrowserUpdate, 10) > dateComparison) {
           const browserInstance = browserManager
-            .createWebDriverBrowser(browserId, release);
+            .getLocalBrowser(browserId, release);
           return !browserInstance.isValid();
         }
       }
 
       return true;
     })
-    .catch(() => {
+    .catch((err) => {
       // In case of error download browser.
       return true;
     })

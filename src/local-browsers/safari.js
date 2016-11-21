@@ -19,7 +19,7 @@
 const fs = require('fs');
 const webdriver = require('selenium-webdriver');
 
-const LocalBrowser = require('../local-browser.js');
+const LocalBrowser = require('../browser-models/local-browser.js');
 const SafariConfig = require('../webdriver-config/safari.js');
 
 /**

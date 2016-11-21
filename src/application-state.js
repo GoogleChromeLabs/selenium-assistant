@@ -113,9 +113,11 @@ class ApplicationState {
       const options = {
         username: this._saucelabs.username,
         accessKey: this._saucelabs.accessKey,
-        doctor: true,
-        tunnelIdentifier:
-          `selenium-assistant/sauce-connect-tunnel/${Date.now()}`,
+        // Using tunnelIdentifier means all saucelabs browsers must define
+        // this capability
+        // tunnelIdentifier:
+        //  // Slashes in the identifier breaks a pidfile requirement
+        //  `selenium-assistant_sauce-connect-tunnel_${Date.now()}`,
         connectRetries: 3,
       };
 

@@ -16,12 +16,8 @@
 
 'use strict';
 
-// const fs = require('fs');
-// const path = require('path');
-// const which = require('which');
-const seleniumIE = require('selenium-webdriver/ie');
-const WebDriverBrowser = require('./web-driver-browser');
-// const application = require('../application-state.js');
+const SaucelabsBrowser = require('../browser-models/saucelabs-browser');
+const IEConfig = require('../webdriver-config/ie');
 
 /**
  * <p>Handles the prettyName and executable path for Chrome browser.</p>
@@ -29,25 +25,14 @@ const WebDriverBrowser = require('./web-driver-browser');
  * @private
  * @extends WebDriverBrowser
  */
-class IEWebDriverBrowser extends WebDriverBrowser {
+class IEWebDriverBrowser extends SaucelabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param {string} release The release name for this browser instance.
+   * @param {string} version The release name for this browser instance.
    */
-  constructor(release) {
-    let prettyName = 'Internet Explorer';
-
-    if (release === 'stable') {
-      prettyName += ' Stable';
-    }
-
-    super(
-      prettyName,
-      release,
-      'internet explorer',
-      new seleniumIE.Options()
-    );
+  constructor(version) {
+    super(new IEConfig(), version);
   }
 
   /**

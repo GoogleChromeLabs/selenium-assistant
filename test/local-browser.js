@@ -19,7 +19,7 @@
 const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
 const seleniumFF = require('selenium-webdriver/firefox');
-const LocalBrowser = require('./../src/local-browser.js');
+const LocalBrowser = require('./../src/browser-models/local-browser.js');
 
 require('chai').should();
 
@@ -40,8 +40,6 @@ describe('LocalBrowser', function() {
   const EXAMPLE_BLACKLIST = {
     999: '1.0.0',
   };
-
-  // TODO: Options, Release, Blacklist
 
   it('should instantiate with valid input', function() {
     new LocalBrowser(
@@ -229,7 +227,7 @@ describe('LocalBrowser', function() {
     const options = JSON.parse(JSON.stringify(EXAMPLE_CONFIG));
     options._driverModule = 'exampledriver';
 
-    const ProxiedLocalBrowser = proxyquire('../src/local-browser.js', {
+    const ProxiedLocalBrowser = proxyquire('../src/browser-models/local-browser.js', {
       'exampledriver': null,
     });
     const localBrowser = new ProxiedLocalBrowser(
@@ -249,7 +247,7 @@ describe('LocalBrowser', function() {
     const options = JSON.parse(JSON.stringify(EXAMPLE_CONFIG));
     options._driverModule = 'exampledriver';
 
-    const ProxiedLocalBrowser = proxyquire('../src/local-browser.js', {
+    const ProxiedLocalBrowser = proxyquire('../src/browser-models/local-browser.js', {
       'exampledriver': {
         '@noCallThru': true,
       },
@@ -266,4 +264,6 @@ describe('LocalBrowser', function() {
       (err.message.indexOf('overriden')).should.not.equal(-1);
     });
   });
+
+  // TODO Blacklist test
 });

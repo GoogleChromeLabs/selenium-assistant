@@ -16,22 +16,56 @@
 
 'use strict';
 
-const WebDriverBrowser = require('./web-driver-browser');
+const SaucelabsBrowser = require('../browser-models/saucelabs-browser');
+const EdgeConfig = require('../webdriver-config/edge');
 
 /**
  * <p>Handles the prettyName and executable path for Chrome browser.</p>
  *
+ * <p>Note that Edge gets cranky about which ports are used for localhost +
+ * saucelabs.</p>
+ *
+ * <p>https://support.saucelabs.com/customer/portal/questions/14368823-requests-to-localhost-on-microsoft-edge-are-failing-over-sauce-connect</p>
+ *
  * @private
  * @extends WebDriverBrowser
  */
-class EdgeWebDriverBrowser extends WebDriverBrowser {
+class EdgeWebDriverBrowser extends SaucelabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param {string} release The release name for this browser instance.
+   * @param {string} version The version name for this browser instance.
    */
-  constructor() {
-    super();
+  constructor(version) {
+    super(new EdgeConfig(), version);
+
+    // Set default platform to windows 10 otherwise it will fail.
+    this.addCapability('platform', 'Windows 10');
+  }
+
+  /**
+   * <p>This method returns the preconfigured builder used by
+   * getSeleniumDriver().</p>
+   *
+   * <p>This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)</p>
+   *
+   * <p>For more info, see:
+   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
+   *
+   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
+   */
+  getSeleniumDriverBuilder() {
+    let builder = super.getSeleniumDriverBuilder();
+
+    const seleniumOptions = this.getSeleniumOptions();
+    let capabilities = seleniumOptions.toCapabilities(this._capabilities);
+
+    builder = builder
+      .withCapabilities(capabilities)
+      .forBrowser(this.getId());
+
+    return builder;
   }
 }
 

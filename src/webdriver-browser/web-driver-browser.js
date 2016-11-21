@@ -71,22 +71,6 @@ class WebDriverBrowser {
   }
 
   /**
-   * This is a simple method to define capabilities that'll be
-   * passed to the WebDriver builder when you call getSeleniumDriverBuilder()
-   * or getSeleniumDriver().
-   *
-   * @param {string} key The capability key.
-   * @param {string} value The Value of the capability.
-   */
-  addCapability(key, value) {
-    if (!this._capabilities) {
-      this._capabilities = {};
-    }
-
-    this._capabilities[key] = value;
-  }
-
-  /**
    * <p>This method returns the preconfigured builder used by
    * getSeleniumDriver().</p>
    *

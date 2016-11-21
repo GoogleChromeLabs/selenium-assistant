@@ -22,7 +22,7 @@ const which = require('which');
 const webdriver = require('selenium-webdriver');
 const semver = require('semver');
 
-const LocalBrowser = require('../local-browser.js');
+const LocalBrowser = require('../browser-models/local-browser.js');
 const application = require('../application-state.js');
 const OperaConfig = require('../webdriver-config/opera.js');
 

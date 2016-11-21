@@ -45,7 +45,7 @@ class BrowserManager {
    * to a Saucelabs hosted browser.
    */
   getSaucelabsBrowser(browserId, browserVersion, options) {
-    const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
+    /** const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
     // browser.addCapability('version', browserVersion);
     browser.addCapability('username', options.saucelabs.username);
     browser.addCapability('accessKey', options.saucelabs.accessKey);
@@ -55,19 +55,12 @@ class BrowserManager {
       browser.addCapability('name', options.name);
     }
 
-    // These values are largely from:
-    // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-    if (browserId === 'edge') {
-      // Set default platform to windows 10 otherwise it will fail.
-      browser.addCapability('platform', 'Windows 10');
-    }
-
     if (browserId === 'safari') {
       // Set default platform to windows 10 otherwise it will fail.
       browser.addCapability('platform', 'Windows 10');
     }
 
-    return browser;
+    return browser;**/
   }
 
   /**

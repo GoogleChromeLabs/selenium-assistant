@@ -7,7 +7,7 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 
 const LocalBrowser = require(
-  '../src/local-browser.js');
+  '../src/browser-models/local-browser.js');
 const seleniumAssistant = require('../src/index.js');
 const downloadManager = require('../src/download-manager.js');
 
