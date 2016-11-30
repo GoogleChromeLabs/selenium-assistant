@@ -162,6 +162,15 @@ class LocalSafariBrowser extends LocalBrowser {
   }
 
   /**
+   * Get the minimum support version of Safari with selenium-assistant.
+   * @return {number} Minimum supported Safari version.
+   */
+  _getMinSupportedVersion() {
+    // Latest SafariDriver only works on Safari 10+
+    return 10;
+  }
+
+  /**
    * This method returns the pretty names for each browser releace.
    * @return {Object} An object containing on or move of 'stable', 'beta' or
    * 'unstable' keys with a matching name for that release.
