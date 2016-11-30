@@ -17,40 +17,49 @@
 'use strict';
 
 const fs = require('fs');
-const seleniumSafari = require('selenium-webdriver/safari');
-const WebDriverBrowser = require('./web-driver-browser');
+const webdriver = require('selenium-webdriver');
+
+const LocalBrowser = require('../browser-models/local-browser.js');
+const SafariConfig = require('../webdriver-config/safari.js');
 
 /**
- * <p>Handles the prettyName and executable path for Safari browser.</p>
+ * <p>Handles the prettyName and executable path for Chrome browser.</p>
  *
  * @private
  * @extends WebDriverBrowser
  */
-class SafariWebDriverBrowser extends WebDriverBrowser {
+class LocalSafariBrowser extends LocalBrowser {
   /**
-   * Create an Safari representation of a {@link WebDriverBrowser}
+   * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param  {String} release The channel of Opera you want to get, either
-   *                          'stable', 'beta' or 'unstable'
+   * @param {string} release The release name for this browser instance.
    */
   constructor(release) {
-    let prettyName = 'Safari';
+    super(new SafariConfig(), release);
+  }
 
-    if (release === 'stable') {
-      prettyName += ' Stable';
-    } else if (release === 'beta') {
-      prettyName += ' Technology Preview';
-    } else if (release === 'unstable') {
-      throw new Error('Only stable and beta versions available ' +
-      'for this browser');
-    }
+  /**
+   * <p>This method returns the preconfigured builder used by
+   * getSeleniumDriver().</p>
+   *
+   * <p>This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)</p>
+   *
+   * <p>For more info, see:
+   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
+   *
+   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
+   */
+  getSeleniumDriverBuilder() {
+    const seleniumOptions = this.getSeleniumOptions();
 
-    super(
-      prettyName,
-      release,
-      'safari',
-      new seleniumSafari.Options()
-    );
+    const builder = new webdriver
+      .Builder()
+      .withCapabilities(this._capabilities)
+      .forBrowser(this.getId())
+      .setSafariOptions(seleniumOptions);
+
+    return builder;
   }
 
   /**
@@ -153,12 +162,25 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
   }
 
   /**
-   * Get the available releases for this browser.
-   * @return {Array<string>} Array of releases supported.
+   * Get the minimum support version of Safari with selenium-assistant.
+   * @return {number} Minimum supported Safari version.
    */
-  static getAvailableReleases() {
-    return ['stable', 'beta'];
+  _getMinSupportedVersion() {
+    // Latest SafariDriver only works on Safari 10+
+    return 10;
+  }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Technology Preview',
+    };
   }
 }
 
-module.exports = SafariWebDriverBrowser;
+module.exports = LocalSafariBrowser;

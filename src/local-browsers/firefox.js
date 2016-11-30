@@ -19,45 +19,51 @@
 const fs = require('fs');
 const path = require('path');
 const which = require('which');
-const seleniumFirefox = require('selenium-webdriver/firefox');
-const WebDriverBrowser = require('./web-driver-browser');
+const webdriver = require('selenium-webdriver');
+
+const LocalBrowser = require('../browser-models/local-browser.js');
 const application = require('../application-state.js');
+const FirefoxConfig = require('../webdriver-config/firefox.js');
 
 /**
- * <p>Handles the prettyName and executable path for Firefox browser.</p>
- *
- * <p>For Firefox Beta and Firefox Nightly please define FF_BETA_PATH and
- * FF_NIGHTLY_PATH as environment variables. This is due to Firefox using
- * the same executable name for all releases.</p>
+ * <p>Handles the prettyName and executable path for Chrome browser.</p>
  *
  * @private
  * @extends WebDriverBrowser
  */
-class FirefoxWebDriverBrowser extends WebDriverBrowser {
+class LocalChromeBrowser extends LocalBrowser {
   /**
-   * Pass in the release version this instance should represent and it will
-   * try to find the browser in the current environment and set up a new
-   * {@link WebDriverBrowser} instance.
-   * @param  {String} release The name of the release this instance should
-   * represent. Either 'stable', 'beta' or 'unstable'.
+   * Create a Chrome representation of a {@link WebDriverBrowser}
+   * instance on a specific channel.
+   * @param {string} release The release name for this browser instance.
    */
   constructor(release) {
-    let prettyName = 'Firefox';
+    super(new FirefoxConfig(), release);
+  }
 
-    if (release === 'stable') {
-      prettyName += ' Stable';
-    } else if (release === 'beta') {
-      prettyName += ' Beta';
-    } else if (release === 'unstable') {
-      prettyName += ' Nightly';
-    }
+  /**
+   * <p>This method returns the preconfigured builder used by
+   * getSeleniumDriver().</p>
+   *
+   * <p>This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)</p>
+   *
+   * <p>For more info, see:
+   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
+   *
+   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
+   */
+  getSeleniumDriverBuilder() {
+    const seleniumOptions = this.getSeleniumOptions();
+    seleniumOptions.setBinary(this.getExecutablePath());
 
-    super(
-      prettyName,
-      release,
-      'firefox',
-      new seleniumFirefox.Options()
-    );
+    const builder = new webdriver
+      .Builder()
+      .withCapabilities(this._capabilities)
+      .forBrowser(this.getId())
+      .setFirefoxOptions(seleniumOptions);
+
+    return builder;
   }
 
   /**
@@ -170,6 +176,19 @@ class FirefoxWebDriverBrowser extends WebDriverBrowser {
     // Firefox Marionette only works on Firefox 47+
     return 47;
   }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Beta',
+      unstable: 'Nightly',
+    };
+  }
 }
 
-module.exports = FirefoxWebDriverBrowser;
+module.exports = LocalChromeBrowser;

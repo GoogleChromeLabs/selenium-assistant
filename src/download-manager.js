@@ -63,7 +63,7 @@ class DownloadManager {
    * @return {Promise}           Promise resolves once the browser has been
    *                             downloaded and ready for use.
    */
-  downloadBrowser(browserId, release, expirationInHours) {
+  downloadLocalBrowser(browserId, release, expirationInHours) {
     let installDir = application.getInstallDirectory();
     const storageKey = `${browserId}:${release}`;
     const localstoragePath =
@@ -91,14 +91,14 @@ class DownloadManager {
 
         if (parseInt(lastBrowserUpdate, 10) > dateComparison) {
           const browserInstance = browserManager
-            .createWebDriverBrowser(browserId, release);
+            .getLocalBrowser(browserId, release);
           return !browserInstance.isValid();
         }
       }
 
       return true;
     })
-    .catch(() => {
+    .catch((err) => {
       // In case of error download browser.
       return true;
     })
