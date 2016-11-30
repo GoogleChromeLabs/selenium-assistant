@@ -48,9 +48,12 @@ class LocalBrowser extends Browser {
     }
 
     this._prettyName = `${config._prettyName}`;
-    if (config._prettyReleaseNames[release]) {
-      this._prettyName += ` ${config._prettyReleaseNames[release]}`;
+
+    const releaseNames = this.constructor.getPrettyReleaseNames();
+    if (releaseNames[release]) {
+      this._prettyName += ` ${releaseNames[release]}`;
     }
+
     this._release = release;
     this._blacklist = blacklist;
   }
@@ -224,6 +227,14 @@ class LocalBrowser extends Browser {
    */
   getReleaseName() {
     return this._release;
+  }
+
+  /**
+   * @private
+   */
+  static getPrettyReleaseNames() {
+    throw new Error('getPrettyReleaseNames() must be overriden by ' +
+      'subclasses');
   }
 }
 

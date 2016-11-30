@@ -16,26 +16,24 @@
 
 'use strict';
 
+const DriverConfig = require('../browser-models/driver-config');
 const seleniumChrome = require('selenium-webdriver/chrome');
 
 /**
  * This is a helper class that contains the base pieces of
  * web driver info.
  */
-class Chrome {
+class Chrome extends DriverConfig {
   /**
    * Basic constructor.
    */
   constructor() {
-    this._id = 'chrome';
-    this._options = new seleniumChrome.Options();
-    this._prettyName = 'Google Chrome';
-    this._prettyReleaseNames = {
-      stable: 'Stable',
-      beta: 'Beta',
-      unstable: 'Dev',
-    };
-    this._driverModule = 'chromedriver';
+    super(
+      'chrome',
+      new seleniumChrome.Options(),
+      'Google Chrome',
+      'chromedriver'
+    );
   }
 }
 

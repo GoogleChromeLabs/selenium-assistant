@@ -160,6 +160,18 @@ class LocalSafariBrowser extends LocalBrowser {
 
     return parseInt(regexMatch[1], 10);
   }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Technology Preview',
+    };
+  }
 }
 
 module.exports = LocalSafariBrowser;

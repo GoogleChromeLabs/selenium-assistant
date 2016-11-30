@@ -16,23 +16,23 @@
 
 'use strict';
 
+const DriverConfig = require('../browser-models/driver-config');
 const seleniumEdge = require('selenium-webdriver/edge');
 
 /**
  * This is a helper class that contains the base pieces of
  * web driver info.
  */
-class Edge {
+class Edge extends DriverConfig {
   /**
    * Basic constructor.
    */
   constructor() {
-    this._id = 'microsoftedge';
-    this._options = new seleniumEdge.Options();
-    this._prettyName = 'Microsoft Edge';
-    this._prettyReleaseNames = {
-      stable: 'Stable',
-    };
+    super(
+      'microsoftedge',
+      new seleniumEdge.Options(),
+      'Microsoft Edge'
+    );
   }
 }
 

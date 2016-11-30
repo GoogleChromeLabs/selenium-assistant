@@ -16,23 +16,23 @@
 
 'use strict';
 
+const DriverConfig = require('../browser-models/driver-config');
 const seleniumIE = require('selenium-webdriver/ie');
 
 /**
  * This is a helper class that contains the base pieces of
  * web driver info.
  */
-class IE {
+class IE extends DriverConfig {
   /**
    * Basic constructor.
    */
   constructor() {
-    this._id = 'internet explorer';
-    this._options = new seleniumIE.Options();
-    this._prettyName = 'Internet Explorer';
-    this._prettyReleaseNames = {
-      stable: 'Stable',
-    };
+    super(
+      'internet explorer',
+      new seleniumIE.Options(),
+      'Internet Explorer'
+    );
   }
 }
 

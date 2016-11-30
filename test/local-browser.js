@@ -18,6 +18,7 @@
 
 const expect = require('chai').expect;
 const proxyquire = require('proxyquire');
+const sinon = require('sinon');
 const seleniumFF = require('selenium-webdriver/firefox');
 const LocalBrowser = require('./../src/browser-models/local-browser.js');
 
@@ -30,16 +31,32 @@ describe('LocalBrowser', function() {
       selenium: 'example-options',
     },
     _prettyName: 'Example Pretty Name',
-    _prettyReleaseNames: {
-      stable: 'Example Stable',
-      beta: 'Example Beta',
-      unstable: 'Example Unstable',
-    },
   };
 
   const EXAMPLE_BLACKLIST = {
     999: '1.0.0',
   };
+
+  let sinonStubs = [];
+  let releaseNames = {};
+
+  beforeEach(function() {
+    releaseNames = {};
+
+    // getPrettyReleaseNames needs to be stubbed since we are instantiating
+    // LocalBrowser directly rather than extending it.
+    const stub = sinon.stub(LocalBrowser, 'getPrettyReleaseNames', () => {
+      return releaseNames;
+    });
+    sinonStubs.push(stub);
+  });
+
+  afterEach(function() {
+    sinonStubs.forEach((stub) => {
+      stub.restore();
+    });
+    sinonStubs = [];
+  });
 
   it('should instantiate with valid input', function() {
     new LocalBrowser(
@@ -98,11 +115,16 @@ describe('LocalBrowser', function() {
     const options = JSON.parse(JSON.stringify(EXAMPLE_CONFIG));
     options._prettyName = prettyName;
 
+    const stableReleaseName = 'Injected Stable Browser Name';
+    releaseNames = {
+      stable: stableReleaseName,
+    };
+
     const localBrowser = new LocalBrowser(
       options,
       'stable'
     );
-    localBrowser.getPrettyName().should.equal(`${prettyName} ${options._prettyReleaseNames.stable}`);
+    localBrowser.getPrettyName().should.equal(`${prettyName} ${stableReleaseName}`);
   });
 
   it('should return the release value', function() {
@@ -230,6 +252,12 @@ describe('LocalBrowser', function() {
     const ProxiedLocalBrowser = proxyquire('../src/browser-models/local-browser.js', {
       'exampledriver': null,
     });
+
+    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames', () => {
+      return releaseNames;
+    });
+    sinonStubs.push(stub);
+
     const localBrowser = new ProxiedLocalBrowser(
       options,
       'stable'
@@ -252,6 +280,12 @@ describe('LocalBrowser', function() {
         '@noCallThru': true,
       },
     });
+
+    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames', () => {
+      return releaseNames;
+    });
+    sinonStubs.push(stub);
+
     const localBrowser = new ProxiedLocalBrowser(
       options,
       'stable'

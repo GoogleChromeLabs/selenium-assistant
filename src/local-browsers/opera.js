@@ -192,6 +192,19 @@ class LocalOperaBrowser extends LocalBrowser {
     }
     return true;
   }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Beta',
+      unstable: 'Developer',
+    };
+  }
 }
 
 module.exports = LocalOperaBrowser;

@@ -186,6 +186,19 @@ class LocalChromeBrowser extends LocalBrowser {
     // ChromeDriver only works on Chrome 47+
     return 47;
   }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Beta',
+      unstable: 'Dev',
+    };
+  }
 }
 
 module.exports = LocalChromeBrowser;

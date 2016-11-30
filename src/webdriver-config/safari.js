@@ -16,24 +16,23 @@
 
 'use strict';
 
+const DriverConfig = require('../browser-models/driver-config');
 const seleniumSafari = require('selenium-webdriver/safari');
 
 /**
  * This is a helper class that contains the base pieces of
  * web driver info.
  */
-class Safari {
+class Safari extends DriverConfig {
   /**
    * Basic constructor.
    */
   constructor() {
-    this._id = 'safari';
-    this._options = new seleniumSafari.Options();
-    this._prettyName = 'Safari';
-    this._prettyReleaseNames = {
-      stable: 'Stable',
-      beta: 'Technology Preview',
-    };
+    super(
+      'safari',
+      new seleniumSafari.Options(),
+      'Safari'
+    );
   }
 }
 

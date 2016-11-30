@@ -28,7 +28,6 @@ require('chai').should();
 
 const TIMEOUT = 5 * 60 * 1000;
 const RETRIES = 3;
-const RELEASES = ['stable', 'beta', 'unstable'];
 
 describe('Test Usage of Browsers', function() {
   this.timeout(TIMEOUT);
@@ -204,7 +203,8 @@ describe('Test Usage of Browsers', function() {
   const localBrowserFiles = fs.readdirSync('./src/local-browsers');
   localBrowserFiles.forEach((localBrowserFile) => {
     const LocalBrowserClass = require(`./../src/local-browsers/${localBrowserFile}`);
-    RELEASES.forEach((release) => {
+    const browserReleases = LocalBrowserClass.getPrettyReleaseNames();
+    Object.keys(browserReleases).forEach((release) => {
       const localBrowser = new LocalBrowserClass(release);
       setupTest(localBrowser);
     });
