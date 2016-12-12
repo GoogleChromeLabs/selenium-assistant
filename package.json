@@ -4,9 +4,6 @@
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
-    "publish-release": "publish-release.sh",
-    "publish-docs": "publish-docs.sh",
-    "build": "echo 'Skip Build Step.'",
     "build-docs": "jsdoc -c ./jsdoc.conf -d ",
     "lint": "eslint './**/*.js'",
     "test": "npm run lint && mocha",
