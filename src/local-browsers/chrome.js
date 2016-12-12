@@ -19,10 +19,11 @@
 const fs = require('fs');
 const path = require('path');
 const which = require('which');
-const chalk = require('chalk');
-const seleniumChrome = require('selenium-webdriver/chrome');
-const WebDriverBrowser = require('./web-driver-browser');
+const webdriver = require('selenium-webdriver');
+
+const LocalBrowser = require('../browser-models/local-browser.js');
 const application = require('../application-state.js');
+const ChromeConfig = require('../webdriver-config/chrome.js');
 
 /**
  * <p>Handles the prettyName and executable path for Chrome browser.</p>
@@ -30,26 +31,45 @@ const application = require('../application-state.js');
  * @private
  * @extends WebDriverBrowser
  */
-class ChromeWebDriverBrowser extends WebDriverBrowser {
+class LocalChromeBrowser extends LocalBrowser {
+  /**
+   * Create a Chrome representation of a {@link WebDriverBrowser}
+   * instance on a specific channel.
+   * @param {string} release The release name for this browser instance.
+   */
   constructor(release) {
-    let prettyName = 'Google Chrome';
-
-    if (release === 'stable') {
-      prettyName += ' Stable';
-    } else if (release === 'beta') {
-      prettyName += ' Beta';
-    } else if (release === 'unstable') {
-      prettyName += ' Dev';
-    }
-
-    super(
-      prettyName,
-      release,
-      'chrome',
-      new seleniumChrome.Options()
-    );
+    super(new ChromeConfig(), release);
   }
 
+  /**
+   * <p>This method returns the preconfigured builder used by
+   * getSeleniumDriver().</p>
+   *
+   * <p>This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)</p>
+   *
+   * <p>For more info, see:
+   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
+   *
+   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
+   */
+  getSeleniumDriverBuilder() {
+    const seleniumOptions = this.getSeleniumOptions();
+    seleniumOptions.setChromeBinaryPath(this.getExecutablePath());
+
+    const builder = new webdriver
+      .Builder()
+      .withCapabilities(this._capabilities)
+      .forBrowser(this.getId())
+      .setChromeOptions(seleniumOptions);
+
+    return builder;
+  }
+
+  /**
+   * @return {string|null} The install directory with selenium-assistant's
+   * reserved directory for installing browsers and operating files.
+   */
   _findInInstallDir() {
     let defaultDir = application.getInstallDirectory();
     let expectedPath;
@@ -82,7 +102,9 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
       // This will throw if it's not found
       fs.lstatSync(expectedPath);
       return expectedPath;
-    } catch (error) {}
+    } catch (error) {
+      // NOOP
+    }
 
     return null;
   }
@@ -130,7 +152,9 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
         default:
           throw new Error('Sorry, this platform isn\'t supported');
       }
-    } catch (err) {}
+    } catch (err) {
+      // NOOP
+    }
 
     return null;
   }
@@ -148,18 +172,33 @@ class ChromeWebDriverBrowser extends WebDriverBrowser {
 
     const regexMatch = chromeVersion.match(/(\d+)\.\d+\.\d+\.\d+/);
     if (regexMatch === null) {
-      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Chrome: ', this.getExecutablePath());
       return -1;
     }
 
     return parseInt(regexMatch[1], 10);
   }
 
+  /**
+   * Get the minimum support version of Chrome with selenium-assistant.
+   * @return {number} Minimum supported Chrome version.
+   */
   _getMinSupportedVersion() {
     // ChromeDriver only works on Chrome 47+
     return 47;
   }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Beta',
+      unstable: 'Dev',
+    };
+  }
 }
 
-module.exports = ChromeWebDriverBrowser;
+module.exports = LocalChromeBrowser;

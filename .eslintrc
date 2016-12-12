@@ -1,6 +1,13 @@
 {
-  "extends": "google",
+  "extends": ["eslint:recommended", "google"],
+  "env": {
+    "node": true,
+    "es6": true
+  },
   "rules": {
     "no-var": 2
-    }
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  }
 }

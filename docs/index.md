@@ -39,7 +39,7 @@ for that browser, this can be done like so:
     const seleniumAssistant = require('selenium-assistant');
     seleniumAssistant.printAvailableBrowserInfo();
 
-    const browsers = seleniumAssistant.getAvailableBrowsers();
+    const browsers = seleniumAssistant.getLocalBrowsers();
     browsers.forEach(browser => {
       // Skip if the browser isn't stable.
       if (browser.getReleaseName() !== 'stable') {

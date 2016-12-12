@@ -17,43 +17,55 @@
 'use strict';
 
 const fs = require('fs');
-const chalk = require('chalk');
-const seleniumSafari = require('selenium-webdriver/safari');
-const WebDriverBrowser = require('./web-driver-browser');
+const webdriver = require('selenium-webdriver');
+
+const LocalBrowser = require('../browser-models/local-browser.js');
+const SafariConfig = require('../webdriver-config/safari.js');
 
 /**
- * <p>Handles the prettyName and executable path for Safari browser.</p>
+ * <p>Handles the prettyName and executable path for Chrome browser.</p>
  *
  * @private
  * @extends WebDriverBrowser
  */
-class SafariWebDriverBrowser extends WebDriverBrowser {
+class LocalSafariBrowser extends LocalBrowser {
   /**
-   * Create an Safari representation of a {@link WebDriverBrowser}
+   * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param  {String} release The channel of Opera you want to get, either
-   *                          'stable', 'beta' or 'unstable'
+   * @param {string} release The release name for this browser instance.
    */
   constructor(release) {
-    let prettyName = 'Safari';
-
-    if (release === 'stable') {
-      prettyName += ' Stable';
-    } else if (release === 'beta') {
-      prettyName += ' Technology Preview';
-    } else if (release === 'unstable') {
-      throw new Error('Only stable and beta versions available ' +
-      'for this browser');
-    }
-
-    super(
-      prettyName,
-      release,
-      'safari',
-      new seleniumSafari.Options()
-    );
+    super(new SafariConfig(), release);
   }
 
+  /**
+   * <p>This method returns the preconfigured builder used by
+   * getSeleniumDriver().</p>
+   *
+   * <p>This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)</p>
+   *
+   * <p>For more info, see:
+   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
+   *
+   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
+   */
+  getSeleniumDriverBuilder() {
+    const seleniumOptions = this.getSeleniumOptions();
+
+    const builder = new webdriver
+      .Builder()
+      .withCapabilities(this._capabilities)
+      .forBrowser(this.getId())
+      .setSafariOptions(seleniumOptions);
+
+    return builder;
+  }
+
+  /**
+   * @return {string|null} The install directory with selenium-assistant's
+   * reserved directory for installing browsers and operating files.
+   */
   _findInInstallDir() {
     return null;
   }
@@ -81,11 +93,18 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
             'Contents/MacOS/Safari Technology Preview';
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      // NOOP
+    }
 
     return null;
   }
 
+  /**
+   * Get the version string from the browser itself. From Safari this is from
+   * `version.plist` file.
+   * @return {string} The version string for this Safari release.
+   */
   getRawVersionString() {
     if (this._rawVerstionString) {
       return this._rawVerstionString;
@@ -117,8 +136,7 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
         this._rawVerstionString = results[1];
       }
     } catch (err) {
-      console.warn(chalk.red('WARNING') + ': Unable to get a version string ' +
-        'for ' + this.getPrettyName());
+      // NOOP
     }
 
     return this._rawVerstionString;
@@ -137,17 +155,32 @@ class SafariWebDriverBrowser extends WebDriverBrowser {
 
     const regexMatch = safariVersion.match(/(\d+)\.\d+(?:\.\d+)?/);
     if (regexMatch === null) {
-      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Safari: ', this.getExecutablePath());
       return -1;
     }
 
     return parseInt(regexMatch[1], 10);
   }
 
-  static getAvailableReleases() {
-    return ['stable', 'beta'];
+  /**
+   * Get the minimum support version of Safari with selenium-assistant.
+   * @return {number} Minimum supported Safari version.
+   */
+  _getMinSupportedVersion() {
+    // Latest SafariDriver only works on Safari 10+
+    return 10;
+  }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Technology Preview',
+    };
   }
 }
 
-module.exports = SafariWebDriverBrowser;
+module.exports = LocalSafariBrowser;

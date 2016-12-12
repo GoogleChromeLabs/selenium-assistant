@@ -44,10 +44,10 @@ describe('SeleniumAssistant', function() {
   it('should be able to get an array of available browsers', function() {
     this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
-    const browsers = seleniumAssistant.getAvailableBrowsers();
+    const browsers = seleniumAssistant.getLocalBrowsers();
     (browsers instanceof Array).should.equal(true);
 
-    browsers.forEach(browser => {
+    browsers.forEach((browser) => {
       browser.isValid().should.equal(true);
     });
   });
@@ -55,9 +55,9 @@ describe('SeleniumAssistant', function() {
   it('should return a browser for valid browser and release names', function() {
     const possibleBrowsers = ['chrome', 'firefox', 'opera'];
     const releases = ['stable', 'beta', 'unstable'];
-    possibleBrowsers.forEach(browserId => {
-      releases.forEach(release => {
-        const browser = seleniumAssistant.getBrowser(browserId, release);
+    possibleBrowsers.forEach((browserId) => {
+      releases.forEach((release) => {
+        const browser = seleniumAssistant.getLocalBrowser(browserId, release);
         (typeof browser).should.equal('object');
       });
     });
@@ -65,37 +65,37 @@ describe('SeleniumAssistant', function() {
 
   it('should throw for an invalid browser name in getBrowser', function() {
     expect(function() {
-      seleniumAssistant.getBrowser('made-up', 'stable');
+      seleniumAssistant.getLocalBrowser('made-up', 'stable');
     }).to.throw();
   });
 
   it('should throw for an null browser name in getBrowser', function() {
     expect(function() {
-      seleniumAssistant.getBrowser(null, 'stable');
+      seleniumAssistant.getLocalBrowser(null, 'stable');
     }).to.throw();
   });
 
   it('should throw for an invalid release name in getBrowser', function() {
     expect(function() {
-      seleniumAssistant.getBrowser('chrome', 'made-up');
+      seleniumAssistant.getLocalBrowser('chrome', 'made-up');
     }).to.throw();
   });
 
   it('should throw for an null release name in getBrowser', function() {
     expect(function() {
-      seleniumAssistant.getBrowser('chrome', null);
+      seleniumAssistant.getLocalBrowser('chrome', null);
     }).to.throw();
   });
 
   it('should throw for no release name in getBrowser', function() {
     expect(function() {
-      seleniumAssistant.getBrowser('chrome');
+      seleniumAssistant.getLocalBrowser('chrome');
     }).to.throw();
   });
 
   it('should throw for no arguments in getBrowser', function() {
     expect(function() {
-      seleniumAssistant.getBrowser();
+      seleniumAssistant.getLocalBrowser();
     }).to.throw();
   });
 
@@ -103,7 +103,7 @@ describe('SeleniumAssistant', function() {
     this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
-    const stub = sinon.stub(console, 'log', input => {
+    const stub = sinon.stub(console, 'log', (input) => {
       consoleCalls++;
     });
     sinonStubs.push(stub);
@@ -166,7 +166,7 @@ describe('SeleniumAssistant', function() {
         return new Promise((resolve, reject) => {
           resolve();
         });
-      }
+      },
     });
     (killPromise instanceof Promise).should.equal(true);
     return killPromise;
@@ -181,7 +181,7 @@ describe('SeleniumAssistant', function() {
         return new Promise((resolve, reject) => {
           reject();
         });
-      }
+      },
     });
     (killPromise instanceof Promise).should.equal(true);
     return killPromise;
@@ -194,7 +194,7 @@ describe('SeleniumAssistant', function() {
     const killPromise = seleniumAssistant.killWebDriver({
       quit: () => {
         return new Promise((resolve, reject) => {});
-      }
+      },
     });
     (killPromise instanceof Promise).should.equal(true);
     return killPromise;

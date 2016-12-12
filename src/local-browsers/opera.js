@@ -19,43 +19,63 @@
 const fs = require('fs');
 const path = require('path');
 const which = require('which');
-const chalk = require('chalk');
-const seleniumOpera = require('selenium-webdriver/opera');
-const WebDriverBrowser = require('./web-driver-browser');
+const webdriver = require('selenium-webdriver');
+const semver = require('semver');
+
+const LocalBrowser = require('../browser-models/local-browser.js');
 const application = require('../application-state.js');
+const OperaConfig = require('../webdriver-config/opera.js');
 
 /**
- * <p>Handles the prettyName and executable path for Opera browser.</p>
+ * <p>Handles the prettyName and executable path for Chrome browser.</p>
  *
  * @private
  * @extends WebDriverBrowser
  */
-class OperaWebDriverBrowser extends WebDriverBrowser {
+class LocalOperaBrowser extends LocalBrowser {
   /**
-   * Create an Opera representation of a {@link WebDriverBrowser}
+   * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param  {String} release The channel of Opera you want to get, either
-   *                          'stable', 'beta' or 'unstable'
+   * @param {string} release The release name for this browser instance.
    */
   constructor(release) {
-    let prettyName = 'Opera';
-
-    if (release === 'stable') {
-      prettyName += ' Stable';
-    } else if (release === 'beta') {
-      prettyName += ' Beta';
-    } else if (release === 'unstable') {
-      prettyName += ' Developer';
-    }
-
-    super(
-      prettyName,
-      release,
-      'opera',
-      new seleniumOpera.Options()
-    );
+    const blacklist = {
+      41: '0.2.2',
+      42: '0.2.2',
+      43: '0.2.2',
+    };
+    super(new OperaConfig(), release, blacklist);
   }
 
+  /**
+   * <p>This method returns the preconfigured builder used by
+   * getSeleniumDriver().</p>
+   *
+   * <p>This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)</p>
+   *
+   * <p>For more info, see:
+   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
+   *
+   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
+   */
+  getSeleniumDriverBuilder() {
+    const seleniumOptions = this.getSeleniumOptions();
+    seleniumOptions.setOperaBinaryPath(this.getExecutablePath());
+
+    const builder = new webdriver
+      .Builder()
+      .withCapabilities(this._capabilities)
+      .forBrowser(this.getId())
+      .setOperaOptions(seleniumOptions);
+
+    return builder;
+  }
+
+  /**
+   * @return {string|null} The install directory with selenium-assistant's
+   * reserved directory for installing browsers and operating files.
+   */
   _findInInstallDir() {
     let defaultDir = application.getInstallDirectory();
     let expectedPath;
@@ -79,7 +99,9 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
       // This will throw if it's not found
       fs.lstatSync(expectedPath);
       return expectedPath;
-    } catch (error) {}
+    } catch (error) {
+      // NOOP
+    }
     return null;
   }
 
@@ -117,7 +139,9 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
           return which.sync('opera-developer');
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      // NOOP
+    }
 
     return null;
   }
@@ -135,13 +159,52 @@ class OperaWebDriverBrowser extends WebDriverBrowser {
 
     const regexMatch = operaVersion.match(/(\d+)\.\d+\.\d+\.\d+/);
     if (regexMatch === null) {
-      console.warn(chalk.red('Warning:') + ' Unable to parse version number ' +
-        'from Opera: ', this.getExecutablePath());
       return -1;
     }
 
     return parseInt(regexMatch[1], 10);
   }
+
+  /**
+   * The blacklist allows blocking use of a browser with
+   * a specific version with a particular driver version.
+   * @return {Boolean} Whether to blacklist this browser.
+   */
+  isBlackListed() {
+    if (!this._blacklist) {
+      return false;
+    }
+
+    try {
+      const browserVersion = this.getVersionNumber();
+      if (!this._blacklist[browserVersion]) {
+        return false;
+      }
+
+      const minBrokenDriverModule = this._blacklist[browserVersion];
+      const driverModule = require(this.getDriverModule());
+      if (semver.gt(driverModule.version, minBrokenDriverModule)) {
+        return false;
+      }
+    } catch (err) {
+      // If we can validate the blacklist, chances are the browser is invalid
+      // with current selenium.
+    }
+    return true;
+  }
+
+  /**
+   * This method returns the pretty names for each browser releace.
+   * @return {Object} An object containing on or move of 'stable', 'beta' or
+   * 'unstable' keys with a matching name for that release.
+   */
+  static getPrettyReleaseNames() {
+    return {
+      stable: 'Stable',
+      beta: 'Beta',
+      unstable: 'Developer',
+    };
+  }
 }
 
-module.exports = OperaWebDriverBrowser;
+module.exports = LocalOperaBrowser;

@@ -16,10 +16,10 @@
 
 'use strict';
 
-const ChromeWebDriverBrowser = require('./webdriver-browser/chrome');
-const FirefoxWebDriverBrowser = require('./webdriver-browser/firefox');
-const OperaWebDriverBrowser = require('./webdriver-browser/opera');
-const SafariWebDriverBrowser = require('./webdriver-browser/safari');
+const LocalChromeBrowser = require('./local-browsers/chrome');
+const LocalFirefoxBrowser = require('./local-browsers/firefox');
+const LocalOperaBrowser = require('./local-browsers/opera');
+const LocalSafariBrowser = require('./local-browsers/safari');
 
 /**
  * This class is a simple helper to define the possible permutations of
@@ -29,6 +29,41 @@ const SafariWebDriverBrowser = require('./webdriver-browser/safari');
  * @private
  */
 class BrowserManager {
+
+  // Details from:
+  // https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BrowserVersion
+  /**
+   * This method will return a browser instance tied to a saucelabs hosted
+   * browser.
+   *
+   * @param {String} browserId The browser ID you wish to control.
+   * @param {String} browserVersion The browser verions you wish to target.
+   * This is the saucelabs version, not release name. Can be "latest",
+   * "latest-1", "latest-2", "45.0"
+   * @param {Object} options Add additional options for the saucelabs browser.
+   * @return {WebDriverBrowser} browser A WebDriverBrowser instance pointing
+   * to a Saucelabs hosted browser.
+   */
+  getSaucelabsBrowser(browserId, browserVersion, options) {
+    /** const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
+    // browser.addCapability('version', browserVersion);
+    browser.addCapability('username', options.saucelabs.username);
+    browser.addCapability('accessKey', options.saucelabs.accessKey);
+
+    // This is the name that is shown on saucelabs.
+    if (options.name) {
+      browser.addCapability('name', options.name);
+    }
+
+    if (browserId === 'safari') {
+      // Set default platform to windows 10 otherwise it will fail.
+      browser.addCapability('platform', 'Windows 10');
+    }
+
+    return browser;**/
+    return null;
+  }
+
   /**
    * <p>This method returns the full list of browsers this library supports,
    * regardless of whether the current environment has access to them or not.
@@ -41,20 +76,20 @@ class BrowserManager {
    */
   getSupportedBrowsers() {
     return [
-      this.createWebDriverBrowser('chrome', 'stable'),
-      this.createWebDriverBrowser('chrome', 'beta'),
-      this.createWebDriverBrowser('chrome', 'unstable'),
+      this.getLocalBrowser('chrome', 'stable'),
+      this.getLocalBrowser('chrome', 'beta'),
+      this.getLocalBrowser('chrome', 'unstable'),
 
-      this.createWebDriverBrowser('firefox', 'stable'),
-      this.createWebDriverBrowser('firefox', 'beta'),
-      this.createWebDriverBrowser('firefox', 'unstable'),
+      this.getLocalBrowser('firefox', 'stable'),
+      this.getLocalBrowser('firefox', 'beta'),
+      this.getLocalBrowser('firefox', 'unstable'),
 
-      this.createWebDriverBrowser('opera', 'stable'),
-      this.createWebDriverBrowser('opera', 'beta'),
-      this.createWebDriverBrowser('opera', 'unstable'),
+      this.getLocalBrowser('opera', 'stable'),
+      this.getLocalBrowser('opera', 'beta'),
+      this.getLocalBrowser('opera', 'unstable'),
 
-      this.createWebDriverBrowser('safari', 'stable'),
-      this.createWebDriverBrowser('safari', 'beta')
+      this.getLocalBrowser('safari', 'stable'),
+      this.getLocalBrowser('safari', 'beta'),
     ];
   }
 
@@ -67,19 +102,25 @@ class BrowserManager {
    *
    * @param  {String} browserId The selenium browser Id 'chrome', 'firefox', etc
    * @param  {String} release   The release you want the browser to be on
-   *                            'stable', 'beta' or 'unstable'
+   *                            'stable', 'beta', 'unstable' or 'saucelabs'
    * @return {WebDriverBrowser} An instance of the browser you requested.
    */
-  createWebDriverBrowser(browserId, release) {
+  getLocalBrowser(browserId, release) {
+    if (release !== 'stable' &&
+      release !== 'beta' &&
+      release !== 'unstable') {
+      throw new Error('Unknown release type.');
+    }
+
     switch (browserId) {
       case 'chrome':
-        return new ChromeWebDriverBrowser(release);
+        return new LocalChromeBrowser(release);
       case 'firefox':
-        return new FirefoxWebDriverBrowser(release);
+        return new LocalFirefoxBrowser(release);
       case 'opera':
-        return new OperaWebDriverBrowser(release);
+        return new LocalOperaBrowser(release);
       case 'safari':
-        return new SafariWebDriverBrowser(release);
+        return new LocalSafariBrowser(release);
       default:
         throw new Error('Unknown web driver browser request: ', browserId);
     }
