@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build-docs": "jsdoc -c ./jsdoc.conf -d ",
-    "lint": "eslint './**/*.js'",
+    "lint": "eslint '.'",
     "test": "npm run lint && mocha",
     "istanbul": "npm run lint && istanbul cover _mocha",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
@@ -33,8 +33,8 @@
     "chai": "^3.5.0",
     "chromedriver": "^2.24.0",
     "coveralls": "^2.11.12",
-    "eslint": "^3.5.0",
-    "eslint-config-google": "^0.7.0",
+    "eslint": "^3.12.1",
+    "eslint-config-google": "^0.7.1",
     "express": "^4.14.0",
     "firebase": "^3.5.1",
     "geckodriver": "^1.2.0",
@@ -56,7 +56,7 @@
     "node-localstorage": "^1.3.0",
     "request": "^2.78.0",
     "sauce-connect-launcher": "^1.0.0",
-    "selenium-webdriver": "3.0.0",
+    "selenium-webdriver": "3.0.1",
     "semver": "^5.3.0",
     "which": "^1.2.11",
     "yauzl": "^2.7.0"
@@ -64,7 +64,7 @@
   "optionalDependencies": {
     "chromedriver": "^2.24.0",
     "geckodriver": "^1.2.0",
-    "operadriver": "^0.2.2"
+    "operadriver": "^1.0.0"
   },
   "files": [
     "src/"

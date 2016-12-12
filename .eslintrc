@@ -7,7 +7,4 @@
   "rules": {
     "no-var": 2
   },
-  "parserOptions": {
-    "ecmaVersion": 6
-  }
 }
