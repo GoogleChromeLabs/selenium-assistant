@@ -1,0 +1,820 @@
+---
+layout: jsdoc
+title: "Class: Browser"
+jsdocNav: 
+  - Classes:
+    - <a href="Browser.html#main">Browser</a>
+    - <a href="Chrome.html#main">Chrome</a>
+    - <a href="DriverConfig.html#main">DriverConfig</a>
+    - <a href="Edge.html#main">Edge</a>
+    - <a href="Firefox.html#main">Firefox</a>
+    - <a href="IE.html#main">IE</a>
+    - <a href="LocalBrowser.html#main">LocalBrowser</a>
+    - 
+    - <a href="Opera.html#main">Opera</a>
+    - <a href="Safari.html#main">Safari</a>
+    - <a href="SeleniumAssistant.html#main">SeleniumAssistant</a>
+---
+
+
+
+
+
+
+
+    
+        <h2>Browser</h2>
+        
+            <p>A base class for all other browser models to extend.</p>
+        
+    
+
+    
+      
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h2 class="subsection-title">Instance Methods</h2>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="addCapability"><span class="type-signature"></span><span class="this">this.</span>addCapability<span class="signature">(<span class="signature-args">key, value</span>)</span><span class="type-signature"></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This is a simple method to define capabilities that'll be
+passed to the WebDriver builder when you call getSeleniumDriverBuilder()
+or getSeleniumDriver().</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">key</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The capability key.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">value</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The Value of the capability.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getDriverModule"><span class="type-signature"></span><span class="this">this.</span>getDriverModule<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Gets the name of the driver module to use with this
+browser. Null if there is no driver module</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getId"><span class="type-signature"></span><span class="this">this.</span>getId<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>Get the ID of the browser.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>ID of this browser.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getPrettyName"><span class="type-signature"></span><span class="this">this.</span>getPrettyName<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>A user friendly name for the browser</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>A user friendly name for the browser</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSeleniumOptions"><span class="type-signature"></span><span class="this">this.</span>getSeleniumOptions<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> SeleniumOptions</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>The selenium options passed to webdriver's <code>Builder</code> method. This
+will have the executable path set for the browser so you should
+manipulate these options rather than create entirely new objects.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">SeleniumOptions</span>
+
+
+
+
+<div class="param-desc">
+    <p>An instance of either
+<code>selenium-webdriver/firefox</code> or <code>selenium-webdriver/chrome</code></p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="setSeleniumOptions"><span class="type-signature"></span><span class="this">this.</span>setSeleniumOptions<span class="signature">(<span class="signature-args">options</span>)</span><span class="type-signature"></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>If changes are made to the selenium options, call this method to
+set them before calling getSeleniumDriver.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">options</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">SeleniumOptions</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>An instance of
+<code>selenium-webdriver/firefox</code> or <code>selenium-webdriver/chrome</code></p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+</div>
+
+</div>

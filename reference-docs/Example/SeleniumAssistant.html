@@ -1,0 +1,1843 @@
+---
+layout: jsdoc
+title: "Class: SeleniumAssistant"
+jsdocNav: 
+  - Classes:
+    - <a href="Browser.html#main">Browser</a>
+    - <a href="Chrome.html#main">Chrome</a>
+    - <a href="DriverConfig.html#main">DriverConfig</a>
+    - <a href="Edge.html#main">Edge</a>
+    - <a href="Firefox.html#main">Firefox</a>
+    - <a href="IE.html#main">IE</a>
+    - <a href="LocalBrowser.html#main">LocalBrowser</a>
+    - 
+    - <a href="Opera.html#main">Opera</a>
+    - <a href="Safari.html#main">Safari</a>
+    - <a href="SeleniumAssistant.html#main">SeleniumAssistant</a>
+---
+
+
+
+
+
+
+
+    
+        <h2>SeleniumAssistant</h2>
+        
+            <p>SeleniumAssistant is a class that makes
+it easier to download, interegate and launch a browser
+for running tests with selenium.</p>
+        
+    
+
+    
+      
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h2 class="subsection-title">Instance Methods</h2>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="disableSaucelabsConnect"><span class="type-signature"></span><span class="this">this.</span>disableSaucelabsConnect<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This will disable the saucelabs connect proxy.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise</span>
+
+
+
+
+<div class="param-desc">
+    <p>Returns a promise that resolves once the proxy is closed.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="downloadLocalBrowser"><span class="type-signature"></span><span class="this">this.</span>downloadLocalBrowser<span class="signature">(<span class="signature-args">browserId, release, expirationInHours</span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>The downloadLocalBrowser() function is a helper method what will
+grab a browser on a specific release channel.</p>
+
+<p>If the request browser is already installed, it will resolve
+the promise and not download anything.</p>
+
+<p>This is somewhat experimental, so be prepared for issues.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">browserId</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+
+            
+                
+                
+
+                
+
+                
+                <span class="param-attributes">()</span>
+            
+            </td>
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The selenium id of the browser you wish
+                           to download.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">release</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+
+            
+                
+                
+
+                
+
+                
+                <span class="param-attributes">()</span>
+            
+            </td>
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>String of the release channel, can be
+                           'stable', 'beta' or 'unstable'</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">expirationInHours</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+
+            
+                
+                
+
+                
+
+                
+                <span class="param-attributes">(Optional)</span>
+            
+            </td>
+
+            
+                <td class="default">
+                
+                    24
+                
+                </td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>This is how long until a browser
+                            download is regarded as expired and Should
+                            be updated. A value of 0 will force a download.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise</span>
+
+
+
+
+<div class="param-desc">
+    <p>A promise is returned which resolves
+                           once the browser has been downloaded.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="enableSaucelabsConnect"><span class="type-signature"></span><span class="this">this.</span>enableSaucelabsConnect<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This will enable the saucelabs connect proxy.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise</span>
+
+
+
+
+<div class="param-desc">
+    <p>Returns a promise that resolves once the proxy is
+set up.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getBrowserInstallDir"><span class="type-signature"></span><span class="this">this.</span>getBrowserInstallDir<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This returns the path of where browsers are downloaded to.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Path of downloaded browsers</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getLocalBrowser"><span class="type-signature"></span><span class="this">this.</span>getLocalBrowser<span class="signature">(<span class="signature-args">browserId, release</span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> WebDriverBrowser</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>If you want a specific browser you can use to retrieve although
+you should use WebDriverBrowser#isValid to check if the
+browser is available in the current environment.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">browserId</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The selenium id of the browser you want.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">release</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The release of the browser you want. Either
+                           'stable', 'beta' or 'unstable.'</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">WebDriverBrowser</span>
+
+
+
+
+<div class="param-desc">
+    <p>The WebDriverBrowser instance that represents
+                           your request.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getLocalBrowsers"><span class="type-signature"></span><span class="this">this.</span>getLocalBrowsers<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Array.&lt;WebDriverBrowser></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method returns a list of discovered browsers in the current
+environment.</p>
+
+<p>This method will throw an error if run on a platform other than
+OS X and Linux.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Array.&lt;WebDriverBrowser></span>
+
+
+
+
+<div class="param-desc">
+    <p>Array of browsers discovered in the
+current environment.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSaucelabsBrowser"><span class="type-signature"></span><span class="this">this.</span>getSaucelabsBrowser<span class="signature">(<span class="signature-args">browserId, browserVersion, options</span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> WebDriverBrowser</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>Get a Saucelab browser for a particular browser ID and a particular
+browser version.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">browserId</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The selenium browser ID.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">browserVersion</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>This is a Saucelabs browser version like
+&quot;latest&quot; or &quot;latest-2&quot;.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">options</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The options to set for saucelabs.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">WebDriverBrowser</span>
+
+
+
+
+<div class="param-desc">
+    <p>A selenium-assistant web driver instance.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="killWebDriver"><span class="type-signature"></span><span class="this">this.</span>killWebDriver<span class="signature">(<span class="signature-args">driver</span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>Once a web driver is no longer needed call this method to kill it. The
+promise resolves once the browser is closed and clean up has been done.</p>
+
+<p>This is a basic helper that adds a timeout to the end of killling
+driver to account for shutdown time and the issues that can cause.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">driver</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">WebDriver</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>Instance of a <a href="http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html%20"> WebDriver</a></p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise</span>
+
+
+
+
+<div class="param-desc">
+    <p>Promise that resolves once the browser is
+killed.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="printAvailableBrowserInfo"><span class="type-signature"></span><span class="this">this.</span>printAvailableBrowserInfo<span class="signature">(<span class="signature-args">printToConsole</span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method prints out a table of info for all available browsers
+on the current environment.</p>
+
+<p>Useful if you are testing on travis and want to see what tests
+should be running.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">printToConsole</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+
+            
+                
+                
+
+                
+
+                
+                <span class="param-attributes">(Optional)</span>
+            
+            </td>
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>If you wish to prevent
+the table being printed to the console, you can suppress it by
+passing in false and simply use the string response.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Returns table of information as a string.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="setBrowserInstallDir"><span class="type-signature"></span><span class="this">this.</span>setBrowserInstallDir<span class="signature">(<span class="signature-args">newInstallDir</span>)</span><span class="type-signature"></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>To change where browsers are downloaded to, call this method
+before calling downloadLocalBrowser and
+getLocalBrowsers.</p>
+<p>By default, this will install under <code>.selenium-assistant</code> in
+your home directory on OS X and Linux, or just <code>selenium-assistant</code>
+in your home directory on Windows.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">newInstallDir</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>Path to download browsers to. Pass in
+                              null to use default path.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="setSaucelabsDetails"><span class="type-signature"></span><span class="this">this.</span>setSaucelabsDetails<span class="signature">(<span class="signature-args">username, accessKey</span>)</span><span class="type-signature"></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>The Saucelabs details to be used by Saucelab browsers.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">username</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The Saucelabs username.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">accessKey</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>The Saucelabs access key.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+</div>
+
+</div>

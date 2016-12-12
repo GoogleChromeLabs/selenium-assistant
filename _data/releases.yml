@@ -25,3 +25,5 @@ alpha:
         - /reference-docs/alpha/v2.0.4-alpha
         - /reference-docs/alpha/v2.0.2-alpha
         - /reference-docs/alpha/v2.0.1-alpha
+other:
+    - Example: /reference-docs/Example

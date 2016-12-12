@@ -1,0 +1,3522 @@
+---
+layout: jsdoc
+title: "Class: LocalBrowser"
+jsdocNav: 
+  - Classes:
+    - <a href="Browser.html#main">Browser</a>
+    - <a href="Chrome.html#main">Chrome</a>
+    - <a href="DriverConfig.html#main">DriverConfig</a>
+    - <a href="Edge.html#main">Edge</a>
+    - <a href="Firefox.html#main">Firefox</a>
+    - <a href="IE.html#main">IE</a>
+    - <a href="LocalBrowser.html#main">LocalBrowser</a>
+    - 
+    - <a href="Opera.html#main">Opera</a>
+    - <a href="Safari.html#main">Safari</a>
+    - <a href="SeleniumAssistant.html#main">SeleniumAssistant</a>
+---
+
+
+
+
+
+
+
+    
+        <h2>LocalBrowser</h2>
+        
+            <p>Local browser is an abstract class with some implemented methods
+and some methods that MUST be overriden.</p>
+        
+    
+
+    
+      
+        <h2 class="subsection-title">Constructor</h2>
+        
+<div class="method-entry method-type-class">
+
+    <h4 class="method-name" id="LocalBrowser"><span class="type-signature"></span>new LocalBrowser<span class="signature">(<span class="signature-args">config, version</span>)</span><span class="type-signature"></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>Constructs new local browser.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">config</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>TODO This should be a shared webdriver config
+class.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">version</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>Version name to be given to Saucelabs.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+</div>
+
+</div>
+
+      
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h2 class="subsection-title">Instance Methods</h2>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="_getMinSupportedVersion"><span class="type-signature"></span><span class="this">this.</span>_getMinSupportedVersion<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> number</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>Get the minimum supported browser version for this browser.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">number</span>
+
+
+
+
+<div class="param-desc">
+    <p>The minimum supported version number.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getExecutablePath"><span class="type-signature"></span><span class="this">this.</span>getExecutablePath<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>To get the path of the browsers executable file, call this method.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Path of the browsers executable file or null if
+it can't be found.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getPrettyName"><span class="type-signature"></span><span class="this">this.</span>getPrettyName<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>A user friendly name for the browser</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>A user friendly name for the browser</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getPrettyName"><span class="type-signature"></span><span class="this">this.</span>getPrettyName<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>A user friendly name for the browser</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>A user friendly name for the browser</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getRawVersionString"><span class="type-signature"></span><span class="this">this.</span>getRawVersionString<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>If you need to identify a browser based on it's version number but
+the high level version number isn't specific enough, you can use the
+raw version string (this will be the result of calling the browser
+executable with an appropriate flag to get the version)</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Raw string that identifies the browser</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getReleaseName"><span class="type-signature"></span><span class="this">this.</span>getReleaseName<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>The release name for this browser, either 'stable', 'beta',
+'unstable'.</p>
+
+<p>Useful if you only want to test <i>or</i> not test on a particular
+release type.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Release name of browser. 'stable', 'beta' or 'unstable'</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSeleniumDriver"><span class="type-signature"></span><span class="this">this.</span>getSeleniumDriver<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise.&lt;WebDriver></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method resolves to a webdriver instance of this browser i
+nstance.</p>
+
+<p>For more info, see:
+<a href="http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html%20"> WebDriver Docs</a></p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise.&lt;WebDriver></span>
+
+
+
+
+<div class="param-desc">
+    <p>[description]</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSeleniumDriver"><span class="type-signature"></span><span class="this">this.</span>getSeleniumDriver<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise.&lt;WebDriver></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method resolves to a webdriver instance of this browser i
+nstance.</p>
+
+<p>For more info, see:
+<a href="http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html%20"> WebDriver Docs</a></p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise.&lt;WebDriver></span>
+
+
+
+
+<div class="param-desc">
+    <p>[description]</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSeleniumDriverBuilder"><span class="type-signature"></span><span class="this">this.</span>getSeleniumDriverBuilder<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> WebDriverBuilder</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method returns the preconfigured builder used by
+getSeleniumDriver().</p>
+
+<p>This is useful if you wish to customise the builder with additional
+options (i.e. customise the proxy of the driver.)</p>
+
+<p>For more info, see:
+<a href="https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html%20"> WebDriverBuilder Docs</a></p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">WebDriverBuilder</span>
+
+
+
+
+<div class="param-desc">
+    <p>Builder that resolves to a webdriver instance.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getVersion"><span class="type-signature"></span><span class="this">this.</span>getVersion<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>The release name for this browser, either 'stable', 'beta',
+'unstable'.</p>
+
+<p>Useful if you only want to test <i>or</i> not test on a particular
+release type.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Release name of browser. 'stable', 'beta' or 'unstable'</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getVersionNumber"><span class="type-signature"></span><span class="this">this.</span>getVersionNumber<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Integer</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method returns an integer if it can be determined from
+the browser executable or -1 if the version is unknown.</p>
+
+<p>A scenario where it will be unable to produce a valid version
+is if the browsers executable path can't be found.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Integer</span>
+
+
+
+
+<div class="param-desc">
+    <p>Version number if it can be found</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="isBlackListed"><span class="type-signature"></span><span class="this">this.</span>isBlackListed<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Boolean</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Boolean</span>
+
+
+
+
+<div class="param-desc">
+    <p>Whether this browser is blacklisted or not.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="isValid"><span class="type-signature"></span><span class="this">this.</span>isValid<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Boolean</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method returns true if the instance can be found and can create a
+selenium driver that will launch the expected browser.</p>
+
+<p>A scenario where it will be unable to produce a valid selenium driver
+is if the browsers executable path can't be found.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Boolean</span>
+
+
+
+
+<div class="param-desc">
+    <p>True if a selenium driver can be produced</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+    
+
+    
+
+    
+
+
+
+
+
+
+
+
+    
+        <h2>LocalBrowser</h2>
+        
+            <p>Local browser is an abstract class with some implemented methods
+and some methods that MUST be overriden.</p>
+        
+    
+
+    
+      
+        <h2 class="subsection-title">Constructor</h2>
+        
+<div class="method-entry method-type-class">
+
+    <h4 class="method-name" id="LocalBrowser"><span class="type-signature"></span>new LocalBrowser<span class="signature">(<span class="signature-args">config, release, blacklist</span>)</span><span class="type-signature"></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>Constructs new local browser.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+  <tr>
+    <th>Parameters</th>
+    <td>
+      
+
+<table class="params">
+    
+
+        <tr>
+            
+              <td class="name">config</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>TODO This should be a shared webdriver config
+class.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">release</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>Release name must be 'stable', 'beta' or
+'unstable'.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+
+        <tr>
+            
+              <td class="name">blacklist</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+
+            
+            </td>
+
+            
+              <td></td>
+            
+
+            <tr>
+              <td></td>
+              <td class="description last">
+                <p>This is a list of browser versions: driver
+versions used to blacklist a browser.</p>
+                
+              </td>
+            </tr>
+        </tr>
+
+    
+</table>
+
+    </td>
+  </tr>
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+</div>
+
+</div>
+
+      
+    
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h2 class="subsection-title">Instance Methods</h2>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="_getMinSupportedVersion"><span class="type-signature"></span><span class="this">this.</span>_getMinSupportedVersion<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> number</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>Get the minimum supported browser version for this browser.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">number</span>
+
+
+
+
+<div class="param-desc">
+    <p>The minimum supported version number.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getExecutablePath"><span class="type-signature"></span><span class="this">this.</span>getExecutablePath<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>To get the path of the browsers executable file, call this method.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Path of the browsers executable file or null if
+it can't be found.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getPrettyName"><span class="type-signature"></span><span class="this">this.</span>getPrettyName<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>A user friendly name for the browser</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>A user friendly name for the browser</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getPrettyName"><span class="type-signature"></span><span class="this">this.</span>getPrettyName<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>A user friendly name for the browser</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>A user friendly name for the browser</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getRawVersionString"><span class="type-signature"></span><span class="this">this.</span>getRawVersionString<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>If you need to identify a browser based on it's version number but
+the high level version number isn't specific enough, you can use the
+raw version string (this will be the result of calling the browser
+executable with an appropriate flag to get the version)</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Raw string that identifies the browser</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getReleaseName"><span class="type-signature"></span><span class="this">this.</span>getReleaseName<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>The release name for this browser, either 'stable', 'beta',
+'unstable'.</p>
+
+<p>Useful if you only want to test <i>or</i> not test on a particular
+release type.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Release name of browser. 'stable', 'beta' or 'unstable'</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSeleniumDriver"><span class="type-signature"></span><span class="this">this.</span>getSeleniumDriver<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise.&lt;WebDriver></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method resolves to a webdriver instance of this browser i
+nstance.</p>
+
+<p>For more info, see:
+<a href="http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html%20"> WebDriver Docs</a></p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise.&lt;WebDriver></span>
+
+
+
+
+<div class="param-desc">
+    <p>[description]</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSeleniumDriver"><span class="type-signature"></span><span class="this">this.</span>getSeleniumDriver<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Promise.&lt;WebDriver></span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method resolves to a webdriver instance of this browser i
+nstance.</p>
+
+<p>For more info, see:
+<a href="http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html%20"> WebDriver Docs</a></p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Promise.&lt;WebDriver></span>
+
+
+
+
+<div class="param-desc">
+    <p>[description]</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getSeleniumDriverBuilder"><span class="type-signature"></span><span class="this">this.</span>getSeleniumDriverBuilder<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> WebDriverBuilder</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method returns the preconfigured builder used by
+getSeleniumDriver().</p>
+
+<p>This is useful if you wish to customise the builder with additional
+options (i.e. customise the proxy of the driver.)</p>
+
+<p>For more info, see:
+<a href="https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html%20"> WebDriverBuilder Docs</a></p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">WebDriverBuilder</span>
+
+
+
+
+<div class="param-desc">
+    <p>Builder that resolves to a webdriver instance.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getVersion"><span class="type-signature"></span><span class="this">this.</span>getVersion<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> String</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>The release name for this browser, either 'stable', 'beta',
+'unstable'.</p>
+
+<p>Useful if you only want to test <i>or</i> not test on a particular
+release type.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">String</span>
+
+
+
+
+<div class="param-desc">
+    <p>Release name of browser. 'stable', 'beta' or 'unstable'</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="getVersionNumber"><span class="type-signature"></span><span class="this">this.</span>getVersionNumber<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Integer</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method returns an integer if it can be determined from
+the browser executable or -1 if the version is unknown.</p>
+
+<p>A scenario where it will be unable to produce a valid version
+is if the browsers executable path can't be found.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Integer</span>
+
+
+
+
+<div class="param-desc">
+    <p>Version number if it can be found</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="isBlackListed"><span class="type-signature"></span><span class="this">this.</span>isBlackListed<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Boolean</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Boolean</span>
+
+
+
+
+<div class="param-desc">
+    <p>Whether this browser is blacklisted or not.</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
+
+        
+            
+<div class="method-entry method-type-function">
+
+    <h4 class="method-name" id="isValid"><span class="type-signature"></span><span class="this">this.</span>isValid<span class="signature">(<span class="signature-args"></span>)</span><span class="type-signature"> <span class="return-arrow">&rarr;</span> Boolean</span></h4>
+
+
+<div class="method-collapse js-method-collapse">
+
+
+  
+
+  <div class="description">
+    <p>This method returns true if the instance can be found and can create a
+selenium driver that will launch the expected browser.</p>
+
+<p>A scenario where it will be unable to produce a valid selenium driver
+is if the browsers executable path can't be found.</p>
+  </div>
+
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <tr>
+  <th>Returns</th>
+  <td>
+  
+          
+
+
+
+<span class="param-type">Boolean</span>
+
+
+
+
+<div class="param-desc">
+    <p>True if a selenium driver can be produced</p>
+</div>
+
+
+      
+  </td>
+  </tr>
+
+
+</table>
+
+</div>
+
+</div>
