@@ -31,8 +31,10 @@
         {% endcomment %}
 
         {% assign anchorHrefSplit = navGroupItem | split: 'href="' %}
-        {% assign correctedHref = 'href="' | append: {{ project_root_url }} | append: site.data.releases.stable.latest | append: '/' %}
+        {% assign correctedHref = 'href="' | append: project_root_url | append: site.data.releases.stable.latest | append: '/' %}
         {% assign alteredAnchor = anchorHrefSplit | join: correctedHref %}
+        <li>Origin: {{ navGroupItem }}</li>
+        <li>correctedHref: {{ correctedHref }}</li>
         <li>{{ alteredAnchor }}</li>
       {% endfor %}
     {% endfor %}
