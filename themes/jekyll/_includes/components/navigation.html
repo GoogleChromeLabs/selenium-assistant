@@ -59,7 +59,7 @@ First we need to get the list of directories for the current depth
 
 <ul>
 {% for singlePage in weightedPages %}
-  <li class="{% if page.url contains singlePage.url %}current-section{% endif %} {% if page.url == singlePage.url %}current-page{% endif %}"><a href="{{singlePage.url}}#main">{{ singlePage.title }}</a></li>
+  <li class="{% if page.url contains singlePage.url %}current-section{% endif %} {% if page.url == singlePage.url %}current-page{% endif %}"><a href="{{ project_root_url }}{{singlePage.url}}#main">{{ singlePage.title }}</a></li>
 
   {% if singlePage.url != currentContext %}
     {% if page.url != singlePage.url %}
