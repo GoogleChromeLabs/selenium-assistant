@@ -1,10 +1,9 @@
 {
   "name": "selenium-assistant",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
-    "build-docs": "jsdoc -c ./jsdoc.conf -d ",
     "lint": "eslint '.'",
     "test": "npm run lint && mocha",
     "istanbul": "npm run lint && istanbul cover _mocha",
@@ -42,7 +41,6 @@
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.1",
     "mocha": "^3.1.2",
-    "npm-publish-scripts": "3.0.3",
     "operadriver": "^0.2.2",
     "proxyquire": "^1.7.10",
     "sinon": "^1.17.6"
