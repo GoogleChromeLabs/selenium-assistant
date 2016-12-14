@@ -36,7 +36,7 @@ class LocalOperaBrowser extends LocalBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param {string} release The release name for this browser instance.
+   * @param {String} release The release name for this browser instance.
    */
   constructor(release) {
     const blacklist = {

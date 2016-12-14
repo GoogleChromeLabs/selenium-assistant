@@ -32,7 +32,7 @@ class LocalSafariBrowser extends LocalBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param {string} release The release name for this browser instance.
+   * @param {String} release The release name for this browser instance.
    */
   constructor(release) {
     super(new SafariConfig(), release);
@@ -103,7 +103,7 @@ class LocalSafariBrowser extends LocalBrowser {
   /**
    * Get the version string from the browser itself. From Safari this is from
    * `version.plist` file.
-   * @return {string} The version string for this Safari release.
+   * @return {String} The version string for this Safari release.
    */
   getRawVersionString() {
     if (this._rawVerstionString) {

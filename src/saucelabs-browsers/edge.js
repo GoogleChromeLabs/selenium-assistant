@@ -34,7 +34,7 @@ class EdgeWebDriverBrowser extends SaucelabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param {string} version The version name for this browser instance.
+   * @param {String} version The version name for this browser instance.
    */
   constructor(version) {
     super(new EdgeConfig(), version);

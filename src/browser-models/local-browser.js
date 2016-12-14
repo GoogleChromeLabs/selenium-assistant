@@ -30,7 +30,7 @@ class LocalBrowser extends Browser {
    * Constructs new local browser.
    * @param {Object} config TODO This should be a shared webdriver config
    * class.
-   * @param {string} release Release name must be 'stable', 'beta' or
+   * @param {String} release Release name must be 'stable', 'beta' or
    * 'unstable'.
    * @param {Object} blacklist This is a list of browser versions: driver
    * versions used to blacklist a browser.

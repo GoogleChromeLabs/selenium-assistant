@@ -29,7 +29,7 @@ class ChromeWebDriverBrowser extends SaucelabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
-   * @param {string} version The release name for this browser instance.
+   * @param {String} version The release name for this browser instance.
    */
   constructor(version) {
     super(new ChromeConfig(), version);

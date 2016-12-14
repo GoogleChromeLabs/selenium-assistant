@@ -38,14 +38,14 @@ describe('Test Saucelabs', function() {
       seleniumAssistant.setSaucelabsDetails(
         SAUCELABS_USERNAME,
         SAUCELABS_ACCESS_KEY);
-      return seleniumAssistant.enableSaucelabsConnect();
+      return seleniumAssistant.startSaucelabsConnect();
     });
   });
 
   after(function() {
     return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
     .then(() => {
-      return seleniumAssistant.disableSaucelabsConnect();
+      return seleniumAssistant.stopSaucelabsConnect();
     })
     .then(() => {
       return globalServer.killServer();

@@ -38,8 +38,8 @@ class Browser {
    * passed to the WebDriver builder when you call getSeleniumDriverBuilder()
    * or getSeleniumDriver().
    *
-   * @param {string} key The capability key.
-   * @param {string} value The Value of the capability.
+   * @param {String} key The capability key.
+   * @param {String} value The Value of the capability.
    */
   addCapability(key, value) {
     if (!this._capabilities) {

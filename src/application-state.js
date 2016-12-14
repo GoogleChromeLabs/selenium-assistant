@@ -104,7 +104,7 @@ class ApplicationState {
    * @return {Promise} Returns a promise that resolves once the connection is
    * open.
    */
-  enableSaucelabsConnect() {
+  startSaucelabsConnect() {
     if (this._sauceConnect) {
       return Promise.resolve();
     }
@@ -138,7 +138,7 @@ class ApplicationState {
   /**
    * @return {Promise} A promise that resolves once the connection is closed.
    */
-  disableSaucelabsConnect() {
+  stopSaucelabsConnect() {
     if (!this._sauceConnect) {
       return Promise.resolve();
     }

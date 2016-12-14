@@ -23,24 +23,33 @@ const browserManager = require('./browser-manager.js');
 const downloadManager = require('./download-manager.js');
 
 /**
- * SeleniumAssistant is a class that makes
- * it easier to download, interegate and launch a browser
- * for running tests with selenium.
+ * When you require in the `selenium-assistant` module an instance of this
+ * SeleniumAssistant class will be returned.
+ *
+ * This method gives you the require API's to manage downloading of browsers,
+ * accessing required browsers and making use of SaucesLabs.
  *
  * @example <caption>Usage in Node</caption>
  * const seleniumAssistant = require('selenium-assistant');
- * seleniumAssistant.printAvailableBrowserInfo();
  *
  * const browsers = seleniumAssistant.getLocalBrowsers();
- * browsers.forEach(browser => {
+ * browsers.map(browser => {
  *   console.log(browsers.getPrettyName());
  *   console.log(browsers.getReleaseName());
+ *
+ *   return browser.getSeleniumDriver()
+ *   .then((driver) => {
+ *     return driver.get('https://google.com/')
+ *     .then(() => {
+ *      return seleniumAssistant.killWebDriver(driver);
+ *     });
+ *   });
  * });
  */
 class SeleniumAssistant {
 
   /**
-   * This returns the path of where browsers are downloaded to.
+   * Returns the browser download path.
    * @return {String} Path of downloaded browsers
    */
   getBrowserInstallDir() {
@@ -49,38 +58,61 @@ class SeleniumAssistant {
 
   /**
    * To change where browsers are downloaded to, call this method
-   * before calling {@link downloadLocalBrowser} and
-   * {@link getLocalBrowsers}.
+   * before calling
+   * [downloadLocalBrowser()]{@link SeleniumAssistant#downloadLocalBrowser} and
+   * [getLocalBrowsers()]{@link SeleniumAssistant#getLocalBrowsers}.
    *
    * By default, this will install under `.selenium-assistant` in
    * your home directory on OS X and Linux, or just `selenium-assistant`
    * in your home directory on Windows.
    *
    * @param {String} newInstallDir Path to download browsers to. Pass in
-   *                               null to use default path.
+   * null to use default path.
    */
   setBrowserInstallDir(newInstallDir) {
     application.setInstallDirectory(newInstallDir);
   }
 
   /**
-   * <p>The downloadLocalBrowser() function is a helper method what will
-   * grab a browser on a specific release channel.</p>
+   * This downloads a browser with browser ID of 'chrome' or 'firefox' and
+   * a release type of 'stable', 'beta', 'unstable'. SeleniumAssistant
+   * will download the browser and keep a track of when it was last downloaded.
    *
-   * <p>If the request browser is already installed, it will resolve
-   * the promise and not download anything.</p>
+   * The next time a download is requested, seleniumAssistant will check if the
+   * browser is within the `expirationInHours` parameter and if it is, resolve
+   * the promise.
    *
-   * <p>This is somewhat experimental, so be prepared for issues.</p>
+   * Any programs using selenium-assistant will share the same browser
+   * downloads reducing overall download time (unless
+   * [setBrowserInstallDir()]{@link SeleniumAssistant#setBrowserInstallDir}
+   * is called with a unique directory).
    *
-   * @param  {String} browserId The selenium id of the browser you wish
-   *                            to download.
-   * @param  {String} release   String of the release channel, can be
-   *                            'stable', 'beta' or 'unstable'
-   * @param  {int} [expirationInHours=24] This is how long until a browser
-   *                             download is regarded as expired and Should
-   *                             be updated. A value of 0 will force a download.
-   * @return {Promise}          A promise is returned which resolves
-   *                            once the browser has been downloaded.
+   * @param  {String} browserId The selenium ID of the browser you wish
+   * to download.
+   * @param  {String} release The release channel of the browser. Can be
+   * 'stable', 'beta' or 'unstable'
+   * @param  {Number} [expirationInHours=24] This is how long until a browser
+   * download is regarded as expired and should be updated.
+   * A value of 0 will force a download.
+   * @return {Promise} The promise resolves once the browser has been
+   * downloaded.
+   *
+   * @example
+   * return Promise.all([
+  *   seleniumAssistant.downloadLocalBrowser('chrome', 'stable', 48),
+  *   seleniumAssistant.downloadLocalBrowser('chrome', 'beta', 48),
+  *   seleniumAssistant.downloadLocalBrowser('chrome', 'unstable', 48),
+  *   seleniumAssistant.downloadLocalBrowser('firefox', 'stable', 48),
+  *   seleniumAssistant.downloadLocalBrowser('firefox', 'beta', 48),
+  *   seleniumAssistant.downloadLocalBrowser('firefox', 'unstable', 48),
+   * ])
+   * .then(() => {
+   *   console.log('Browser download complete.');
+   * })
+   * .catch((err) => {
+   *   console.error('Browser download failed.');
+   * });
+   *
    */
   downloadLocalBrowser(browserId, release, expirationInHours) {
     return downloadManager.downloadLocalBrowser(
@@ -88,28 +120,32 @@ class SeleniumAssistant {
   }
 
   /**
-   * If you want a specific browser you can use to retrieve although
-   * you should use {@link WebDriverBrowser#isValid} to check if the
-   * browser is available in the current environment.
+   * Most users of this library will want to make use of
+   * {@link getLocalBrowsers} to get all available  browsers in the current
+   * environment.
+   *
+   * If you need a specific browser use this method to retrieve it. Use
+   * [LocalBrowser.isValid()]{@link LocalBrowser#isValid} to check if the
+   * browser is available on the current environment.
    *
    * @param  {String} browserId The selenium id of the browser you want.
    * @param  {String} release   The release of the browser you want. Either
-   *                            'stable', 'beta' or 'unstable.'
-   * @return {WebDriverBrowser} The WebDriverBrowser instance that represents
-   *                            your request.
+   * 'stable', 'beta' or 'unstable.'
+   * @return {LocalBrowser} A LocalBrowser instance that represents
+   * your request.
    */
   getLocalBrowser(browserId, release) {
     return browserManager.getLocalBrowser(browserId, release);
   }
 
   /**
-   * <p>This method returns a list of discovered browsers in the current
-   * environment.</p>
+   * This method returns a list of available browsers in the current
+   * environment.
    *
-   * <p>This method will throw an error if run on a platform other than
-   * OS X and Linux.</p>
+   * This method will throw an error if run on a platform other than
+   * OS X and Linux.
    *
-   * @return {Array<WebDriverBrowser>} Array of browsers discovered in the
+   * @return {Array<LocalBrowser>} Array of browsers discovered in the
    * current environment.
    */
   getLocalBrowsers() {
@@ -126,15 +162,16 @@ class SeleniumAssistant {
   }
 
   /**
-   * <p>This method prints out a table of info for all available browsers
-   * on the current environment.</p>
+   * This method prints out a table of info for all available browsers
+   * on the current environment.
    *
-   * <p>Useful if you are testing on travis and want to see what tests
-   * should be running.</p>
+   * Useful if you are testing on Travis and want to see what tests
+   * should be running, but be cautious to print this only at the start
+   * of your tests to avoid excessive logging.
    *
    * @param {Boolean} [printToConsole=true] - If you wish to prevent
    * the table being printed to the console, you can suppress it by
-   * passing in false and simply use the string response.
+   * passing in false and simply get the string response.
    * @return {String} Returns table of information as a string.
    */
   printAvailableBrowserInfo(printToConsole) {
@@ -202,22 +239,42 @@ class SeleniumAssistant {
   }
 
   /**
-   * The Saucelabs details to be used by Saucelab browsers.
-   * @param {string} username The Saucelabs username.
-   * @param {string} accessKey The Saucelabs access key.
+   * If you wish to use Saucelabs to host the browser instances you can
+   * do so by setting your saucelab details with this method before calling
+   * [getSaucelabsBrowser()]{@link SeleniumAssistant#getSaucelabsBrowser}.
+   * @param {String} username The Saucelabs username.
+   * @param {String} accessKey The Saucelabs access key.
    */
   setSaucelabsDetails(username, accessKey) {
     application.setSaucelabsDetails(username, accessKey);
   }
 
   /**
-   * Get a Saucelab browser for a particular browser ID and a particular
+   * Get a Saucelabs hosted browser for a particular browser ID and a particular
    * browser version.
-   * @param {string} browserId The selenium browser ID.
-   * @param {string} browserVersion This is a Saucelabs browser version like
-   * "latest" or "latest-2".
-   * @param {Object} options The options to set for saucelabs.
-   * @return {WebDriverBrowser} A selenium-assistant web driver instance.
+   * @param {String} browserId The selenium browser ID.
+   * @param {String} browserVersion The saucelabs browser version, i.e.
+   * "latest", "latest-2", "48.0".
+   * @param {Object} options Any options that you wish to set on the browser
+   * that are for Saucelabs rather than configuration of the browser.
+   * @return {SaucelabsBrowser} A selenium-assistant web driver instance.
+   *
+   * @example
+   * seleniumAssistant.setSaucelabsDetails(myusername, myaccesskey);
+   * seleniumAssistant.startSaucelabsConnect();
+   * seleniumAssistant.getSaucelabsBrowser('edge', 'latest')
+   * .then((browserInstance) => {
+   *   return browserInstance.getSeleniumDriver();
+   * })
+   * .then((driver) => {
+   *   return driver.get('http://localhost:8080/')
+   *   .then(() => {
+   *     return seleniumAssistant.killWebDriver(driver);
+   *   });
+   * })
+   * .then(() => {
+   *   return seleniumAssistant.stopSaucelabsConnect();
+   * });
    */
   getSaucelabsBrowser(browserId, browserVersion, options) {
     if (!options.saucelabs || !options.saucelabs.username ||
@@ -230,32 +287,39 @@ class SeleniumAssistant {
   }
 
   /**
-   * This will enable the saucelabs connect proxy.
+   * The saucelabs proxy allows a browser running on Saucelabs to load
+   * a localhost site.
+   *
+   * Calling this method will start the saucelabs connect proxy.
+   *
    * @return {Promise} Returns a promise that resolves once the proxy is
    * set up.
    */
-  enableSaucelabsConnect() {
-    return application.enableSaucelabsConnect();
+  startSaucelabsConnect() {
+    return application.startSaucelabsConnect();
   }
 
   /**
-   * This will disable the saucelabs connect proxy.
+   * The saucelabs proxy allows a browser running on Saucelabs to load
+   * a localhost site.
+   *
+   * Calling this method will stop the saucelabs connect proxy.
+   *
    * @return {Promise} Returns a promise that resolves once the proxy is closed.
    */
-  disableSaucelabsConnect() {
-    return application.disableSaucelabsConnect();
+  stopSaucelabsConnect() {
+    return application.stopSaucelabsConnect();
   }
 
   /**
-   * <p>Once a web driver is no longer needed call this method to kill it. The
-   * promise resolves once the browser is closed and clean up has been done.</p>
+   * Once a web driver is no longer needed, call this method to kill it.
    *
-   * <p>This is a basic helper that adds a timeout to the end of killling
-   * driver to account for shutdown time and the issues that can cause.</p>
+   * This is a basic helper that adds a timeout to the end of killling the
+   * driver to account for shutdown time and the issues that can be caused
+   * if a new driver is launched too soon before the previous end of a driver.
    *
-   * @param  {WebDriver} driver Instance of a {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver}
-   * @return {Promise}          Promise that resolves once the browser is
-   * killed.
+   * @param  {WebDriver} driver An instance of {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_WebDriver.html|WebDriver}
+   * @return {Promise} Promise that resolves once the browser is killed.
    */
   killWebDriver(driver) {
     if (typeof driver === 'undefined' || driver === null) {
@@ -286,4 +350,27 @@ class SeleniumAssistant {
   }
 }
 
+/**
+ * Requiring the SeleniumAssistant node module will give you an instance of
+ * the {@link SeleniumAssistant} class.
+ *
+ * @module selenium-assistant
+ *
+ * @example <caption>Usage in Node</caption>
+ * const seleniumAssistant = require('selenium-assistant');
+ *
+ * const browsers = seleniumAssistant.getLocalBrowsers();
+ * browsers.map(browser => {
+ *   console.log(browsers.getPrettyName());
+ *   console.log(browsers.getReleaseName());
+ *
+ *   return browser.getSeleniumDriver()
+ *   .then((driver) => {
+ *     return driver.get('https://google.com/')
+ *     .then(() => {
+ *      return seleniumAssistant.killWebDriver(driver);
+ *     });
+ *   });
+ * });
+ */
 module.exports = new SeleniumAssistant();

@@ -28,12 +28,12 @@ const webdriver = require('selenium-webdriver');
  * Local browser is an abstract class with some implemented methods
  * and some methods that MUST be overriden.
  */
-class LocalBrowser extends Browser {
+class SaucelabsBrowser extends Browser {
   /**
    * Constructs new local browser.
    * @param {Object} config TODO This should be a shared webdriver config
    * class.
-   * @param {string} version Version name to be given to Saucelabs.
+   * @param {String} version Version name to be given to Saucelabs.
    */
   constructor(config, version) {
     super(config);
@@ -132,4 +132,4 @@ class LocalBrowser extends Browser {
   }
 }
 
-module.exports = LocalBrowser;
+module.exports = SaucelabsBrowser;

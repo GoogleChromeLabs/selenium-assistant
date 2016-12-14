@@ -22,10 +22,10 @@
  */
 class DriverConfig {
   /**
-   * @param {string} id The Browser ID. This is what selenium will expect.
+   * @param {String} id The Browser ID. This is what selenium will expect.
    * @param {Object} seleniumOptions This is the Selenium Options object
-   * @param {string} prettyName This is the pretty name for the browser.
-   * @param {string} driverModuleName This is the name of the driver module
+   * @param {String} prettyName This is the pretty name for the browser.
+   * @param {String} driverModuleName This is the name of the driver module
    * if one exists (i.e. 'chromedriver', 'geckodriver', etc).
    */
   constructor(id, seleniumOptions, prettyName, driverModuleName) {
