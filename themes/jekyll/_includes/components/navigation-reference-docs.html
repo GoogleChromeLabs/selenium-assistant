@@ -33,8 +33,6 @@
         {% assign anchorHrefSplit = navGroupItem | split: 'href="' %}
         {% assign correctedHref = 'href="' | append: project_root_url | append: site.data.releases.stable.latest | append: '/' %}
         {% assign alteredAnchor = anchorHrefSplit | join: correctedHref %}
-        {% assign alteredAnchor = alteredAnchor | split: '">' %}
-        {% assign alteredAnchor = alteredAnchor | join: '#main">' %}
         <li>{{ alteredAnchor }}</li>
       {% endfor %}
     {% endfor %}
