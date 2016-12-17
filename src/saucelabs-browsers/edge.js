@@ -16,7 +16,7 @@
 
 'use strict';
 
-const SaucelabsBrowser = require('../browser-models/saucelabs-browser');
+const SauceLabsBrowser = require('../browser-models/saucelabs-browser');
 const EdgeConfig = require('../webdriver-config/edge');
 
 /**
@@ -30,7 +30,7 @@ const EdgeConfig = require('../webdriver-config/edge');
  * @private
  * @extends WebDriverBrowser
  */
-class EdgeWebDriverBrowser extends SaucelabsBrowser {
+class EdgeWebDriverBrowser extends SauceLabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.

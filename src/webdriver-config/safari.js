@@ -20,12 +20,11 @@ const DriverConfig = require('../browser-models/driver-config');
 const seleniumSafari = require('selenium-webdriver/safari');
 
 /**
- * This is a helper class that contains the base pieces of
- * web driver info.
+ * @private
  */
 class Safari extends DriverConfig {
   /**
-   * Basic constructor.
+   *
    */
   constructor() {
     super(

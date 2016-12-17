@@ -20,12 +20,11 @@ const DriverConfig = require('../browser-models/driver-config');
 const seleniumIE = require('selenium-webdriver/ie');
 
 /**
- * This is a helper class that contains the base pieces of
- * web driver info.
+ * @private
  */
 class IE extends DriverConfig {
   /**
-   * Basic constructor.
+   *
    */
   constructor() {
     super(

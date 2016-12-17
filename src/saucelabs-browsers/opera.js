@@ -16,7 +16,7 @@
 
 'use strict';
 
-const SaucelabsBrowser = require('../browser-models/saucelabs-browser');
+const SauceLabsBrowser = require('../browser-models/saucelabs-browser');
 const OperaConfig = require('../webdriver-config/opera');
 
 /**
@@ -25,7 +25,7 @@ const OperaConfig = require('../webdriver-config/opera');
  * @private
  * @extends WebDriverBrowser
  */
-class OperaDriverBrowser extends SaucelabsBrowser {
+class OperaDriverBrowser extends SauceLabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.

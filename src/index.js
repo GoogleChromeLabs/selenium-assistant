@@ -239,30 +239,30 @@ class SeleniumAssistant {
   }
 
   /**
-   * If you wish to use Saucelabs to host the browser instances you can
+   * If you wish to use Sauce Labs to host the browser instances you can
    * do so by setting your saucelab details with this method before calling
-   * [getSaucelabsBrowser()]{@link SeleniumAssistant#getSaucelabsBrowser}.
-   * @param {String} username The Saucelabs username.
-   * @param {String} accessKey The Saucelabs access key.
+   * [getSauceLabsBrowser()]{@link SeleniumAssistant#getSauceLabsBrowser}.
+   * @param {String} username The Sauce Labs username.
+   * @param {String} accessKey The Sauce Labs access key.
    */
   setSaucelabsDetails(username, accessKey) {
     application.setSaucelabsDetails(username, accessKey);
   }
 
   /**
-   * Get a Saucelabs hosted browser for a particular browser ID and a particular
-   * browser version.
+   * Get a Sauce Labs hosted browser for a particular browser ID and a
+   * particular browser version.
    * @param {String} browserId The selenium browser ID.
-   * @param {String} browserVersion The saucelabs browser version, i.e.
+   * @param {String} browserVersion The Sauce Labs browser version, i.e.
    * "latest", "latest-2", "48.0".
    * @param {Object} options Any options that you wish to set on the browser
-   * that are for Saucelabs rather than configuration of the browser.
-   * @return {SaucelabsBrowser} A selenium-assistant web driver instance.
+   * that are for Sauce Labs rather than configuration of the browser.
+   * @return {SauceLabsBrowser} A selenium-assistant web driver instance.
    *
    * @example
    * seleniumAssistant.setSaucelabsDetails(myusername, myaccesskey);
    * seleniumAssistant.startSaucelabsConnect();
-   * seleniumAssistant.getSaucelabsBrowser('edge', 'latest')
+   * seleniumAssistant.getSauceLabsBrowser('edge', 'latest')
    * .then((browserInstance) => {
    *   return browserInstance.getSeleniumDriver();
    * })
@@ -276,21 +276,21 @@ class SeleniumAssistant {
    *   return seleniumAssistant.stopSaucelabsConnect();
    * });
    */
-  getSaucelabsBrowser(browserId, browserVersion, options) {
+  getSauceLabsBrowser(browserId, browserVersion, options) {
     if (!options.saucelabs || !options.saucelabs.username ||
       !options.saucelabs.accessKey) {
       options.saucelabs = application.getSaucelabsDetails();
     }
 
-    return browserManager.getSaucelabsBrowser(browserId, browserVersion,
+    return browserManager.getSauceLabsBrowser(browserId, browserVersion,
       options);
   }
 
   /**
-   * The saucelabs proxy allows a browser running on Saucelabs to load
+   * The Sauce Labs proxy allows a browser running on Sauce Labs to load
    * a localhost site.
    *
-   * Calling this method will start the saucelabs connect proxy.
+   * Calling this method will start the Sauce Labs connect proxy.
    *
    * @return {Promise} Returns a promise that resolves once the proxy is
    * set up.
@@ -300,10 +300,10 @@ class SeleniumAssistant {
   }
 
   /**
-   * The saucelabs proxy allows a browser running on Saucelabs to load
+   * The Sauce Labs proxy allows a browser running on Sauce Labs to load
    * a localhost site.
    *
-   * Calling this method will stop the saucelabs connect proxy.
+   * Calling this method will stop the Sauce Labs connect proxy.
    *
    * @return {Promise} Returns a promise that resolves once the proxy is closed.
    */

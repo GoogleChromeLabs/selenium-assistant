@@ -17,8 +17,7 @@
 'use strict';
 
 /**
- * This class just ensure consistencies between browser configs and shouldn't
- * be instantiated directly.
+ * @private
  */
 class DriverConfig {
   /**

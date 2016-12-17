@@ -20,12 +20,11 @@ const DriverConfig = require('../browser-models/driver-config');
 const seleniumOpera = require('selenium-webdriver/opera');
 
 /**
- * This is a helper class that contains the base pieces of
- * web driver info.
+ * @private
  */
 class Opera extends DriverConfig {
   /**
-   * Basic constructor.
+   *
    */
   constructor() {
     super(

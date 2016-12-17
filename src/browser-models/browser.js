@@ -17,7 +17,10 @@
 'use strict';
 
 /**
- * A base class for all other browser models to extend.
+ * A base class which all "types" of browser models extend.
+ *
+ * For example: {@link LocalBrowser|LocalBrowser} and
+ * {@link SauceLabsBrowser|SauceLabsBrowser}
  */
 class Browser {
   /**
@@ -34,12 +37,13 @@ class Browser {
   }
 
   /**
-   * This is a simple method to define capabilities that'll be
-   * passed to the WebDriver builder when you call getSeleniumDriverBuilder()
-   * or getSeleniumDriver().
+   * You can define capabilities here that will  be
+   * given to the WebDriver builder when
+   * [getSeleniumDriverBuilder()]{@link Browser#getSeleniumDriverBuilder} or
+   * [getSeleniumDriver()]{@link Browser#getSeleniumDriver} is called.
    *
    * @param {String} key The capability key.
-   * @param {String} value The Value of the capability.
+   * @param {String} value The capability value.
    */
   addCapability(key, value) {
     if (!this._capabilities) {
@@ -50,23 +54,32 @@ class Browser {
   }
 
   /**
-   * Get the ID of the browser.
-   * @return {String} ID of this browser.
+   * Get the Selenium ID of the browser (i.e. 'chrome', 'firefox', 'edge' etc.).
+   * @return {String} Selenium ID of this browser.
    */
   getId() {
     return this._config._id;
   }
 
   /**
-   * @return {String} Gets the name of the driver module to use with this
-   * browser. Null if there is no driver module
+   * Some browsers require an executable be available on the current path
+   * to work with Selenium. If this is the case, there may be an NPM module
+   * that can download and add the executable to the path. This method returns
+   * the name of the appropriate NPM module for this browser.
+   *
+   * For example, Chrome uses the 'chromedriver' npm module and Firefox uses
+   * the 'geckodriver' module.
+   *
+   * @return {String|null} The name of the NPM driver module to use with this
+   * browser. Null is returned if there is no driver module.
    */
   getDriverModule() {
     return this._config._driverModule;
   }
 
   /**
-   * A user friendly name for the browser
+   * This is simple a user friendly name for the browser. This is largely
+   * used for printing friendly debug info in tests.
    * @return {String} A user friendly name for the browser
    */
   getPrettyName() {
@@ -74,12 +87,13 @@ class Browser {
   }
 
   /**
-   * The selenium options passed to webdriver's `Builder` method. This
-   * will have the executable path set for the browser so you should
-   * manipulate these options rather than create entirely new objects.
+   * The selenium options passed to WebDriver's Builder.
    *
-   * @return {SeleniumOptions} An instance of either
-   * `selenium-webdriver/firefox` or `selenium-webdriver/chrome`
+   * For Chrome, this will return an instance of `selenium-webdriver/chrome`,
+   * for Firefox it would return an instance of `selenium-webdriver/firefox`.
+   *
+   * @return {SeleniumOptions} An instance of the appropriate
+   * `selenium-webdriver` options for this browser.
    */
   getSeleniumOptions() {
     return this._config._options;
@@ -87,13 +101,39 @@ class Browser {
 
   /**
    * If changes are made to the selenium options, call this method to
-   * set them before calling {@link getSeleniumDriver}.
-   * @param {SeleniumOptions} options An instance of
-   * `selenium-webdriver/firefox` or `selenium-webdriver/chrome`
+   * set them before calling
+   * [getSeleniumDriver()]{@link Browser#getSeleniumDriver}.
+   *
+   * @param {SeleniumOptions} options An instance of a `selenium-webdriver`
+   * options class.
    */
   setSeleniumOptions(options) {
     this._config._options = options;
   }
+
+  /* eslint-disable valid-jsdoc */
+  /**
+   * This method returns the preconfigured WebDriver Builder.
+   *
+   * This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)
+   * @return {WebDriverBuilder} A WebDriver Builder instance, see [selenium-webdriver.Builder]{@link http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html} for more info.
+   */
+  getSeleniumDriverBuilder() {
+    throw new Error('getSeleniumDriverBuilder() must be overriden by ' +
+      'subclasses');
+  }
+
+  /**
+   * This method resolves to a raw WebDriver instance.
+   *
+   * @return {Promise<WebDriver>} A WebDriver Instance, see [selenium-webdriver.ThenableWebDriver]{@link http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_ThenableWebDriver.html} for more info.
+   */
+  getSeleniumDriver() {
+    throw new Error('getSeleniumDriver() must be overriden by ' +
+      'subclasses');
+  }
+  /* eslint-enable valid-jsdoc */
 }
 
 module.exports = Browser;

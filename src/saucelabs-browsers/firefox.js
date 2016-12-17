@@ -16,7 +16,7 @@
 
 'use strict';
 
-const SaucelabsBrowser = require('../browser-models/saucelabs-browser');
+const SauceLabsBrowser = require('../browser-models/saucelabs-browser');
 const FirefoxConfig = require('../webdriver-config/firefox');
 
 /**
@@ -25,7 +25,7 @@ const FirefoxConfig = require('../webdriver-config/firefox');
  * @private
  * @extends WebDriverBrowser
  */
-class FirefoxWebDriverBrowser extends SaucelabsBrowser {
+class FirefoxWebDriverBrowser extends SauceLabsBrowser {
   /**
    * Create a Chrome representation of a {@link WebDriverBrowser}
    * instance on a specific channel.
@@ -50,7 +50,7 @@ class FirefoxWebDriverBrowser extends SaucelabsBrowser {
   getSeleniumDriverBuilder() {
     let builder = super.getSeleniumDriverBuilder();
     builder = builder
-      // Saucelabs + Firefox is simple broken if I pass in the options
+      // Sauce Labs + Firefox is simple broken if I pass in the options
       // .setFirefoxOptions(this.getSeleniumOptions())
       .withCapabilities(this._capabilities)
       .forBrowser(this.getId());

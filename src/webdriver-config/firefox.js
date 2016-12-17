@@ -20,12 +20,11 @@ const DriverConfig = require('../browser-models/driver-config');
 const seleniumFirefox = require('selenium-webdriver/firefox');
 
 /**
- * This is a helper class that contains the base pieces of
- * web driver info.
+ * @private
  */
 class Firefox extends DriverConfig {
   /**
-   * Basic constructor.
+   *
    */
   constructor() {
     super(
