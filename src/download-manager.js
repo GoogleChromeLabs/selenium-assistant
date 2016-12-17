@@ -130,8 +130,8 @@ class DownloadManager {
 
   /**
    * Download a version of Chrome to a specific directory.
-   * @param {string} release This should be 'stable', 'beta' or 'unstable'.
-   * @param {string} installDir The path to install Chrome into.
+   * @param {String} release This should be 'stable', 'beta' or 'unstable'.
+   * @param {String} installDir The path to install Chrome into.
    * @return {Promise} Promise that resolves once the download has completed.
    */
   _downlaodChrome(release, installDir) {
@@ -273,8 +273,8 @@ class DownloadManager {
 
   /**
    * Download a version of Firefox to a specific directory.
-   * @param {string} release This should be 'stable', 'beta' or 'unstable'.
-   * @param {string} installDir The path to install Firefox into.
+   * @param {String} release This should be 'stable', 'beta' or 'unstable'.
+   * @param {String} installDir The path to install Firefox into.
    * @return {Promise} Promise that resolves once the download has completed.
    */
   _downloadFirefox(release, installDir) {
@@ -398,8 +398,8 @@ class DownloadManager {
 
   /**
    * Download a version of Opera to a specific directory.
-   * @param {string} release This should be 'stable', 'beta' or 'unstable'.
-   * @param {string} installDir The path to install Opera into.
+   * @param {String} release This should be 'stable', 'beta' or 'unstable'.
+   * @param {String} installDir The path to install Opera into.
    * @return {Promise} Promise that resolves once the download has completed.
    */
   _downloadOpera(release, installDir) {

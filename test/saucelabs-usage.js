@@ -6,7 +6,7 @@ const selenium = require('selenium-webdriver');
 
 if (!process.env['SAUCELABS_USERNAME'] ||
   !process.env['SAUCELABS_ACCESS_KEY']) {
-  console.warn('Skipping saucelabs tests due to no credentials in environment');
+  console.warn('Skipping Sauce Labs tests due to no credentials in environment');
   return;
 }
 
@@ -38,14 +38,14 @@ describe('Test Saucelabs', function() {
       seleniumAssistant.setSaucelabsDetails(
         SAUCELABS_USERNAME,
         SAUCELABS_ACCESS_KEY);
-      return seleniumAssistant.enableSaucelabsConnect();
+      return seleniumAssistant.startSaucelabsConnect();
     });
   });
 
   after(function() {
     return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
     .then(() => {
-      return seleniumAssistant.disableSaucelabsConnect();
+      return seleniumAssistant.stopSaucelabsConnect();
     })
     .then(() => {
       return globalServer.killServer();
@@ -81,24 +81,24 @@ describe('Test Saucelabs', function() {
 
   });
 
-  function setupTest(saucelabsBrowser) {
-    it(`should be able to use saucelab browser ${saucelabsBrowser.getPrettyName()}`, function() {
+  function setupTest(SauceLabsBrowser) {
+    it(`should be able to use saucelab browser ${SauceLabsBrowser.getPrettyName()}`, function() {
       this.timeout(5 * 60 * 1000);
 
-      /** const webdriverBrowser = seleniumAssistant.getSaucelabsBrowser(browser,
+      /** const webdriverBrowser = seleniumAssistant.getSauceLabsBrowser(browser,
         version, {
           name: `selenium-assistant/unit-test/${browser}/${version}`,
         });**/
-      return testNormalSeleniumUsage(saucelabsBrowser);
+      return testNormalSeleniumUsage(SauceLabsBrowser);
     });
   }
 
   const saucelabBrowserFiles = fs.readdirSync('./src/saucelabs-browsers');
-  saucelabBrowserFiles.forEach((saucelabsBrowserFile) => {
-    const SaucelabBrowserClass = require(`./../src/saucelabs-browsers/${saucelabsBrowserFile}`);
+  saucelabBrowserFiles.forEach((SauceLabsBrowserFile) => {
+    const SaucelabBrowserClass = require(`./../src/saucelabs-browsers/${SauceLabsBrowserFile}`);
     RELEASES.forEach((release) => {
-      const saucelabsBrowser = new SaucelabBrowserClass(release);
-      setupTest(saucelabsBrowser);
+      const SauceLabsBrowser = new SaucelabBrowserClass(release);
+      setupTest(SauceLabsBrowser);
     });
   });
 });

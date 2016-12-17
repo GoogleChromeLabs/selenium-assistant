@@ -20,12 +20,11 @@ const DriverConfig = require('../browser-models/driver-config');
 const seleniumChrome = require('selenium-webdriver/chrome');
 
 /**
- * This is a helper class that contains the base pieces of
- * web driver info.
+ * @private
  */
-class Chrome extends DriverConfig {
+class ChromeConfig extends DriverConfig {
   /**
-   * Basic constructor.
+   *
    */
   constructor() {
     super(
@@ -37,4 +36,4 @@ class Chrome extends DriverConfig {
   }
 }
 
-module.exports = Chrome;
+module.exports = ChromeConfig;

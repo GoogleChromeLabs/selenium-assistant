@@ -20,12 +20,11 @@ const DriverConfig = require('../browser-models/driver-config');
 const seleniumEdge = require('selenium-webdriver/edge');
 
 /**
- * This is a helper class that contains the base pieces of
- * web driver info.
+ * @private
  */
 class Edge extends DriverConfig {
   /**
-   * Basic constructor.
+   *
    */
   constructor() {
     super(

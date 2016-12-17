@@ -33,18 +33,18 @@ class BrowserManager {
   // Details from:
   // https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BrowserVersion
   /**
-   * This method will return a browser instance tied to a saucelabs hosted
+   * This method will return a browser instance tied to a Sauce Labs hosted
    * browser.
    *
    * @param {String} browserId The browser ID you wish to control.
    * @param {String} browserVersion The browser verions you wish to target.
-   * This is the saucelabs version, not release name. Can be "latest",
+   * This is the Sauce Labs version, not release name. Can be "latest",
    * "latest-1", "latest-2", "45.0"
-   * @param {Object} options Add additional options for the saucelabs browser.
+   * @param {Object} options Add additional options for the Sauce Labs browser.
    * @return {WebDriverBrowser} browser A WebDriverBrowser instance pointing
-   * to a Saucelabs hosted browser.
+   * to a Sauce Labs hosted browser.
    */
-  getSaucelabsBrowser(browserId, browserVersion, options) {
+  getSauceLabsBrowser(browserId, browserVersion, options) {
     /** const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
     // browser.addCapability('version', browserVersion);
     browser.addCapability('username', options.saucelabs.username);

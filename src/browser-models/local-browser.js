@@ -22,18 +22,21 @@ const execSync = require('child_process').execSync;
 const Browser = require('./browser.js');
 
 /**
- * Local browser is an abstract class with some implemented methods
- * and some methods that MUST be overriden.
+ * The LocalBrowser class is an abstract class that is overriden by
+ * browser classes that are supported (Chrome, Firefox, Opera and Safari).
+ * @extends Browser
  */
 class LocalBrowser extends Browser {
   /**
-   * Constructs new local browser.
-   * @param {Object} config TODO This should be a shared webdriver config
-   * class.
-   * @param {string} release Release name must be 'stable', 'beta' or
-   * 'unstable'.
-   * @param {Object} blacklist This is a list of browser versions: driver
-   * versions used to blacklist a browser.
+   * Construct a new local browser.
+   *
+   * @param {DriverConfig} config The config for the browser.
+   * @param {String} release Release name of the browser, must be 'stable',
+   * 'beta' or 'unstable'.
+   * @param {Object} blacklist This is a list of browser versions => driver
+   * versions which is used to blacklist a browser from be made available. This
+   * is not assurance of a browser working but may be used more actively
+   * to block bad browser support in the future.
    */
   constructor(config, release, blacklist) {
     super(config);
@@ -57,25 +60,13 @@ class LocalBrowser extends Browser {
     this._release = release;
     this._blacklist = blacklist;
   }
-  /* eslint-disable valid-jsdoc */
-  /**
-   * To get the path of the browsers executable file, call this method.
-   * @return {String} Path of the browsers executable file or null if
-   * it can't be found.
-   */
-  getExecutablePath() {
-    throw new Error('getExecutablePath() must be overriden by subclasses');
-  }
-  /* eslint-enable valid-jsdoc */
 
   /**
-   * <p>This method returns true if the instance can be found and can create a
-   * selenium driver that will launch the expected browser.</p>
+   * This method returns true if the browser executable can be found and the
+   * browser version is expected to work with the current installed browser
+   * driver, otherwise false is returned.
    *
-   * <p>A scenario where it will be unable to produce a valid selenium driver
-   * is if the browsers executable path can't be found.</p>
-   *
-   * @return {Boolean} True if a selenium driver can be produced
+   * @return {Boolean} True if a WebDriver can be built and used.
    */
   isValid() {
     const executablePath = this.getExecutablePath();
@@ -105,26 +96,37 @@ class LocalBrowser extends Browser {
   }
 
   /**
-   * @return {Boolean} Whether this browser is blacklisted or not.
+   * This method is largely used internally to determine if a browser should
+   * be made available or not.
+   *
+   * This method will only blacklist a browser if there is a known bad browser
+   * + driver module combination.
+   *
+   * @return {Boolean} Whether this browser is blacklisted or not from being
+   * included in available browsers.
    */
   isBlackListed() {
     return false;
   }
 
   /**
-   * A user friendly name for the browser
-   * @return {String} A user friendly name for the browser
+   * A user friendly name for the browser. This is largely useful for
+   * console logging. LocalBrowsers will also include the appropriate release
+   * name.
+   * @return {String} A user friendly name for the browser.
    */
   getPrettyName() {
     return this._prettyName;
   }
 
   /**
-   * If you need to identify a browser based on it's version number but
-   * the high level version number isn't specific enough, you can use the
-   * raw version string (this will be the result of calling the browser
-   * executable with an appropriate flag to get the version)
-   * @return {String} Raw string that identifies the browser
+   * This is the raw output of a browsers version number (i.e. running the
+   * browser executable with `--version`).
+   *
+   * This provides more information than major release number returned by
+   * [getVersionNumber()]{@link LocalBrowser#getVersionNumber}.
+   *
+   * @return {String} Raw string of the browser version.
    */
   getRawVersionString() {
     if (this._rawVerstionString) {
@@ -148,37 +150,10 @@ class LocalBrowser extends Browser {
     return this._rawVerstionString;
   }
 
-  /* eslint-disable valid-jsdoc */
   /**
-   * <p>This method returns an integer if it can be determined from
-   * the browser executable or -1 if the version is unknown.</p>
+   * This method resolves to a raw WebDriver instance.
    *
-   * <p>A scenario where it will be unable to produce a valid version
-   * is if the browsers executable path can't be found.</p>
-   *
-   * @return {Integer} Version number if it can be found
-   */
-  getVersionNumber() {
-    throw new Error('getVersionNumber() must be overriden by subclasses');
-  }
-  /* eslint-enable valid-jsdoc */
-
-  /**
-   * @private
-   */
-  getSeleniumDriverBuilder() {
-    throw new Error('getSeleniumDriverBuilder() must be overriden by ' +
-      'subclasses');
-  }
-
-  /**
-   * <p>This method resolves to a webdriver instance of this browser i
-   * nstance.</p>
-   *
-   * <p>For more info, see:
-   * {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver Docs}</p>
-   *
-   * @return {Promise<WebDriver>} [description]
+   * @return {Promise<WebDriver>} A WebDriver Instance, see [selenium-webdriver.ThenableWebDriver]{@link http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_ThenableWebDriver.html} for more info.
    */
   getSeleniumDriver() {
     if (this.getDriverModule()) {
@@ -210,7 +185,7 @@ class LocalBrowser extends Browser {
   }
 
   /**
-   * Get the minimum supported browser version for this browser.
+   * @private
    * @return {number} The minimum supported version number.
    */
   _getMinSupportedVersion() {
@@ -218,24 +193,59 @@ class LocalBrowser extends Browser {
   }
 
   /**
-   * <p>The release name for this browser, either 'stable', 'beta',
-   * 'unstable'.</p>
+   * The release name for this browser. This will be either 'stable', 'beta' or
+   * 'unstable'.
    *
-   * <p>Useful if you only want to test <i>or</i> not test on a particular
-   * release type.</p>
-   * @return {String} Release name of browser. 'stable', 'beta' or 'unstable'
+   * Useful if you only want to test, <i>or</i> not test, on a particular
+   * release type, i.e. only test of stable releases of browsers.
+   *
+   * @return {String} Release name of this browser. 'stable', 'beta' or
+   * 'unstable'.
    */
   getReleaseName() {
     return this._release;
   }
 
+  //
+  // Disabling eslint for JSDoc here as I want to document the return
+  // types of the LocalBrowser without labelling the methods as
+  // abstract in the docs.
+  //
+
+  /* eslint-disable valid-jsdoc */
   /**
-   * @private
+   * Get the path of the browser executable if known.
+   * @return {String|null} The path of the browsers executable. Null if
+   * it's unknown.
+   */
+  getExecutablePath() {
+    throw new Error('getExecutablePath() must be overriden by subclasses');
+  }
+
+  /**
+   * This returns an object consisting of the supported releases and the
+   * matching browser release name.
+   *
+   * For example, Chrome is:
+   * `{ stable: 'Stable', beta: 'Beta', unstable: 'Dev' }`
+   *
+   * @return {Object} Returns an object containing release names as keys and
+   * a user friendly release name as the value.
    */
   static getPrettyReleaseNames() {
     throw new Error('getPrettyReleaseNames() must be overriden by ' +
       'subclasses');
   }
+
+  /**
+   * The major version of the browser if known.
+   * @return {Integer} Major version number of this browser if it can be found,
+   * -1 otherwise.
+   */
+  getVersionNumber() {
+    throw new Error('getVersionNumber() must be overriden by subclasses');
+  }
+  /* eslint-enable valid-jsdoc */
 }
 
 module.exports = LocalBrowser;

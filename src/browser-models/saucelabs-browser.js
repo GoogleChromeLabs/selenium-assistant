@@ -25,15 +25,16 @@ const webdriver = require('selenium-webdriver');
 // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
 
 /**
- * Local browser is an abstract class with some implemented methods
- * and some methods that MUST be overriden.
+ * The SauceLabsBrowser class is an abstract class that is overriden by browser
+ * classes that are supported on Sauce Labs (Chrome, Edge, Firefox, IE, Opera
+ * and Safari).
+ * @extends Browser
  */
-class LocalBrowser extends Browser {
+class SauceLabsBrowser extends Browser {
   /**
-   * Constructs new local browser.
-   * @param {Object} config TODO This should be a shared webdriver config
-   * class.
-   * @param {string} version Version name to be given to Saucelabs.
+   * Constructs new Sauce Labs Browser.
+   * @param {DriverConfig} config The config for the browser.
+   * @param {String} version Version name to be given to Sauce Labs.
    */
   constructor(config, version) {
     super(config);
@@ -48,21 +49,19 @@ class LocalBrowser extends Browser {
   }
 
   /**
-   * A user friendly name for the browser
-   * @return {String} A user friendly name for the browser
+   * A user friendly name for the browser. This is largely useful for
+   * console logging. SauceLabsBrowsers will also include the version passed
+   * into the constructor.
+   * @return {String} A user friendly name for the browser.
    */
   getPrettyName() {
     return this._prettyName;
   }
 
   /**
-   * <p>This method resolves to a webdriver instance of this browser i
-   * nstance.</p>
+   * This method resolves to a raw WebDriver instance.
    *
-   * <p>For more info, see:
-   * {@link http://selenium.googlecode.com/git/docs/api/javascript/class_webdriver_WebDriver.html | WebDriver Docs}</p>
-   *
-   * @return {Promise<WebDriver>} [description]
+   * @return {Promise<WebDriver>} A WebDriver Instance, see [selenium-webdriver.ThenableWebDriver]{@link http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_ThenableWebDriver.html} for more info.
    */
   getSeleniumDriver() {
     if (this.getDriverModule()) {
@@ -94,28 +93,22 @@ class LocalBrowser extends Browser {
   }
 
   /**
-   * <p>The release name for this browser, either 'stable', 'beta',
-   * 'unstable'.</p>
+   * This is the version passed into the constructor which is ultimately used
+   * by Sauce Labs (i.e. 'latest', 'latest-2', '48').
    *
-   * <p>Useful if you only want to test <i>or</i> not test on a particular
-   * release type.</p>
-   * @return {String} Release name of browser. 'stable', 'beta' or 'unstable'
+   * @return {String} The Sauce Labs browser version.
    */
   getVersion() {
     return this._version;
   }
 
   /**
-   * <p>This method returns the preconfigured builder used by
-   * getSeleniumDriver().</p>
+   * This method returns the preconfigured WebDriver Builder.
    *
-   * <p>This is useful if you wish to customise the builder with additional
-   * options (i.e. customise the proxy of the driver.)</p>
+   * This is useful if you wish to customise the builder with additional
+   * options (i.e. customise the proxy of the driver.)
    *
-   * <p>For more info, see:
-   * {@link https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html | WebDriverBuilder Docs}</p>
-   *
-   * @return {WebDriverBuilder} Builder that resolves to a webdriver instance.
+   * @return {WebDriverBuilder} A WebDriver Builder instance, see [selenium-webdriver.Builder]{@link http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/index_exports_Builder.html} for more info.
    */
   getSeleniumDriverBuilder() {
     const saucelabsDetails = applicationState.getSaucelabsDetails();
@@ -132,4 +125,4 @@ class LocalBrowser extends Browser {
   }
 }
 
-module.exports = LocalBrowser;
+module.exports = SauceLabsBrowser;

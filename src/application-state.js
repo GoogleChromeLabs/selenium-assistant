@@ -77,10 +77,10 @@ class ApplicationState {
   }
 
   /**
-   * Before attempting to use a Saucelabs browser, you must
-   * call this method with your Saucelabs Username and Access Key.
-   * @param {String} username Your Saucelabs username.
-   * @param {String} accessKey Your Saucelabs accessKey.
+   * Before attempting to use a Sauce Labs browser, you must
+   * call this method with your Sauce Labs Username and Access Key.
+   * @param {String} username Your Sauce Labs username.
+   * @param {String} accessKey Your Sauce Labs accessKey.
    */
   setSaucelabsDetails(username, accessKey) {
     this._saucelabs = this._saucelabs || {};
@@ -104,7 +104,7 @@ class ApplicationState {
    * @return {Promise} Returns a promise that resolves once the connection is
    * open.
    */
-  enableSaucelabsConnect() {
+  startSaucelabsConnect() {
     if (this._sauceConnect) {
       return Promise.resolve();
     }
@@ -113,7 +113,7 @@ class ApplicationState {
       const options = {
         username: this._saucelabs.username,
         accessKey: this._saucelabs.accessKey,
-        // Using tunnelIdentifier means all saucelabs browsers must define
+        // Using tunnelIdentifier means all Sauce Labs browsers must define
         // this capability
         // tunnelIdentifier:
         //  // Slashes in the identifier breaks a pidfile requirement
@@ -138,7 +138,7 @@ class ApplicationState {
   /**
    * @return {Promise} A promise that resolves once the connection is closed.
    */
-  disableSaucelabsConnect() {
+  stopSaucelabsConnect() {
     if (!this._sauceConnect) {
       return Promise.resolve();
     }
