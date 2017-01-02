@@ -261,8 +261,10 @@ class SeleniumAssistant {
    *
    * @example
    * seleniumAssistant.setSaucelabsDetails(myusername, myaccesskey);
-   * seleniumAssistant.startSaucelabsConnect();
-   * seleniumAssistant.getSauceLabsBrowser('edge', 'latest')
+   * seleniumAssistant.startSaucelabsConnect()
+   * .then(() => {
+   *   return seleniumAssistant.getSauceLabsBrowser('edge', 'latest');
+   * })
    * .then((browserInstance) => {
    *   return browserInstance.getSeleniumDriver();
    * })
