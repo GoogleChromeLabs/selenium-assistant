@@ -30,7 +30,7 @@
   "homepage": "https://github.com/GoogleChrome/selenium-assistant#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "chromedriver": "^2.24.0",
+    "chromedriver": "^2.26.1",
     "coveralls": "^2.11.12",
     "eslint": "^3.12.1",
     "eslint-config-google": "^0.7.1",
@@ -41,7 +41,7 @@
     "istanbul": "^0.4.5",
     "jsdoc": "^3.4.1",
     "mocha": "^3.1.2",
-    "operadriver": "^0.2.2",
+    "operadriver": "^1.0.0",
     "proxyquire": "^1.7.10",
     "sinon": "^1.17.6"
   },
@@ -60,7 +60,7 @@
     "yauzl": "^2.7.0"
   },
   "optionalDependencies": {
-    "chromedriver": "^2.24.0",
+    "chromedriver": "^2.26.1",
     "geckodriver": "^1.2.0",
     "operadriver": "^1.0.0"
   },
