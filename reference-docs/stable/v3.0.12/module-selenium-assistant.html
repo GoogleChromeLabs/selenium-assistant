@@ -1,0 +1,136 @@
+---
+layout: jsdoc
+title: "Module: selenium-assistant"
+jsdocNav: 
+  - Modules:
+    - <a href="module-selenium-assistant.html#main">selenium-assistant</a>
+  - Classes:
+    - <a href="Browser.html#main">Browser</a>
+    - <a href="LocalBrowser.html#main">LocalBrowser</a>
+    - <a href="SauceLabsBrowser.html#main">SauceLabsBrowser</a>
+    - <a href="SeleniumAssistant.html#main">SeleniumAssistant</a>
+---
+
+
+
+
+
+
+
+    
+        
+            
+        
+    
+
+    
+        
+            <div class="description"><p>Requiring the SeleniumAssistant node module will give you an instance of
+the <a href="SeleniumAssistant.html#main">SeleniumAssistant</a> class.</p></div>
+        
+
+        
+            
+<div class="method-entry method-type-module">
+
+
+<div class="method-collapse js-method-collapse">
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Usage in Node</p>
+    
+    <pre class="prettyprint"><code>const seleniumAssistant = require('selenium-assistant');
+
+const browsers = seleniumAssistant.getLocalBrowsers();
+browsers.map(browser => {
+  console.log(browsers.getPrettyName());
+  console.log(browsers.getReleaseName());
+
+  return browser.getSeleniumDriver()
+  .then((driver) => {
+    return driver.get('https://google.com/')
+    .then(() => {
+     return seleniumAssistant.killWebDriver(driver);
+    });
+  });
+});</code></pre>
+
+
+
+<table class="method-info-table">
+
+  
+
+  
+
+  
+
+
+
+<!--
+<tr>
+<th>Details</th>
+<td>
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+</td>
+</tr>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+</div>
+
+</div>

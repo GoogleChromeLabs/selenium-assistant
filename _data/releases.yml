@@ -4,6 +4,7 @@ stable:
     all:
         - /reference-docs/stable/v5.0.2
         - /reference-docs/stable/v5.0.1
+        - /reference-docs/stable/v3.0.12
         - /reference-docs/stable/v3.0.0
         - /reference-docs/stable/v1.0.0
         - /reference-docs/stable/v0.3.0
