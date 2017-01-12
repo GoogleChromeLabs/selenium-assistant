@@ -8,9 +8,9 @@ class JSDocCollapse {
    * The class configures the behaviors in the constructor.
    */
   constructor() {
-    const signatureElements = document.querySelectorAll('.method-entry');
+    const signatureElements = document.querySelectorAll('.collapsing-entry');
     signatureElements.forEach((element) => {
-      if (element.querySelector('.js-method-collapse')) {
+      if (element.querySelector('.js-collapse-details')) {
         this._configureElementBehavior(element);
       }
     });
@@ -22,8 +22,8 @@ class JSDocCollapse {
    * @param {DomElement} element The element to configure to show and hide.
    */
   _configureElementBehavior(element) {
-    const signatureTitle = element.querySelector('.method-name');
-    const collapseElement = element.querySelector('.js-method-collapse');
+    const signatureTitle = element.querySelector('.js-collapse-title');
+    const collapseElement = element.querySelector('.js-collapse-details');
     const cssClassName = 'is-closed';
     signatureTitle.addEventListener('click', (event) => {
       if (collapseElement.classList.contains(cssClassName)) {
@@ -32,7 +32,10 @@ class JSDocCollapse {
         collapseElement.classList.add(cssClassName);
       }
     });
-    collapseElement.classList.add(cssClassName);
+
+    if (!element.classList.contains('start-open')) {
+      collapseElement.classList.add(cssClassName);
+    }
   }
 }
 
