@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const TestServer = require('./helpers/test-server.js');
 const seleniumAssistant = require('../src/index.js');
 const selenium = require('selenium-webdriver');
