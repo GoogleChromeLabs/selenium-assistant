@@ -4,17 +4,17 @@ const TestServer = require('./helpers/test-server.js');
 const seleniumAssistant = require('../src/index.js');
 const selenium = require('selenium-webdriver');
 
-/** if (!process.env['SAUCELABS_USERNAME'] ||
+if (!process.env['SAUCELABS_USERNAME'] ||
   !process.env['SAUCELABS_ACCESS_KEY']) {
   console.warn('Skipping Sauce Labs tests due to no credentials in environment');
   return;
-}**/
+}
 
 const TIMEOUT = 10 * 60 * 1000;
 const RETRIES = 1;
 
-const SAUCELABS_USERNAME = 'sw-helpers'; // process.env['SAUCELABS_USERNAME'];
-const SAUCELABS_ACCESS_KEY = 'bd709f69-c0c8-4ecc-93c8-b31ea4e98f1e'; // process.env['SAUCELABS_ACCESS_KEY'];
+const SAUCELABS_USERNAME = process.env['SAUCELABS_USERNAME'];
+const SAUCELABS_ACCESS_KEY = process.env['SAUCELABS_ACCESS_KEY'];
 
 const RELEASES = [
   'latest',
