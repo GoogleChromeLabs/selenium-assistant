@@ -20,6 +20,12 @@ const LocalChromeBrowser = require('./local-browsers/chrome');
 const LocalFirefoxBrowser = require('./local-browsers/firefox');
 const LocalOperaBrowser = require('./local-browsers/opera');
 const LocalSafariBrowser = require('./local-browsers/safari');
+const SaucelabsChromeBrowser = require('./saucelabs-browsers/chrome');
+const SaucelabsEdgeBrowser = require('./saucelabs-browsers/edge');
+const SaucelabsFirefoxBrowser = require('./saucelabs-browsers/firefox');
+const SaucelabsIEBrowser = require('./saucelabs-browsers/ie');
+const SaucelabsOperaBrowser = require('./saucelabs-browsers/opera');
+const SaucelabsSafariBrowser = require('./saucelabs-browsers/safari');
 
 /**
  * This class is a simple helper to define the possible permutations of
@@ -40,28 +46,26 @@ class BrowserManager {
    * @param {String} browserVersion The browser verions you wish to target.
    * This is the Sauce Labs version, not release name. Can be "latest",
    * "latest-1", "latest-2", "45.0"
-   * @param {Object} options Add additional options for the Sauce Labs browser.
    * @return {WebDriverBrowser} browser A WebDriverBrowser instance pointing
    * to a Sauce Labs hosted browser.
    */
-  getSauceLabsBrowser(browserId, browserVersion, options) {
-    /** const browser = this.createWebDriverBrowser(browserId, 'saucelabs');
-    // browser.addCapability('version', browserVersion);
-    browser.addCapability('username', options.saucelabs.username);
-    browser.addCapability('accessKey', options.saucelabs.accessKey);
-
-    // This is the name that is shown on saucelabs.
-    if (options.name) {
-      browser.addCapability('name', options.name);
+  getSauceLabsBrowser(browserId, browserVersion) {
+    switch (browserId) {
+      case 'chrome':
+        return new SaucelabsChromeBrowser(browserVersion);
+      case 'microsoftedge':
+        return new SaucelabsEdgeBrowser(browserVersion);
+      case 'firefox':
+        return new SaucelabsFirefoxBrowser(browserVersion);
+      case 'internet explorer':
+        return new SaucelabsIEBrowser(browserVersion);
+      case 'opera':
+        return new SaucelabsOperaBrowser(browserVersion);
+      case 'safari':
+        return new SaucelabsSafariBrowser(browserVersion);
+      default:
+        throw new Error('Unknown Saucelabs browser request: ', browserId);
     }
-
-    if (browserId === 'safari') {
-      // Set default platform to windows 10 otherwise it will fail.
-      browser.addCapability('platform', 'Windows 10');
-    }
-
-    return browser;**/
-    return null;
   }
 
   /**

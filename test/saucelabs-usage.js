@@ -4,17 +4,17 @@ const TestServer = require('./helpers/test-server.js');
 const seleniumAssistant = require('../src/index.js');
 const selenium = require('selenium-webdriver');
 
-if (!process.env['SAUCELABS_USERNAME'] ||
+/** if (!process.env['SAUCELABS_USERNAME'] ||
   !process.env['SAUCELABS_ACCESS_KEY']) {
   console.warn('Skipping Sauce Labs tests due to no credentials in environment');
   return;
-}
+}**/
 
 const TIMEOUT = 10 * 60 * 1000;
 const RETRIES = 1;
 
-const SAUCELABS_USERNAME = process.env['SAUCELABS_USERNAME'];
-const SAUCELABS_ACCESS_KEY = process.env['SAUCELABS_ACCESS_KEY'];
+const SAUCELABS_USERNAME = 'sw-helpers'; // process.env['SAUCELABS_USERNAME'];
+const SAUCELABS_ACCESS_KEY = 'bd709f69-c0c8-4ecc-93c8-b31ea4e98f1e'; // process.env['SAUCELABS_ACCESS_KEY'];
 
 const RELEASES = [
   'latest',
@@ -81,24 +81,26 @@ describe('Test Saucelabs', function() {
 
   });
 
-  function setupTest(SauceLabsBrowser) {
-    it(`should be able to use saucelab browser ${SauceLabsBrowser.getPrettyName()}`, function() {
+  function setupTest(browserId, browserVersion) {
+    it(`should be able to use saucelab browser ${browserId} - ${browserVersion}`, function() {
       this.timeout(5 * 60 * 1000);
-
-      /** const webdriverBrowser = seleniumAssistant.getSauceLabsBrowser(browser,
-        version, {
-          name: `selenium-assistant/unit-test/${browser}/${version}`,
-        });**/
-      return testNormalSeleniumUsage(SauceLabsBrowser);
+      return testNormalSeleniumUsage(
+        seleniumAssistant.getSauceLabsBrowser(browserId, browserVersion)
+      );
     });
   }
 
-  const saucelabBrowserFiles = fs.readdirSync('./src/saucelabs-browsers');
-  saucelabBrowserFiles.forEach((SauceLabsBrowserFile) => {
-    const SaucelabBrowserClass = require(`./../src/saucelabs-browsers/${SauceLabsBrowserFile}`);
+  const browserIds = [
+    'chrome',
+    'microsoftedge',
+    'firefox',
+    'internet explorer',
+    'opera',
+    'safari',
+  ];
+  browserIds.forEach((browserId) => {
     RELEASES.forEach((release) => {
-      const SauceLabsBrowser = new SaucelabBrowserClass(release);
-      setupTest(SauceLabsBrowser);
+      setupTest(browserId, release);
     });
   });
 });
