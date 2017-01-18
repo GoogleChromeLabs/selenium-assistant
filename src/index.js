@@ -279,6 +279,10 @@ class SeleniumAssistant {
    * });
    */
   getSauceLabsBrowser(browserId, browserVersion, options) {
+    if (!options) {
+      options = {};
+    }
+
     if (!options.saucelabs || !options.saucelabs.username ||
       !options.saucelabs.accessKey) {
       options.saucelabs = application.getSaucelabsDetails();
