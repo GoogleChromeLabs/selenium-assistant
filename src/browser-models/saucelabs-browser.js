@@ -118,10 +118,8 @@ class SauceLabsBrowser extends Browser {
     const builder = new webdriver
       .Builder();
 
-    builder.usingServer('https://' + saucelabsDetails.username + ':' +
+    return builder.usingServer('https://' + saucelabsDetails.username + ':' +
       saucelabsDetails.accessKey + '@ondemand.saucelabs.com:443/wd/hub');
-
-    return builder;
   }
 }
 

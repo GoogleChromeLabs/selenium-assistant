@@ -18,7 +18,6 @@
 
 const SauceLabsBrowser = require('../browser-models/saucelabs-browser');
 const ChromeConfig = require('../webdriver-config/chrome');
-
 /**
  * <p>Handles the prettyName and executable path for Chrome browser.</p>
  *
@@ -33,6 +32,10 @@ class ChromeWebDriverBrowser extends SauceLabsBrowser {
    */
   constructor(version) {
     super(new ChromeConfig(), version);
+
+    // Set default platform to windows 10 otherwise it will be an out of
+    // date version of Chrome.
+    this.addCapability('platform', 'Windows 10');
   }
 
   /**
@@ -50,10 +53,10 @@ class ChromeWebDriverBrowser extends SauceLabsBrowser {
   getSeleniumDriverBuilder() {
     let builder = super.getSeleniumDriverBuilder();
 
-    builder = builder
-      .setChromeOptions(this.getSeleniumOptions())
-      .withCapabilities(this._capabilities)
-      .forBrowser(this.getId());
+    const seleniumOptions = this.getSeleniumOptions();
+    let capabilities = seleniumOptions.toCapabilities(this._capabilities);
+
+    builder = builder.withCapabilities(capabilities);
 
     return builder;
   }

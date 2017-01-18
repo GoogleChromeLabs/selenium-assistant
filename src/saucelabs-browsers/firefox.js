@@ -33,6 +33,10 @@ class FirefoxWebDriverBrowser extends SauceLabsBrowser {
    */
   constructor(version) {
     super(new FirefoxConfig(), version);
+
+    // Set default platform to windows 10 otherwise it will be an out of
+    // date version of Firefox.
+    this.addCapability('platform', 'Windows 10');
   }
 
   /**
@@ -49,13 +53,25 @@ class FirefoxWebDriverBrowser extends SauceLabsBrowser {
    */
   getSeleniumDriverBuilder() {
     let builder = super.getSeleniumDriverBuilder();
+
+    const seleniumOptions = this.getSeleniumOptions();
+    // FirefoxOptions.toCapabilities() don't take in options.
+    let capabilities = seleniumOptions.toCapabilities()
+      .merge(this._capabilities);
+
+    builder = builder
+      .withCapabilities(capabilities);
+
+    return builder;
+
+    /** let builder = super.getSeleniumDriverBuilder();
     builder = builder
       // Sauce Labs + Firefox is simple broken if I pass in the options
       // .setFirefoxOptions(this.getSeleniumOptions())
       .withCapabilities(this._capabilities)
       .forBrowser(this.getId());
 
-    return builder;
+    return builder;**/
   }
 }
 

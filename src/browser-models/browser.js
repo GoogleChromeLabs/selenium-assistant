@@ -16,6 +16,8 @@
 
 'use strict';
 
+const seleniumWebdriver = require('selenium-webdriver');
+
 /**
  * A base class which all "types" of browser models extend.
  *
@@ -34,6 +36,9 @@ class Browser {
     }
 
     this._config = config;
+    this._capabilities = new seleniumWebdriver.Capabilities();
+
+    this.addCapability(seleniumWebdriver.Capability.BROWSER_NAME, this.getId());
   }
 
   /**
@@ -46,11 +51,7 @@ class Browser {
    * @param {String} value The capability value.
    */
   addCapability(key, value) {
-    if (!this._capabilities) {
-      this._capabilities = {};
-    }
-
-    this._capabilities[key] = value;
+    this._capabilities.set(key, value);
   }
 
   /**
