@@ -57,13 +57,11 @@ class EdgeWebDriverBrowser extends SauceLabsBrowser {
    */
   getSeleniumDriverBuilder() {
     let builder = super.getSeleniumDriverBuilder();
-
     const seleniumOptions = this.getSeleniumOptions();
     let capabilities = seleniumOptions.toCapabilities(this._capabilities);
 
     builder = builder
-      .withCapabilities(capabilities)
-      .forBrowser(this.getId());
+      .withCapabilities(capabilities);
 
     return builder;
   }

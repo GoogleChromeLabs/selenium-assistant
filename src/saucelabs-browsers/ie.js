@@ -49,11 +49,11 @@ class IEWebDriverBrowser extends SauceLabsBrowser {
    */
   getSeleniumDriverBuilder() {
     let builder = super.getSeleniumDriverBuilder();
+    const seleniumOptions = this.getSeleniumOptions();
+    let capabilities = seleniumOptions.toCapabilities(this._capabilities);
 
     builder = builder
-      .setIeOptions(this.getSeleniumOptions())
-      .withCapabilities(this._capabilities)
-      .forBrowser(this.getId());
+      .withCapabilities(capabilities);
 
     return builder;
   }
