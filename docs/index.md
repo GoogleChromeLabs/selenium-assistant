@@ -51,7 +51,7 @@ browsers.forEach(browser => {
   }
 
   // Print out the browsers name.
-  console.log(browsers.getPrettyName());
+  console.log(browser.getPrettyName());
 
   browser.getSeleniumDriver()
   .then(webdriverInstance =>
