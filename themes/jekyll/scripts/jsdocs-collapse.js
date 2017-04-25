@@ -8,11 +8,20 @@ class JSDocCollapse {
    * The class configures the behaviors in the constructor.
    */
   constructor() {
-    const signatureElements = document.querySelectorAll('.collapsing-entry');
-    signatureElements.forEach((element) => {
-      if (element.querySelector('.js-collapse-details')) {
-        this._configureElementBehavior(element);
-      }
+    const collapsingTypes = [
+      'method-type-function',
+      'method-type-class',
+      'member-type-member',
+      'member-type-typedef',
+    ];
+    collapsingTypes.forEach((methodClassname) => {
+      const signatureElements =
+        document.querySelectorAll(`.collapsing-entry.${methodClassname}`);
+      signatureElements.forEach((element) => {
+        if (element.querySelector('.js-collapse-details')) {
+          this._configureElementBehavior(element);
+        }
+      });
     });
   }
 
@@ -24,17 +33,18 @@ class JSDocCollapse {
   _configureElementBehavior(element) {
     const signatureTitle = element.querySelector('.js-collapse-title');
     const collapseElement = element.querySelector('.js-collapse-details');
-    const cssClassName = 'is-closed';
+    const closedCssClassName = 'is-closed';
     signatureTitle.addEventListener('click', (event) => {
-      if (collapseElement.classList.contains(cssClassName)) {
-        collapseElement.classList.remove(cssClassName);
+      if (collapseElement.classList.contains(closedCssClassName)) {
+        collapseElement.classList.remove(closedCssClassName);
       } else {
-        collapseElement.classList.add(cssClassName);
+        collapseElement.classList.add(closedCssClassName);
       }
     });
 
-    if (!element.classList.contains('start-open')) {
-      collapseElement.classList.add(cssClassName);
+    if (signatureTitle.id !== location.hash.substring(1) &&
+      !element.classList.contains('start-open')) {
+      collapseElement.classList.add(closedCssClassName);
     }
   }
 }

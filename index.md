@@ -40,6 +40,7 @@ on the current machine, filter out any browsers you may not want and
 then get a web driver instance for that browser, this can be done like so:
 
 ```javascript
+const selenium = require('selenium-webdriver');
 const seleniumAssistant = require('selenium-assistant');
 
 const browsers = seleniumAssistant.getLocalBrowsers();
@@ -50,15 +51,13 @@ browsers.forEach(browser => {
   }
 
   // Print out the browsers name.
-  console.log(browsers.getPrettyName());
+  console.log(browser.getPrettyName());
 
   browser.getSeleniumDriver()
-  .then(webdriverInstance => {
-    return webdriverInstance.get('https://google.com/');
-  })
-  .then(() => {
-    return globalDriver.wait(selenium.until.titleIs('Google'), 1000);
-  });
+  .then(webdriverInstance =>
+    webdriverInstance.get('https://google.com/');
+      .then(_ => webdriverInstance.wait(selenium.until.titleIs('Google'), 1000);
+  );
 });
 ```
 
