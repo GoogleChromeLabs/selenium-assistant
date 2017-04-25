@@ -45,7 +45,8 @@ describe('LocalBrowser', function() {
 
     // getPrettyReleaseNames needs to be stubbed since we are instantiating
     // LocalBrowser directly rather than extending it.
-    const stub = sinon.stub(LocalBrowser, 'getPrettyReleaseNames', () => {
+    const stub = sinon.stub(LocalBrowser, 'getPrettyReleaseNames')
+    .callsFake(() => {
       return releaseNames;
     });
     sinonStubs.push(stub);
@@ -253,7 +254,8 @@ describe('LocalBrowser', function() {
       'exampledriver': null,
     });
 
-    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames', () => {
+    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
+    .callsFake(() => {
       return releaseNames;
     });
     sinonStubs.push(stub);
@@ -281,7 +283,8 @@ describe('LocalBrowser', function() {
       },
     });
 
-    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames', () => {
+    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
+    .callsFake(() => {
       return releaseNames;
     });
     sinonStubs.push(stub);

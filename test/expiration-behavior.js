@@ -104,19 +104,20 @@ describe('Test Download Manager - Browser Expiration', function() {
   before(function() {
     seleniumAssistant.setBrowserInstallDir(testPath);
 
-    const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome',
-      (release, installDir) => {
+    const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome')
+      .callsFake((release, installDir) => {
         browserDownloads.chrome[release] = true;
         return Promise.resolve();
       });
 
-    const dlFFStub = sinon.stub(downloadManager, '_downloadFirefox',
-      (release, installDir) => {
+    const dlFFStub = sinon.stub(downloadManager, '_downloadFirefox')
+      .callsFake((release, installDir) => {
         browserDownloads.firefox[release] = true;
         return Promise.resolve();
       });
 
-    const isValidStub = sinon.stub(LocalBrowser.prototype, 'isValid', () => {
+    const isValidStub = sinon.stub(LocalBrowser.prototype, 'isValid')
+    .callsFake(() => {
       return true;
     });
 
