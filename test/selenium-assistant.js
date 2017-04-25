@@ -103,7 +103,7 @@ describe('SeleniumAssistant', function() {
     this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
-    const stub = sinon.stub(console, 'log', (input) => {
+    const stub = sinon.stub(console, 'log').callsFake((input) => {
       consoleCalls++;
     });
     sinonStubs.push(stub);
@@ -121,7 +121,7 @@ describe('SeleniumAssistant', function() {
     this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
-    const stub = sinon.stub(console, 'log', () => {
+    const stub = sinon.stub(console, 'log').callsFake(() => {
       consoleCalls++;
     });
     sinonStubs.push(stub);

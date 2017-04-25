@@ -116,7 +116,7 @@ describe('Test Usage of Browsers', function() {
 
       it('should get null for raw version output if no executable found', function() {
         sinonStubs.push(
-          sinon.stub(localBrowser, 'getExecutablePath', () => {
+          sinon.stub(localBrowser, 'getExecutablePath').callsFake(() => {
             return null;
           })
         );
@@ -130,7 +130,7 @@ describe('Test Usage of Browsers', function() {
 
       it('should get -1 for version number if no executable found', function() {
         sinonStubs.push(
-          sinon.stub(localBrowser, 'getExecutablePath', () => {
+          sinon.stub(localBrowser, 'getExecutablePath').callsFake(() => {
             return null;
           })
         );
@@ -144,7 +144,7 @@ describe('Test Usage of Browsers', function() {
 
       it('should get -1 for an unexpected raw version string', function() {
         sinonStubs.push(
-          sinon.stub(localBrowser, 'getRawVersionString', () => {
+          sinon.stub(localBrowser, 'getRawVersionString').callsFake(() => {
             return 'ImTotallyMadeUp 12345678.asdf.12345678.asdf';
           })
         );
