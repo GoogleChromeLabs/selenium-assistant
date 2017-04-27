@@ -55,8 +55,8 @@ browsers.forEach(browser => {
 
   browser.getSeleniumDriver()
   .then(webdriverInstance =>
-    webdriverInstance.get('https://google.com/');
-      .then(_ => webdriverInstance.wait(selenium.until.titleIs('Google'), 1000);
+    webdriverInstance.get('https://google.com/')
+      .then(_ => webdriverInstance.wait(selenium.until.titleIs('Google'), 1000))
   );
 });
 ```
