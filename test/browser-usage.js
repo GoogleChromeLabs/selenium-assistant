@@ -90,7 +90,7 @@ describe('Test Usage of Browsers', function() {
     prettyName.length.should.gt(1);
 
     const options = specificBrowser.getSeleniumOptions();
-    expect(options).to.be.defined;
+    expect(options).to.exist;
 
     const executablePath = specificBrowser.getExecutablePath();
     (typeof executablePath).should.equal('string');
