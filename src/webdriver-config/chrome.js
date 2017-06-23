@@ -29,7 +29,8 @@ class ChromeConfig extends DriverConfig {
   constructor() {
     super(
       'chrome',
-      new seleniumChrome.Options(),
+      // See https://developers.google.com/web/updates/2017/04/headless-chrome
+      new seleniumChrome.Options().addArguments('--headless', '--disable-gpu'),
       'Google Chrome',
       'chromedriver'
     );
