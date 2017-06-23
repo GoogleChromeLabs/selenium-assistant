@@ -250,7 +250,8 @@ class DownloadManager {
 
               fse.copySync(
                 path.join(mountedPath, chromeOSXAppName),
-                path.join(installDir, 'chrome', release, chromeOSXAppName)
+                path.join(installDir, 'chrome', release, chromeOSXAppName),
+                {dereference: true}
               );
 
               dmg.unmount(mountedPath, (err) => {
@@ -267,7 +268,9 @@ class DownloadManager {
       }
     })
     .then((filePath) => {
-      return del(filePath, {force: true});
+      if (filePath) {
+        return del(filePath, {force: true});
+      }
     });
   }
 
@@ -375,7 +378,8 @@ class DownloadManager {
 
             fse.copySync(
               path.join(mountedPath, firefoxMacApp),
-              path.join(installDir, 'firefox', release, firefoxMacApp)
+              path.join(installDir, 'firefox', release, firefoxMacApp),
+              {dereference: true}
             );
 
             dmg.unmount(mountedPath, (err) => {
@@ -392,7 +396,9 @@ class DownloadManager {
       throw new Error('Unable to handle downloaded file: ', downloadUrl);
     })
     .then((filePath) => {
-      return del(filePath, {force: true});
+      if (filePath) {
+        return del(filePath, {force: true});
+      }
     });
   }
 
@@ -608,7 +614,9 @@ class DownloadManager {
       }
     })
     .then((filePath) => {
-      return del(filePath, {force: true});
+      if (filePath) {
+        return del(filePath, {force: true});
+      }
     });
   }
 }
