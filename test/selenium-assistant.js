@@ -162,10 +162,11 @@ describe('SeleniumAssistant', function() {
     this.timeout(3000);
 
     const killPromise = seleniumAssistant.killWebDriver({
+      close: () => {
+        return Promise.resolve();
+      },
       quit: () => {
-        return new Promise((resolve, reject) => {
-          resolve();
-        });
+        return Promise.resolve();
       },
     });
     (killPromise instanceof Promise).should.equal(true);
@@ -177,10 +178,11 @@ describe('SeleniumAssistant', function() {
     this.timeout(3000);
 
     const killPromise = seleniumAssistant.killWebDriver({
+      close: () => {
+        return Promise.resolve();
+      },
       quit: () => {
-        return new Promise((resolve, reject) => {
-          reject();
-        });
+        return Promise.reject();
       },
     });
     (killPromise instanceof Promise).should.equal(true);
@@ -192,6 +194,9 @@ describe('SeleniumAssistant', function() {
     this.timeout(5000);
 
     const killPromise = seleniumAssistant.killWebDriver({
+      close: () => {
+        return Promise.resolve();
+      },
       quit: () => {
         return new Promise((resolve, reject) => {});
       },
