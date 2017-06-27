@@ -1,9 +1,7 @@
 sudo: required
 dist: trusty
 language: node_js
-cache:
-  directories:
-    - node_modules
+
 os:
   - linux
   - osx
@@ -13,7 +11,11 @@ osx_image: xcode7.3
 
 node_js:
   - '6'
-  - '7'
+  - '8'
+
+cache:
+  directories:
+    - node_modules
 env:
   global:
     - COVERALLS_PARALLEL=true
