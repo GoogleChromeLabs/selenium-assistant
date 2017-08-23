@@ -2,6 +2,8 @@
 
 # selenium-assistant
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/GoogleChrome/selenium-assistant.svg)](https://greenkeeper.io/)
+
 It can be a challenge to manage which browsers you can / can't run your tests against
 as well as blocking those that have known issues.
 
