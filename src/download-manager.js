@@ -38,7 +38,6 @@ const browserManager = require('./browser-manager.js');
  * @private
  */
 class DownloadManager {
-
   /**
    * Get the default expiration for downloaded browsers.
    * @return {number} Returns the default expiration of 24 hours.
@@ -57,7 +56,7 @@ class DownloadManager {
    * @param  {Number} [expirationInHours=24] This is how long until a browser
    *                             download is regarded and expired and Should
    *                             be updated. A value of 0 will force a download.
-   *         										 If you want to install the browser regardless
+   *                             If you want to install the browser regardless
    *                             of any existing installs of the process, pass
    *                             in true.
    * @return {Promise}           Promise resolves once the browser has been
