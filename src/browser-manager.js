@@ -35,7 +35,6 @@ const SaucelabsSafariBrowser = require('./saucelabs-browsers/safari');
  * @private
  */
 class BrowserManager {
-
   // Details from:
   // https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options#TestConfigurationOptions-BrowserVersion
   /**

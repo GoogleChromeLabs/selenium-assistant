@@ -47,7 +47,6 @@ const downloadManager = require('./download-manager.js');
  * });
  */
 class SeleniumAssistant {
-
   /**
    * Returns the browser download path.
    * @return {String} Path of downloaded browsers
