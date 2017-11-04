@@ -34,8 +34,8 @@ const downloadManager = require('./download-manager.js');
  *
  * const browsers = seleniumAssistant.getLocalBrowsers();
  * browsers.map(browser => {
- *   console.log(browsers.getPrettyName());
- *   console.log(browsers.getReleaseName());
+ *   console.log(browser.getPrettyName());
+ *   console.log(browser.getReleaseName());
  *
  *   return browser.getSeleniumDriver()
  *   .then((driver) => {
