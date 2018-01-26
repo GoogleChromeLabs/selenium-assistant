@@ -55,7 +55,8 @@ class Browser {
   }
 
   /**
-   * Get the Selenium ID of the browser (i.e. 'chrome', 'firefox', 'edge' etc.).
+   * Get the Selenium ID of the browser (i.e. 'chrome', 'firefox',
+   * 'microsoftedge' etc.).
    * @return {String} Selenium ID of this browser.
    */
   getId() {

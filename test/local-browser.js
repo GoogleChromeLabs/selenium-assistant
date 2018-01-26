@@ -37,7 +37,7 @@ describe('LocalBrowser', function() {
     999: '1.0.0',
   };
 
-  let sinonStubs = [];
+  const sandbox = sinon.sandbox.create();
   let releaseNames = {};
 
   beforeEach(function() {
@@ -45,18 +45,14 @@ describe('LocalBrowser', function() {
 
     // getPrettyReleaseNames needs to be stubbed since we are instantiating
     // LocalBrowser directly rather than extending it.
-    const stub = sinon.stub(LocalBrowser, 'getPrettyReleaseNames')
+    sandbox.stub(LocalBrowser, 'getPrettyReleaseNames')
     .callsFake(() => {
       return releaseNames;
     });
-    sinonStubs.push(stub);
   });
 
   afterEach(function() {
-    sinonStubs.forEach((stub) => {
-      stub.restore();
-    });
-    sinonStubs = [];
+    sandbox.restore();
   });
 
   it('should instantiate with valid input', function() {
@@ -254,11 +250,10 @@ describe('LocalBrowser', function() {
       'exampledriver': null,
     });
 
-    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
+    sandbox.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
     .callsFake(() => {
       return releaseNames;
     });
-    sinonStubs.push(stub);
 
     const localBrowser = new ProxiedLocalBrowser(
       options,
@@ -283,11 +278,10 @@ describe('LocalBrowser', function() {
       },
     });
 
-    const stub = sinon.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
+    sandbox.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
     .callsFake(() => {
       return releaseNames;
     });
-    sinonStubs.push(stub);
 
     const localBrowser = new ProxiedLocalBrowser(
       options,

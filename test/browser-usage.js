@@ -33,7 +33,7 @@ describe('Test Usage of Browsers', function() {
   this.timeout(TIMEOUT);
   this.retries(RETRIES);
 
-  const sinonStubs = [];
+  const sandbox = sinon.sandbox.create();
   let globalDriver = null;
   let globalServer = new TestServer(false);
   let localURL = '';
@@ -118,11 +118,9 @@ describe('Test Usage of Browsers', function() {
       });
 
       it('should get null for raw version output if no executable found', function() {
-        sinonStubs.push(
-          sinon.stub(localBrowser, 'getExecutablePath').callsFake(() => {
-            return null;
-          })
-        );
+        sandbox.stub(localBrowser, 'getExecutablePath').callsFake(() => {
+          return null;
+        });
 
         // To overcome version string caching
         localBrowser._rawVerstionString = null;
@@ -132,11 +130,9 @@ describe('Test Usage of Browsers', function() {
       });
 
       it('should get -1 for version number if no executable found', function() {
-        sinonStubs.push(
-          sinon.stub(localBrowser, 'getExecutablePath').callsFake(() => {
-            return null;
-          })
-        );
+        sandbox.stub(localBrowser, 'getExecutablePath').callsFake(() => {
+          return null;
+        });
 
         // To overcome version string caching
         localBrowser._rawVerstionString = null;
@@ -146,11 +142,9 @@ describe('Test Usage of Browsers', function() {
       });
 
       it('should get -1 for an unexpected raw version string', function() {
-        sinonStubs.push(
-          sinon.stub(localBrowser, 'getRawVersionString').callsFake(() => {
-            return 'ImTotallyMadeUp 12345678.asdf.12345678.asdf';
-          })
-        );
+        sandbox.stub(localBrowser, 'getRawVersionString').callsFake(() => {
+          return 'ImTotallyMadeUp 12345678.asdf.12345678.asdf';
+        });
 
         // To overcome version string caching
         localBrowser._rawVerstionString = null;
@@ -189,10 +183,7 @@ describe('Test Usage of Browsers', function() {
   });
 
   afterEach(function() {
-    while (sinonStubs.length > 0) {
-      const stub = sinonStubs.pop();
-      stub.restore();
-    }
+    sandbox.restore();
 
     return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
     .then(() => {
