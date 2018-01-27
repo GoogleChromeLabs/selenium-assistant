@@ -78,8 +78,6 @@ describe('Test Usage of Browsers', function() {
 
   function testBrowserInfo(specificBrowser) {
     const versionString = specificBrowser.getRawVersionString();
-    /* eslint-disable */
-    console.log(JSON.stringify(versionString));
     (typeof versionString).should.equal('string');
     (versionString === null).should.equal(false);
     // Chrome unstable has made it possible that this could happen
@@ -166,14 +164,15 @@ describe('Test Usage of Browsers', function() {
   before(function() {
     seleniumAssistant.setBrowserInstallDir(null);
 
+    const expiration = process.env.TRAVIS ? 0 : 24;
     console.log('Downloading browsers....');
     return Promise.all([
-      seleniumAssistant.downloadLocalBrowser('chrome', 'stable', 24),
-      seleniumAssistant.downloadLocalBrowser('chrome', 'beta', 24),
-      seleniumAssistant.downloadLocalBrowser('chrome', 'unstable', 24),
-      seleniumAssistant.downloadLocalBrowser('firefox', 'stable', 24),
-      seleniumAssistant.downloadLocalBrowser('firefox', 'beta', 24),
-      seleniumAssistant.downloadLocalBrowser('firefox', 'unstable', 24),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'stable', expiration),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'beta', expiration),
+      seleniumAssistant.downloadLocalBrowser('chrome', 'unstable', expiration),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'stable', expiration),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'beta', expiration),
+      seleniumAssistant.downloadLocalBrowser('firefox', 'unstable', expiration),
     ])
     .catch((err) => {
       console.warn('There was an issue downloading the browsers: ', err);
