@@ -87,7 +87,7 @@ class LocalChromeBrowser extends LocalBrowser {
       // Find OS X expected path
       let firefoxAppName;
       if (this._release === 'unstable') {
-        firefoxAppName = 'FirefoxNightly.app';
+        firefoxAppName = 'Firefox Nightly.app';
       } else {
         firefoxAppName = 'Firefox.app';
       }
@@ -129,7 +129,7 @@ class LocalChromeBrowser extends LocalBrowser {
           if (this._release === 'stable') {
             return '/Applications/Firefox.app/Contents/MacOS/firefox';
           } else if (this._release === 'unstable') {
-            return '/Applications/FirefoxNightly.app/Contents/MacOS/firefox';
+            return '/Applications/Firefox Nightly.app/Contents/MacOS/firefox';
           }
           break;
         case 'linux':

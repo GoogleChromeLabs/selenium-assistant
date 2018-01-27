@@ -1,6 +1,6 @@
 'use strict';
 
-const del = require('del');
+const fse = require('fs-extra');
 const sinon = require('sinon');
 const LocalStorage = require('node-localstorage').LocalStorage;
 const path = require('path');
@@ -149,14 +149,14 @@ describe('Test Download Manager - Browser Expiration', function() {
       stub.restore();
     });
 
-    return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
+    return fse.remove(seleniumAssistant.getBrowserInstallDir());
   });
 
   beforeEach(function() {
     this.timeout(6000);
 
     // Ensure the test output is clear at the start
-    return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
+    return fse.remove(seleniumAssistant.getBrowserInstallDir());
   });
 
   const browsers = [

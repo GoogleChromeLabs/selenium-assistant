@@ -52,6 +52,7 @@ class LocalSafariBrowser extends LocalBrowser {
    */
   getSeleniumDriverBuilder() {
     const seleniumOptions = this.getSeleniumOptions();
+    seleniumOptions.setTechnologyPreview((this._release === 'beta'));
 
     const builder = new webdriver
       .Builder()
