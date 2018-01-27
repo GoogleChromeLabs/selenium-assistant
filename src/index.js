@@ -343,7 +343,7 @@ class SeleniumAssistant {
       quitTimeout = setTimeout(resolve, 2000);
 
       driver.close()
-      .then(() => driver.quit())
+      .then(() => driver.quit(), () => driver.quit())
       .then(resolve, resolve);
     })
     .then(() => {

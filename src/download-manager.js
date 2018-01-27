@@ -21,7 +21,6 @@ const path = require('path');
 const fs = require('fs');
 const request = require('request');
 const mkdirp = require('mkdirp');
-const del = require('del');
 const dmg = require('dmg');
 const fse = require('fs-extra');
 const yauzl = require('yauzl');
@@ -70,6 +69,7 @@ class DownloadManager {
     let localStorage = null;
 
     return new Promise((resolve, reject) => {
+      // TODO: Switch to fs-extra
       mkdirp(localstoragePath, (err) => {
         if (err) {
           return reject(err);
@@ -268,7 +268,7 @@ class DownloadManager {
     })
     .then((filePath) => {
       if (filePath) {
-        return del(filePath, {force: true});
+        return fse.remove(filePath);
       }
     });
   }
@@ -295,7 +295,7 @@ class DownloadManager {
         ffProduct = 'firefox-beta-latest';
         break;
       case 'unstable':
-        firefoxMacApp = 'FirefoxNightly.app';
+        firefoxMacApp = 'Firefox Nightly.app';
         ffProduct = 'firefox-nightly-latest';
         break;
       default:
@@ -396,7 +396,7 @@ class DownloadManager {
     })
     .then((filePath) => {
       if (filePath) {
-        return del(filePath, {force: true});
+        return fse.remove(filePath);
       }
     });
   }
@@ -604,7 +604,7 @@ class DownloadManager {
               });
             })
             .then((filePath) => {
-              return del(currentAppPath, {force: true})
+              return fse.remove(currentAppPath)
               .then(() => filePath);
             });
           });
@@ -614,7 +614,7 @@ class DownloadManager {
     })
     .then((filePath) => {
       if (filePath) {
-        return del(filePath, {force: true});
+        return fse.remove(filePath);
       }
     });
   }

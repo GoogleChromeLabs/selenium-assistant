@@ -80,7 +80,10 @@ class LocalBrowser extends Browser {
 
       const minVersion = this._getMinSupportedVersion();
       if (minVersion) {
-        return this.getVersionNumber() >= minVersion;
+        const browserVersion = this.getVersionNumber();
+        if (browserVersion !== -1 && browserVersion < minVersion) {
+          return false;
+        }
       }
 
       if (this.isBlackListed()) {

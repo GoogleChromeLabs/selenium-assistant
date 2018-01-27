@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint '.'",
-    "test": "npm run lint && mocha",
+    "test": "mocha && npm run lint",
     "istanbul": "npm run lint && istanbul cover _mocha",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "postpublish-release": "track-pkg-size",
@@ -47,7 +47,6 @@
   },
   "dependencies": {
     "chalk": "^2.1.0",
-    "del": "^3.0.0",
     "dmg": "^0.1.0",
     "fs-extra": "^4.0.2",
     "mkdirp": "^0.5.1",

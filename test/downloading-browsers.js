@@ -1,6 +1,6 @@
 'use strict';
 
-const del = require('del');
+const fs = require('fs-extra');
 const seleniumAssistant = require('../src/index.js');
 
 const TIMEOUT = 5 * 60 * 1000;
@@ -14,7 +14,7 @@ describe('Test Download Manager - Browser Download', function() {
     // Reset Install Directory
     seleniumAssistant.setBrowserInstallDir(null);
 
-    return del(seleniumAssistant.getBrowserInstallDir(), {force: true});
+    return fs.remove(seleniumAssistant.getBrowserInstallDir());
   });
 
   const setupDownloadTest = (browserId, release) => {
