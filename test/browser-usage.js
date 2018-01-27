@@ -78,6 +78,8 @@ describe('Test Usage of Browsers', function() {
 
   function testBrowserInfo(specificBrowser) {
     const versionString = specificBrowser.getRawVersionString();
+    /* eslint-disable */
+    console.log(JSON.stringify(versionString));
     (typeof versionString).should.equal('string');
     (versionString === null).should.equal(false);
     // Chrome unstable has made it possible that this could happen
