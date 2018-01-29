@@ -5,23 +5,23 @@ const sinon = require('sinon');
 const LocalStorage = require('node-localstorage').LocalStorage;
 const path = require('path');
 const mkdirp = require('mkdirp');
+require('chai').should();
 
 const LocalBrowser = require(
   '../src/browser-models/local-browser.js');
 const seleniumAssistant = require('../src/index.js');
 const downloadManager = require('../src/download-manager.js');
 
-require('chai').should();
-
 const TIMEOUT = 5 * 60 * 1000;
 const RETRIES = 3;
 
 const testPath = './test/test-output';
 const localStoragePath = path.join(testPath, 'localstorage');
-const stubs = [];
 let browserDownloads;
 
 describe('Test Download Manager - Browser Expiration', function() {
+  const sandbox = sinon.sandbox.create();
+
   this.timeout(TIMEOUT);
   this.retries(RETRIES);
 
@@ -104,26 +104,22 @@ describe('Test Download Manager - Browser Expiration', function() {
   before(function() {
     seleniumAssistant.setBrowserInstallDir(testPath);
 
-    const dlChromeStub = sinon.stub(downloadManager, '_downlaodChrome')
+    sandbox.stub(downloadManager, '_downlaodChrome')
       .callsFake((release, installDir) => {
         browserDownloads.chrome[release] = true;
         return Promise.resolve();
       });
 
-    const dlFFStub = sinon.stub(downloadManager, '_downloadFirefox')
+    sandbox.stub(downloadManager, '_downloadFirefox')
       .callsFake((release, installDir) => {
         browserDownloads.firefox[release] = true;
         return Promise.resolve();
       });
 
-    const isValidStub = sinon.stub(LocalBrowser.prototype, 'isValid')
+    sandbox.stub(LocalBrowser.prototype, 'isValid')
     .callsFake(() => {
       return true;
     });
-
-    stubs.push(dlChromeStub);
-    stubs.push(dlFFStub);
-    stubs.push(isValidStub);
 
     return mkdirp(localStoragePath);
   });
@@ -145,9 +141,7 @@ describe('Test Download Manager - Browser Expiration', function() {
   after(function() {
     this.timeout(6000);
 
-    stubs.forEach((stub) => {
-      stub.restore();
-    });
+    sandbox.restore();
 
     return fse.remove(seleniumAssistant.getBrowserInstallDir());
   });

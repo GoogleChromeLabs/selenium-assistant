@@ -86,7 +86,7 @@ seleniumAssistant.setSaucelabsDetails(
 
 seleniumAssistant.startSaucelabsConnect()
 .then(() => {
- return seleniumAssistant.getSauceLabsBrowser('edge', 'latest');
+ return seleniumAssistant.getSauceLabsBrowser('microsoftedge', 'latest');
 })
 .then((browserInstance) => {
   return browserInstance.getSeleniumDriver();

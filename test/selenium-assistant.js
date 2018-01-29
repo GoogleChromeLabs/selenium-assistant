@@ -25,16 +25,13 @@ const browserManager = require('../src/browser-manager.js');
 require('chai').should();
 
 const NUM_OF_BROWSERS = browserManager.getSupportedBrowsers().length;
-const sinonStubs = [];
+const sandbox = sinon.sandbox.create();
 
 describe('SeleniumAssistant', function() {
   const seleniumAssistant = require('../src/index.js');
 
   afterEach(function() {
-    while (sinonStubs.length > 0) {
-      const stub = sinonStubs.pop();
-      stub.restore();
-    }
+    sandbox.restore();
   });
 
   it('should be instantiated', function() {
@@ -103,15 +100,14 @@ describe('SeleniumAssistant', function() {
     this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
-    const stub = sinon.stub(console, 'log').callsFake((input) => {
+    sandbox.stub(console, 'log').callsFake((input) => {
       consoleCalls++;
     });
-    sinonStubs.push(stub);
 
     // Console Test
     const output = seleniumAssistant.printAvailableBrowserInfo();
 
-    stub.restore();
+    sandbox.restore();
 
     (typeof output).should.equal('string');
     consoleCalls.should.equal(1);
@@ -121,15 +117,14 @@ describe('SeleniumAssistant', function() {
     this.timeout(NUM_OF_BROWSERS * 3000 * 1000);
 
     let consoleCalls = 0;
-    const stub = sinon.stub(console, 'log').callsFake(() => {
+    sandbox.stub(console, 'log').callsFake(() => {
       consoleCalls++;
     });
-    sinonStubs.push(stub);
 
     // Console Test
     const output = seleniumAssistant.printAvailableBrowserInfo(false);
 
-    stub.restore();
+    sandbox.restore();
 
     (typeof output).should.equal('string');
     consoleCalls.should.equal(0);

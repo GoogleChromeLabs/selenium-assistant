@@ -177,11 +177,18 @@ class LocalBrowser extends Browser {
 
     try {
       const builder = this.getSeleniumDriverBuilder();
-      const buildResult = builder.build();
-      if (buildResult.then) {
-        return buildResult;
+      let buildResult = builder.build();
+      if (!buildResult.then) {
+        buildResult = Promise.resolve(buildResult);
       }
-      return Promise.resolve(buildResult);
+
+      return buildResult
+      .then((driver) => {
+        // Enable async excution out of the box.
+        driver.manage().timeouts().setScriptTimeout(30 * 1000);
+
+        return driver;
+      });
     } catch (err) {
       return Promise.reject(err);
     }
