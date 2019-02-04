@@ -18,6 +18,7 @@
 
 const fs = require('fs');
 const webdriver = require('selenium-webdriver');
+const safari = require('selenium-webdriver/safari');
 
 const LocalBrowser = require('../browser-models/local-browser.js');
 const SafariConfig = require('../webdriver-config/safari.js');
@@ -54,11 +55,18 @@ class LocalSafariBrowser extends LocalBrowser {
     const seleniumOptions = this.getSeleniumOptions();
     seleniumOptions.setTechnologyPreview((this._release === 'beta'));
 
-    const builder = new webdriver
+    let builder = new webdriver
       .Builder()
       .withCapabilities(this._capabilities)
       .forBrowser(this.getId())
       .setSafariOptions(seleniumOptions);
+
+    // Run safari 12+ in legacy mode until this is resolved:
+    // https://github.com/SeleniumHQ/selenium/issues/6026
+    if (this.getVersionNumber() >= 12) {
+      builder = builder.usingServer(
+          new safari.ServiceBuilder().addArguments('--legacy').build().start());
+    }
 
     return builder;
   }
