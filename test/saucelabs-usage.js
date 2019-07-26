@@ -24,48 +24,48 @@ describe('Test Saucelabs', function() {
   this.retries(RETRIES);
 
   let globalDriver;
-  let globalServer = new TestServer(false);
+  const globalServer = new TestServer(false);
   let localURL;
 
   before(function() {
     const serverPath = path.join(__dirname, 'data', 'example-site');
     return globalServer.startServer(serverPath, 7000)
-    .then((portNumber) => {
-      localURL = `http://localhost:${portNumber}/`;
-    })
-    .then(() => {
-      seleniumAssistant.setSaucelabsDetails(
-        SAUCELABS_USERNAME,
-        SAUCELABS_ACCESS_KEY);
-      return seleniumAssistant.startSaucelabsConnect();
-    });
+        .then((portNumber) => {
+          localURL = `http://localhost:${portNumber}/`;
+        })
+        .then(() => {
+          seleniumAssistant.setSaucelabsDetails(
+              SAUCELABS_USERNAME,
+              SAUCELABS_ACCESS_KEY);
+          return seleniumAssistant.startSaucelabsConnect();
+        });
   });
 
   after(function() {
     return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
-    .then(() => {
-      return seleniumAssistant.stopSaucelabsConnect();
-    })
-    .then(() => {
-      return globalServer.killServer();
-    });
+        .then(() => {
+          return seleniumAssistant.stopSaucelabsConnect();
+        })
+        .then(() => {
+          return globalServer.killServer();
+        });
   });
 
   function testNormalSeleniumUsage(specificBrowser) {
     return specificBrowser.getSeleniumDriver()
-    .then((driver) => {
-      globalDriver = driver;
-    })
-    .then(() => {
-      return globalDriver.get(localURL)
-      .then(() => {
-        return globalDriver.wait(selenium.until.titleIs('Example Site'), 5 * 60 * 1000);
-      });
-    })
-    .then(() => seleniumAssistant.killWebDriver(globalDriver))
-    .then(() => {
-      globalDriver = null;
-    });
+        .then((driver) => {
+          globalDriver = driver;
+        })
+        .then(() => {
+          return globalDriver.get(localURL)
+              .then(() => {
+                return globalDriver.wait(selenium.until.titleIs('Example Site'), 5 * 60 * 1000);
+              });
+        })
+        .then(() => seleniumAssistant.killWebDriver(globalDriver))
+        .then(() => {
+          globalDriver = null;
+        });
   }
 
   it('should reject for bad saucelab details', function() {
@@ -84,7 +84,7 @@ describe('Test Saucelabs', function() {
     it(`should be able to use saucelab browser ${browserId} - ${browserVersion}`, function() {
       this.timeout(5 * 60 * 1000);
       return testNormalSeleniumUsage(
-        seleniumAssistant.getSauceLabsBrowser(browserId, browserVersion)
+          seleniumAssistant.getSauceLabsBrowser(browserId, browserVersion)
       );
     });
   }
@@ -94,7 +94,6 @@ describe('Test Saucelabs', function() {
     'microsoftedge',
     'firefox',
     'internet explorer',
-    'opera',
     'safari',
   ];
   browserIds.forEach((browserId) => {

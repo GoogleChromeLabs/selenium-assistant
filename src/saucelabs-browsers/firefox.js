@@ -56,11 +56,11 @@ class FirefoxWebDriverBrowser extends SauceLabsBrowser {
 
     const seleniumOptions = this.getSeleniumOptions();
     // FirefoxOptions.toCapabilities() don't take in options.
-    let capabilities = seleniumOptions.toCapabilities()
-      .merge(this._capabilities);
+    const capabilities = seleniumOptions.toCapabilities()
+        .merge(this._capabilities);
 
     builder = builder
-      .withCapabilities(capabilities);
+        .withCapabilities(capabilities);
 
     return builder;
 

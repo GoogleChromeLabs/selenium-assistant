@@ -28,10 +28,10 @@ class Firefox extends DriverConfig {
    */
   constructor() {
     super(
-      'firefox',
-      new seleniumFirefox.Options(),
-      'Firefox',
-      'geckodriver'
+        'firefox',
+        new seleniumFirefox.Options(),
+        'Firefox',
+        'geckodriver'
     );
   }
 }

@@ -58,10 +58,10 @@ class LocalChromeBrowser extends LocalBrowser {
     seleniumOptions.setChromeBinaryPath(this.getExecutablePath());
 
     const builder = new webdriver
-      .Builder()
-      .withCapabilities(this._capabilities)
-      .forBrowser(this.getId())
-      .setChromeOptions(seleniumOptions);
+        .Builder()
+        .withCapabilities(this._capabilities)
+        .forBrowser(this.getId())
+        .setChromeOptions(seleniumOptions);
 
     return builder;
   }
@@ -71,7 +71,7 @@ class LocalChromeBrowser extends LocalBrowser {
    * reserved directory for installing browsers and operating files.
    */
   _findInInstallDir() {
-    let defaultDir = application.getInstallDirectory();
+    const defaultDir = application.getInstallDirectory();
     let expectedPath;
     if (process.platform === 'linux') {
       let chromeSubPath = 'chrome/google-chrome';
@@ -82,8 +82,8 @@ class LocalChromeBrowser extends LocalBrowser {
       }
 
       expectedPath = path.join(
-        defaultDir, 'chrome', this._release, 'opt/google/',
-        chromeSubPath);
+          defaultDir, 'chrome', this._release, 'opt/google/',
+          chromeSubPath);
     } else if (process.platform === 'darwin') {
       let chromeAppName = 'Google Chrome';
       if (this._release === 'beta') {
@@ -93,8 +93,8 @@ class LocalChromeBrowser extends LocalBrowser {
       }
 
       expectedPath = path.join(
-        defaultDir, 'chrome', this._release, chromeAppName + '.app',
-        'Contents/MacOS/' + chromeAppName
+          defaultDir, 'chrome', this._release, chromeAppName + '.app',
+          'Contents/MacOS/' + chromeAppName
       );
     }
 

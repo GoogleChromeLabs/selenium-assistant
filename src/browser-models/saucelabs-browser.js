@@ -16,7 +16,6 @@
 
 'use strict';
 
-const path = require('path');
 const Browser = require('./browser.js');
 const applicationState = require('../application-state');
 const webdriver = require('selenium-webdriver');
@@ -26,7 +25,7 @@ const webdriver = require('selenium-webdriver');
 
 /**
  * The SauceLabsBrowser class is an abstract class that is overriden by browser
- * classes that are supported on Sauce Labs (Chrome, Edge, Firefox, IE, Opera
+ * classes that are supported on Sauce Labs (Chrome, Edge, Firefox, IE,
  * and Safari).
  * @extends Browser
  */
@@ -68,13 +67,7 @@ class SauceLabsBrowser extends Browser {
       try {
         // This will require the necessary driver module that will add the
         // driver executable to the current path.
-        const driverModule = require(this.getDriverModule());
-        // The operadriver module DOESNT add the driver to the current path.
-        if (this.getId() === 'opera') {
-          // Operadriver.path includes the executable name which upsets
-          // selenium and finding the operadriver executable.
-          process.env.PATH += path.delimiter + path.dirname(driverModule.path);
-        }
+        require(this.getDriverModule());
       } catch (err) {
         // NOOP
       }
@@ -116,7 +109,7 @@ class SauceLabsBrowser extends Browser {
     this.addCapability('accessKey', saucelabsDetails.accessKey);
 
     const builder = new webdriver
-      .Builder();
+        .Builder();
 
     return builder.usingServer('https://' + saucelabsDetails.username + ':' +
       saucelabsDetails.accessKey + '@ondemand.saucelabs.com:443/wd/hub');

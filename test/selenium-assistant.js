@@ -25,7 +25,7 @@ const browserManager = require('../src/browser-manager.js');
 require('chai').should();
 
 const NUM_OF_BROWSERS = browserManager.getSupportedBrowsers().length;
-const sandbox = sinon.sandbox.create();
+const sandbox = sinon.createSandbox();
 
 describe('SeleniumAssistant', function() {
   const seleniumAssistant = require('../src/index.js');
@@ -50,7 +50,7 @@ describe('SeleniumAssistant', function() {
   });
 
   it('should return a browser for valid browser and release names', function() {
-    const possibleBrowsers = ['chrome', 'firefox', 'opera'];
+    const possibleBrowsers = ['chrome', 'firefox'];
     const releases = ['stable', 'beta', 'unstable'];
     possibleBrowsers.forEach((browserId) => {
       releases.forEach((release) => {
@@ -177,7 +177,7 @@ describe('SeleniumAssistant', function() {
         return Promise.resolve();
       },
       quit: () => {
-        return Promise.reject();
+        return Promise.reject(new Error());
       },
     });
     (killPromise instanceof Promise).should.equal(true);

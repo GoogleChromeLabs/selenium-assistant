@@ -28,9 +28,9 @@ class Edge extends DriverConfig {
    */
   constructor() {
     super(
-      'microsoftedge',
-      new seleniumEdge.Options(),
-      'Microsoft Edge'
+        'microsoftedge',
+        new seleniumEdge.Options(),
+        'Microsoft Edge'
     );
   }
 }

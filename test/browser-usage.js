@@ -33,47 +33,47 @@ describe('Test Usage of Browsers', function() {
   this.timeout(TIMEOUT);
   this.retries(RETRIES);
 
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
   let globalDriver = null;
-  let globalServer = new TestServer(false);
+  const globalServer = new TestServer(false);
   let localURL = '';
 
   function testNormalSeleniumUsage(specificBrowser) {
     return specificBrowser.getSeleniumDriver()
-    .then((driver) => {
-      globalDriver = driver;
-    })
-    .then(() => {
-      return globalDriver.get(localURL)
-      .then(() => {
-        return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
-      });
-    })
-    .then(() => seleniumAssistant.killWebDriver(globalDriver))
-    .then(() => {
-      globalDriver = null;
-    });
+        .then((driver) => {
+          globalDriver = driver;
+        })
+        .then(() => {
+          return globalDriver.get(localURL)
+              .then(() => {
+                return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
+              });
+        })
+        .then(() => seleniumAssistant.killWebDriver(globalDriver))
+        .then(() => {
+          globalDriver = null;
+        });
   }
 
   function testBuilderSeleniumUsage(specificBrowser) {
     const builder = specificBrowser.getSeleniumDriverBuilder();
 
     return builder.build()
-    .then((driver) => {
-      globalDriver = driver;
-    })
-    .then(() => {
-      return globalDriver.get(localURL);
-    })
-    .then(() => {
-      return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
-    })
-    .then(() => {
-      return seleniumAssistant.killWebDriver(globalDriver);
-    })
-    .then(() => {
-      globalDriver = null;
-    });
+        .then((driver) => {
+          globalDriver = driver;
+        })
+        .then(() => {
+          return globalDriver.get(localURL);
+        })
+        .then(() => {
+          return globalDriver.wait(selenium.until.titleIs('Example Site'), 1000);
+        })
+        .then(() => {
+          return seleniumAssistant.killWebDriver(globalDriver);
+        })
+        .then(() => {
+          globalDriver = null;
+        });
   }
 
   function testBrowserInfo(specificBrowser) {
@@ -114,7 +114,7 @@ describe('Test Usage of Browsers', function() {
 
         testBrowserInfo(localBrowser);
         return testNormalSeleniumUsage(localBrowser)
-        .then(() => testBuilderSeleniumUsage(localBrowser));
+            .then(() => testBuilderSeleniumUsage(localBrowser));
       });
 
       it('should get null for raw version output if no executable found', function() {
@@ -168,27 +168,27 @@ describe('Test Usage of Browsers', function() {
       seleniumAssistant.downloadLocalBrowser('firefox', 'beta', expiration),
       seleniumAssistant.downloadLocalBrowser('firefox', 'unstable', expiration),
     ])
-    .catch((err) => {
-      console.warn('There was an issue downloading the browsers: ', err);
-    })
-    .then(() => {
-      console.log('Download of browsers complete.');
+        .catch((err) => {
+          console.warn('There was an issue downloading the browsers: ', err);
+        })
+        .then(() => {
+          console.log('Download of browsers complete.');
 
-      const serverPath = path.join(__dirname, 'data', 'example-site');
-      return globalServer.startServer(serverPath);
-    })
-    .then((portNumber) => {
-      localURL = `http://localhost:${portNumber}/`;
-    });
+          const serverPath = path.join(__dirname, 'data', 'example-site');
+          return globalServer.startServer(serverPath);
+        })
+        .then((portNumber) => {
+          localURL = `http://localhost:${portNumber}/`;
+        });
   });
 
   afterEach(function() {
     sandbox.restore();
 
     return seleniumAssistant.killWebDriver(globalDriver).catch(() => {})
-    .then(() => {
-      globalDriver = null;
-    });
+        .then(() => {
+          globalDriver = null;
+        });
   });
 
   after(function() {
@@ -196,7 +196,7 @@ describe('Test Usage of Browsers', function() {
   });
 
   const localBrowserFiles = fs.readdirSync(
-    path.join(__dirname, '..', 'src', 'local-browsers'));
+      path.join(__dirname, '..', 'src', 'local-browsers'));
   localBrowserFiles.forEach((localBrowserFile) => {
     const LocalBrowserClass = require(`./../src/local-browsers/${localBrowserFile}`);
     const browserReleases = LocalBrowserClass.getPrettyReleaseNames();

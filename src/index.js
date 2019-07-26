@@ -115,7 +115,7 @@ class SeleniumAssistant {
    */
   downloadLocalBrowser(browserId, release, expirationInHours) {
     return downloadManager.downloadLocalBrowser(
-      browserId, release, expirationInHours);
+        browserId, release, expirationInHours);
   }
 
   /**
@@ -200,7 +200,7 @@ class SeleniumAssistant {
       let currentRowMaxLength = 0;
       rows.forEach((row) => {
         currentRowMaxLength = Math.max(
-          currentRowMaxLength, row[i].length);
+            currentRowMaxLength, row[i].length);
       });
       rowLengths[i] = currentRowMaxLength;
     }
@@ -213,7 +213,7 @@ class SeleniumAssistant {
     let outputString = chalk.gray('-'.repeat(totalRowLength)) + '\n';
     rows.forEach((row, rowIndex) => {
       const color = rowIndex === 0 ? chalk.bold : chalk.blue;
-      let coloredRows = row.map((column, columnIndex) => {
+      const coloredRows = row.map((column, columnIndex) => {
         const padding = rowLengths[columnIndex] - column.length;
         if (padding > 0) {
           return color(column) + ' '.repeat(padding);
@@ -221,7 +221,7 @@ class SeleniumAssistant {
         return color(column);
       });
 
-      let rowString = coloredRows.join(' | ');
+      const rowString = coloredRows.join(' | ');
 
       outputString += '| ' + rowString + ' |\n';
     });
@@ -288,7 +288,7 @@ class SeleniumAssistant {
     }
 
     return browserManager.getSauceLabsBrowser(browserId, browserVersion,
-      options);
+        options);
   }
 
   /**
@@ -343,16 +343,16 @@ class SeleniumAssistant {
       quitTimeout = setTimeout(resolve, 2000);
 
       driver.close()
-      .then(() => driver.quit(), () => driver.quit())
-      .then(resolve, resolve);
+          .then(() => driver.quit(), () => driver.quit())
+          .then(resolve, resolve);
     })
-    .then(() => {
-      clearTimeout(quitTimeout);
+        .then(() => {
+          clearTimeout(quitTimeout);
 
-      return new Promise((resolve, reject) => {
-        setTimeout(resolve, 2000);
-      });
-    });
+          return new Promise((resolve, reject) => {
+            setTimeout(resolve, 2000);
+          });
+        });
   }
 }
 

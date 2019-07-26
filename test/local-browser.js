@@ -37,7 +37,7 @@ describe('LocalBrowser', function() {
     999: '1.0.0',
   };
 
-  const sandbox = sinon.sandbox.create();
+  const sandbox = sinon.createSandbox();
   let releaseNames = {};
 
   beforeEach(function() {
@@ -46,9 +46,9 @@ describe('LocalBrowser', function() {
     // getPrettyReleaseNames needs to be stubbed since we are instantiating
     // LocalBrowser directly rather than extending it.
     sandbox.stub(LocalBrowser, 'getPrettyReleaseNames')
-    .callsFake(() => {
-      return releaseNames;
-    });
+        .callsFake(() => {
+          return releaseNames;
+        });
   });
 
   afterEach(function() {
@@ -57,9 +57,9 @@ describe('LocalBrowser', function() {
 
   it('should instantiate with valid input', function() {
     new LocalBrowser(
-      EXAMPLE_CONFIG,
-      'stable',
-      EXAMPLE_BLACKLIST
+        EXAMPLE_CONFIG,
+        'stable',
+        EXAMPLE_BLACKLIST
     );
   });
 
@@ -69,9 +69,9 @@ describe('LocalBrowser', function() {
       options._prettyName = null;
 
       new LocalBrowser(
-        options,
-        'stable',
-        EXAMPLE_BLACKLIST
+          options,
+          'stable',
+          EXAMPLE_BLACKLIST
       );
     }).to.throw('Invalid prettyName');
   });
@@ -82,9 +82,9 @@ describe('LocalBrowser', function() {
       options._prettyName = '';
 
       new LocalBrowser(
-        options,
-        'stable',
-        EXAMPLE_BLACKLIST
+          options,
+          'stable',
+          EXAMPLE_BLACKLIST
       );
     }).to.throw('Invalid prettyName');
   });
@@ -92,8 +92,8 @@ describe('LocalBrowser', function() {
   it('should fail on invalid release input', function() {
     expect(() => {
       new LocalBrowser(
-        EXAMPLE_CONFIG,
-        'notarelease'
+          EXAMPLE_CONFIG,
+          'notarelease'
       );
     }).to.throw('Unexpected browser release');
   });
@@ -101,8 +101,8 @@ describe('LocalBrowser', function() {
   it('should fail on no selenium options', function() {
     expect(() => {
       new LocalBrowser(
-        null,
-        'stable'
+          null,
+          'stable'
       );
     }).to.throw('No browser config provided.');
   });
@@ -118,44 +118,44 @@ describe('LocalBrowser', function() {
     };
 
     const localBrowser = new LocalBrowser(
-      options,
-      'stable'
+        options,
+        'stable'
     );
     localBrowser.getPrettyName().should.equal(`${prettyName} ${stableReleaseName}`);
   });
 
   it('should return the release value', function() {
     const stableBrowser = new LocalBrowser(
-      EXAMPLE_CONFIG,
-      'stable'
+        EXAMPLE_CONFIG,
+        'stable'
     );
     stableBrowser.getReleaseName().should.equal('stable');
 
     const betaBrowser = new LocalBrowser(
-      EXAMPLE_CONFIG,
-      'beta'
+        EXAMPLE_CONFIG,
+        'beta'
     );
     betaBrowser.getReleaseName().should.equal('beta');
 
     const unstableBrowser = new LocalBrowser(
-      EXAMPLE_CONFIG,
-      'unstable'
+        EXAMPLE_CONFIG,
+        'unstable'
     );
     unstableBrowser.getReleaseName().should.equal('unstable');
   });
 
   it('should return the correct selenium browser ID', function() {
     const localBrowser = new LocalBrowser(
-      EXAMPLE_CONFIG,
-      'stable'
+        EXAMPLE_CONFIG,
+        'stable'
     );
     localBrowser.getId().should.equal(EXAMPLE_CONFIG._id);
   });
 
   it('should return the correct selenium options', function() {
     const localBrowser = new LocalBrowser(
-      EXAMPLE_CONFIG,
-      'stable'
+        EXAMPLE_CONFIG,
+        'stable'
     );
     localBrowser.getSeleniumOptions().should.equal(EXAMPLE_CONFIG._options);
   });
@@ -166,8 +166,8 @@ describe('LocalBrowser', function() {
     const ffOptions = new seleniumFF.Options();
 
     const localBrowser = new LocalBrowser(
-      options,
-      'stable'
+        options,
+        'stable'
     );
     localBrowser.setSeleniumOptions(ffOptions);
     localBrowser.getSeleniumOptions().should.equal(ffOptions);
@@ -176,8 +176,8 @@ describe('LocalBrowser', function() {
   it('should throw for non-overriden getExecutablePath()', function() {
     expect(() => {
       const localBrowser = new LocalBrowser(
-        EXAMPLE_CONFIG,
-        'stable'
+          EXAMPLE_CONFIG,
+          'stable'
       );
 
       localBrowser.getExecutablePath();
@@ -187,8 +187,8 @@ describe('LocalBrowser', function() {
   it('should throw for non-overriden getRawVersionString()', function() {
     expect(() => {
       const localBrowser = new LocalBrowser(
-        EXAMPLE_CONFIG,
-        'stable'
+          EXAMPLE_CONFIG,
+          'stable'
       );
 
       localBrowser.getRawVersionString();
@@ -198,8 +198,8 @@ describe('LocalBrowser', function() {
   it('should throw for non-overriden getVersionNumber()', function() {
     expect(() => {
       const localBrowser = new LocalBrowser(
-        EXAMPLE_CONFIG,
-        'stable'
+          EXAMPLE_CONFIG,
+          'stable'
       );
 
       localBrowser.getVersionNumber();
@@ -209,8 +209,8 @@ describe('LocalBrowser', function() {
   it('should throw for isValid when non-overriden method is used', function() {
     expect(() => {
       const localBrowser = new LocalBrowser(
-        EXAMPLE_CONFIG,
-        'stable'
+          EXAMPLE_CONFIG,
+          'stable'
       );
 
       localBrowser.isValid();
@@ -220,8 +220,8 @@ describe('LocalBrowser', function() {
   it('should throw when getting a builder when non-overriden method is used', function() {
     expect(() => {
       const localBrowser = new LocalBrowser(
-        EXAMPLE_CONFIG,
-        'stable'
+          EXAMPLE_CONFIG,
+          'stable'
       );
 
       localBrowser.getSeleniumDriverBuilder();
@@ -230,16 +230,16 @@ describe('LocalBrowser', function() {
 
   it('should reject when building a driver which isn\'t a subclass', function() {
     const localBrowser = new LocalBrowser(
-      EXAMPLE_CONFIG,
-      'stable'
+        EXAMPLE_CONFIG,
+        'stable'
     );
 
     return localBrowser.getSeleniumDriver()
-    .then(() => {
-      throw new Error('Unexpected promise resolve');
-    }, (err) => {
-      (err.message.indexOf('overriden')).should.not.equal(-1);
-    });
+        .then(() => {
+          throw new Error('Unexpected promise resolve');
+        }, (err) => {
+          (err.message.indexOf('overriden')).should.not.equal(-1);
+        });
   });
 
   it('should handle missing driver module', function() {
@@ -251,21 +251,21 @@ describe('LocalBrowser', function() {
     });
 
     sandbox.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
-    .callsFake(() => {
-      return releaseNames;
-    });
+        .callsFake(() => {
+          return releaseNames;
+        });
 
     const localBrowser = new ProxiedLocalBrowser(
-      options,
-      'stable'
+        options,
+        'stable'
     );
 
     return localBrowser.getSeleniumDriver()
-    .then(() => {
-      throw new Error('Unexpected promise resolve');
-    }, (err) => {
-      (err.message.indexOf('overriden')).should.not.equal(-1);
-    });
+        .then(() => {
+          throw new Error('Unexpected promise resolve');
+        }, (err) => {
+          (err.message.indexOf('overriden')).should.not.equal(-1);
+        });
   });
 
   it('should require driver module', function() {
@@ -279,21 +279,21 @@ describe('LocalBrowser', function() {
     });
 
     sandbox.stub(ProxiedLocalBrowser, 'getPrettyReleaseNames')
-    .callsFake(() => {
-      return releaseNames;
-    });
+        .callsFake(() => {
+          return releaseNames;
+        });
 
     const localBrowser = new ProxiedLocalBrowser(
-      options,
-      'stable'
+        options,
+        'stable'
     );
 
     return localBrowser.getSeleniumDriver()
-    .then(() => {
-      throw new Error('Unexpected promise resolve');
-    }, (err) => {
-      (err.message.indexOf('overriden')).should.not.equal(-1);
-    });
+        .then(() => {
+          throw new Error('Unexpected promise resolve');
+        }, (err) => {
+          (err.message.indexOf('overriden')).should.not.equal(-1);
+        });
   });
 
   // TODO Blacklist test
