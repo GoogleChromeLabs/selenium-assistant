@@ -14,7 +14,7 @@
     "url": "git+https://github.com/GoogleChrome/selenium-assistant.git"
   },
   "engines": {
-    "node": ">= 6.9.0"
+    "node": ">= 8.9.0"
   },
   "keywords": [
     "selenium",

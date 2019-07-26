@@ -12,8 +12,7 @@ os:
 osx_image: xcode7.3
 
 node_js:
-  - '6'
-  - '8'
+  - 8
 env:
   global:
     - COVERALLS_PARALLEL=true
