@@ -26,7 +26,7 @@ const downloadManager = require('./download-manager.js');
  * When you require in the `selenium-assistant` module an instance of this
  * SeleniumAssistant class will be returned.
  *
- * This method gives you the require API's to manage downloading of browsers,
+ * This method gives you the require APIs to manage downloading of browsers,
  * accessing required browsers and making use of SaucesLabs.
  *
  * @example <caption>Usage in Node</caption>

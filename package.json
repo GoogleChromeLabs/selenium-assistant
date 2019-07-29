@@ -39,7 +39,6 @@
     "istanbul": "^0.4.5",
     "jsdoc": "^3.6.3",
     "mocha": "^6.2.0",
-    "operadriver": "^1.0.0",
     "proxyquire": "^2.1.1",
     "sinon": "^7.3.2"
   },

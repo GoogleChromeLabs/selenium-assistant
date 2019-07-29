@@ -104,7 +104,7 @@ describe('Test Download Manager - Browser Expiration', function() {
   before(function() {
     seleniumAssistant.setBrowserInstallDir(testPath);
 
-    sandbox.stub(downloadManager, '_downlaodChrome')
+    sandbox.stub(downloadManager, '_downloadChrome')
         .callsFake((release, installDir) => {
           browserDownloads.chrome[release] = true;
           return Promise.resolve();
