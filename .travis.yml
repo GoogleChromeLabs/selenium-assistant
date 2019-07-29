@@ -36,3 +36,6 @@ matrix:
     dist: trusty
   - name: "OS X"
     os: osx
+    before_script:
+      - "sudo /usr/bin/safaridriver --enable"
+      - "sudo defaults write com.apple.Safari AllowRemoteAutomation 1"
