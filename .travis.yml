@@ -1,18 +1,12 @@
-sudo: required
-dist: trusty
 language: node_js
+
 cache:
   directories:
     - node_modules
-os:
-  - linux
-  - osx
-
-# This is needed to make NVM happy on OS X https://github.com/travis-ci/travis-ci/issues/6476
-osx_image: xcode7.3
 
 node_js:
   - 8
+
 env:
   global:
     - COVERALLS_PARALLEL=true
@@ -21,7 +15,7 @@ notifications:
   webhooks: https://coveralls.io/webhook?repo_token=COVERALLS_REPO_TOKEN
 
 install:
-  - npm install
+  - npm ci
 
 # Read more here: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
 before_script:
@@ -32,3 +26,10 @@ before_script:
 script:
   - npm run istanbul
   - npm run coveralls
+
+matrix:
+  include:
+  - name: "Linux"
+    os: linux
+  - name: "OS X"
+    os: osx
