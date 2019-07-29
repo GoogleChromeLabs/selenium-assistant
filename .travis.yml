@@ -33,5 +33,6 @@ matrix:
   include:
   - name: "Linux"
     os: linux
+    dist: trusty
   - name: "OS X"
     os: osx
