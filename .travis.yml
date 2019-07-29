@@ -33,5 +33,6 @@ matrix:
   - name: "OS X"
     os: osx
     before_script:
+      # See https://github.com/GoogleChromeLabs/selenium-assistant/issues/118
       - "sudo /usr/bin/safaridriver --enable"
       - "sudo defaults write com.apple.Safari AllowRemoteAutomation 1"
