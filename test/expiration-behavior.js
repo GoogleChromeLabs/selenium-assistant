@@ -129,7 +129,6 @@ describe('Test Download Manager - Browser Expiration', function() {
     browserDownloads.chrome = {
       stable: false,
       beta: false,
-      unstable: false,
     };
     browserDownloads.firefox = {
       stable: false,

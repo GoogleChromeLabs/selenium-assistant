@@ -180,7 +180,7 @@ class LocalSafariBrowser extends LocalBrowser {
   }
 
   /**
-   * This method returns the pretty names for each browser releace.
+   * This method returns the pretty names for each browser release.
    * @return {Object} An object containing on or move of 'stable', 'beta' or
    * 'unstable' keys with a matching name for that release.
    */

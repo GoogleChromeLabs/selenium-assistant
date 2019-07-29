@@ -80,8 +80,7 @@ describe('Test Usage of Browsers', function() {
     const versionString = specificBrowser.getRawVersionString();
     (typeof versionString).should.equal('string');
     (versionString === null).should.equal(false);
-    // Chrome unstable has made it possible that this could happen
-    // versionString.length.should.gt(0);
+    versionString.length.should.gt(0);
 
     const versionNumber = specificBrowser.getVersionNumber();
     (typeof versionNumber).should.equal('number');
@@ -163,7 +162,6 @@ describe('Test Usage of Browsers', function() {
     return Promise.all([
       seleniumAssistant.downloadLocalBrowser('chrome', 'stable', expiration),
       seleniumAssistant.downloadLocalBrowser('chrome', 'beta', expiration),
-      seleniumAssistant.downloadLocalBrowser('chrome', 'unstable', expiration),
       seleniumAssistant.downloadLocalBrowser('firefox', 'stable', expiration),
       seleniumAssistant.downloadLocalBrowser('firefox', 'beta', expiration),
       seleniumAssistant.downloadLocalBrowser('firefox', 'unstable', expiration),

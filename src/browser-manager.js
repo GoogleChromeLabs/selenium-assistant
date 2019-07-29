@@ -77,7 +77,6 @@ class BrowserManager {
     return [
       this.getLocalBrowser('chrome', 'stable'),
       this.getLocalBrowser('chrome', 'beta'),
-      this.getLocalBrowser('chrome', 'unstable'),
 
       this.getLocalBrowser('firefox', 'stable'),
       this.getLocalBrowser('firefox', 'beta'),

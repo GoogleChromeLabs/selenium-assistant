@@ -77,8 +77,6 @@ class LocalChromeBrowser extends LocalBrowser {
       let chromeSubPath = 'chrome/google-chrome';
       if (this._release === 'beta') {
         chromeSubPath = 'chrome-beta/google-chrome-beta';
-      } else if (this._release === 'unstable') {
-        chromeSubPath = 'chrome-unstable/google-chrome-unstable';
       }
 
       expectedPath = path.join(
@@ -87,8 +85,6 @@ class LocalChromeBrowser extends LocalBrowser {
     } else if (process.platform === 'darwin') {
       let chromeAppName = 'Google Chrome';
       if (this._release === 'beta') {
-        chromeAppName = 'Google Chrome';
-      } else if (this._release === 'unstable') {
         chromeAppName = 'Google Chrome';
       }
 
@@ -131,9 +127,6 @@ class LocalChromeBrowser extends LocalBrowser {
             case 'beta':
               return '/Applications/Google Chrome Beta.app/' +
                 'Contents/MacOS/Google Chrome Beta';
-            case 'unstable':
-              return '/Applications/Google Chrome Dev.app/' +
-                'Contents/MacOS/Google Chrome Dev';
             default:
               throw new Error('Unknown release: ' + this._release);
           }
@@ -144,8 +137,6 @@ class LocalChromeBrowser extends LocalBrowser {
               return which.sync('google-chrome');
             case 'beta':
               return which.sync('google-chrome-beta');
-            case 'unstable':
-              return which.sync('google-chrome-unstable');
             default:
               throw new Error('Unknown release: ' + this._release);
           }
@@ -188,7 +179,7 @@ class LocalChromeBrowser extends LocalBrowser {
   }
 
   /**
-   * This method returns the pretty names for each browser releace.
+   * This method returns the pretty names for each browser release.
    * @return {Object} An object containing on or move of 'stable', 'beta' or
    * 'unstable' keys with a matching name for that release.
    */
@@ -196,7 +187,6 @@ class LocalChromeBrowser extends LocalBrowser {
     return {
       stable: 'Stable',
       beta: 'Beta',
-      unstable: 'Dev',
     };
   }
 }

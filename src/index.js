@@ -100,7 +100,6 @@ class SeleniumAssistant {
    * return Promise.all([
   *   seleniumAssistant.downloadLocalBrowser('chrome', 'stable', 48),
   *   seleniumAssistant.downloadLocalBrowser('chrome', 'beta', 48),
-  *   seleniumAssistant.downloadLocalBrowser('chrome', 'unstable', 48),
   *   seleniumAssistant.downloadLocalBrowser('firefox', 'stable', 48),
   *   seleniumAssistant.downloadLocalBrowser('firefox', 'beta', 48),
   *   seleniumAssistant.downloadLocalBrowser('firefox', 'unstable', 48),
@@ -128,7 +127,7 @@ class SeleniumAssistant {
    * browser is available on the current environment.
    *
    * @param  {String} browserId The selenium id of the browser you want.
-   * @param  {String} release   The release of the browser you want. Either
+   * @param  {String} release The release of the browser you want. Either
    * 'stable', 'beta' or 'unstable.'
    * @return {LocalBrowser} A LocalBrowser instance that represents
    * your request.
@@ -152,12 +151,12 @@ class SeleniumAssistant {
       throw new Error('Sorry this library only supports OS X and Linux.');
     }
 
-    let webdriveBrowsers = browserManager.getSupportedBrowsers();
-    webdriveBrowsers = webdriveBrowsers.filter((webdriverBrowser) => {
+    let webdriverBrowsers = browserManager.getSupportedBrowsers();
+    webdriverBrowsers = webdriverBrowsers.filter((webdriverBrowser) => {
       return webdriverBrowser.isValid();
     });
 
-    return webdriveBrowsers;
+    return webdriverBrowsers;
   }
 
   /**

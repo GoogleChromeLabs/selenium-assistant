@@ -128,7 +128,7 @@ class DownloadManager {
 
   /**
    * Download a version of Chrome to a specific directory.
-   * @param {String} release This should be 'stable', 'beta' or 'unstable'.
+   * @param {String} release This should be 'stable' or 'beta'.
    * @param {String} installDir The path to install Chrome into.
    * @return {Promise} Promise that resolves once the download has completed.
    */
@@ -144,9 +144,6 @@ class DownloadManager {
         break;
       case 'beta':
         chromeProduct = 'google-chrome-beta';
-        break;
-      case 'unstable':
-        chromeProduct = 'google-chrome-unstable';
         break;
       default:
         throw new Error(`Unknown release: '${release}'`);
@@ -173,17 +170,12 @@ class DownloadManager {
               `GoogleChrome.dmg`;
             chromeOSXAppName = 'Google Chrome.app';
             break;
-          case 'unstable':
-            downloadUrl = `https://dl.google.com/chrome/mac/dev/` +
-              `GoogleChrome.dmg`;
-            chromeOSXAppName = 'Google Chrome.app';
-            break;
           default:
             throw new Error(`Unknown release: '${release}'`);
         }
         break;
       default:
-        throw new Error('Unsupport platform.', process.platform);
+        throw new Error('Unsupported platform.', process.platform);
     }
 
     const finalBrowserPath = path.join(installDir, 'chrome', release);

@@ -235,7 +235,7 @@ class LocalBrowser extends Browser {
    * matching browser release name.
    *
    * For example, Chrome is:
-   * `{ stable: 'Stable', beta: 'Beta', unstable: 'Dev' }`
+   * `{ stable: 'Stable', beta: 'Beta' }`
    *
    * @return {Object} Returns an object containing release names as keys and
    * a user friendly release name as the value.

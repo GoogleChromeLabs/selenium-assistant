@@ -54,6 +54,9 @@ describe('SeleniumAssistant', function() {
     const releases = ['stable', 'beta', 'unstable'];
     possibleBrowsers.forEach((browserId) => {
       releases.forEach((release) => {
+        if (browserId === 'chrome' && release === 'stable') {
+          return;
+        }
         const browser = seleniumAssistant.getLocalBrowser(browserId, release);
         (typeof browser).should.equal('object');
       });
