@@ -15,12 +15,6 @@ notifications:
 install:
   - npm install
 
-# Read more here: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start || echo \"Unable to start virtual display.\""
-  - sleep 3 # give xvfb some time to start
-
 script:
   - npm run istanbul
   - npm run coveralls
@@ -30,6 +24,11 @@ matrix:
   - name: "Linux"
     os: linux
     dist: trusty
+    before_script:
+      # Read more here: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
+      - "export DISPLAY=:99.0"
+      - "sh -e /etc/init.d/xvfb start || echo 'Unable to start virtual display.'"
+      - sleep 3 # give xvfb some time to start
   - name: "OS X"
     os: osx
     before_script:
