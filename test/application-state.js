@@ -49,7 +49,7 @@ describe('Application State', function() {
   it('should start with default install directory', function() {
     const applicationState = require('../src/application-state.js');
     applicationState.getInstallDirectory().should.equal(
-      applicationState.getDefaultInstallLocation()
+        applicationState.getDefaultInstallLocation()
     );
   });
 
@@ -69,7 +69,7 @@ describe('Application State', function() {
 
     applicationState.setInstallDirectory(null);
     applicationState.getInstallDirectory().should.equal(
-      applicationState.getDefaultInstallLocation()
+        applicationState.getDefaultInstallLocation()
     );
   });
 });

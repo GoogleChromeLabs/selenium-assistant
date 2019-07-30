@@ -58,10 +58,10 @@ class LocalChromeBrowser extends LocalBrowser {
     seleniumOptions.setBinary(this.getExecutablePath());
 
     const builder = new webdriver
-      .Builder()
-      .withCapabilities(this._capabilities)
-      .forBrowser(this.getId())
-      .setFirefoxOptions(seleniumOptions);
+        .Builder()
+        .withCapabilities(this._capabilities)
+        .forBrowser(this.getId())
+        .setFirefoxOptions(seleniumOptions);
 
     return builder;
   }
@@ -71,10 +71,10 @@ class LocalChromeBrowser extends LocalBrowser {
    * reserved directory for installing browsers and operating files.
    */
   _findInInstallDir() {
-    let defaultDir = application.getInstallDirectory();
+    const defaultDir = application.getInstallDirectory();
     if (process.platform === 'linux') {
       const expectedPath = path.join(
-        defaultDir, 'firefox', this._release, 'firefox');
+          defaultDir, 'firefox', this._release, 'firefox');
 
       try {
         // This will throw if it's not found
@@ -93,8 +93,8 @@ class LocalChromeBrowser extends LocalBrowser {
       }
 
       const expectedPath = path.join(
-        defaultDir, 'firefox', this._release, firefoxAppName,
-        'Contents/MacOS/firefox'
+          defaultDir, 'firefox', this._release, firefoxAppName,
+          'Contents/MacOS/firefox'
       );
 
       try {
@@ -178,7 +178,7 @@ class LocalChromeBrowser extends LocalBrowser {
   }
 
   /**
-   * This method returns the pretty names for each browser releace.
+   * This method returns the pretty names for each browser release.
    * @return {Object} An object containing on or move of 'stable', 'beta' or
    * 'unstable' keys with a matching name for that release.
    */

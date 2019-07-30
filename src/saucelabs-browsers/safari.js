@@ -50,10 +50,10 @@ class SafariDriverBrowser extends SauceLabsBrowser {
   getSeleniumDriverBuilder() {
     let builder = super.getSeleniumDriverBuilder();
     const seleniumOptions = this.getSeleniumOptions();
-    let capabilities = seleniumOptions.toCapabilities(this._capabilities);
+    const capabilities = seleniumOptions.toCapabilities(this._capabilities);
 
     builder = builder
-      .withCapabilities(capabilities);
+        .withCapabilities(capabilities);
 
     return builder;
   }

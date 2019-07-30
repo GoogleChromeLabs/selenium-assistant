@@ -26,7 +26,7 @@ const downloadManager = require('./download-manager.js');
  * When you require in the `selenium-assistant` module an instance of this
  * SeleniumAssistant class will be returned.
  *
- * This method gives you the require API's to manage downloading of browsers,
+ * This method gives you the require APIs to manage downloading of browsers,
  * accessing required browsers and making use of SaucesLabs.
  *
  * @example <caption>Usage in Node</caption>
@@ -100,7 +100,6 @@ class SeleniumAssistant {
    * return Promise.all([
   *   seleniumAssistant.downloadLocalBrowser('chrome', 'stable', 48),
   *   seleniumAssistant.downloadLocalBrowser('chrome', 'beta', 48),
-  *   seleniumAssistant.downloadLocalBrowser('chrome', 'unstable', 48),
   *   seleniumAssistant.downloadLocalBrowser('firefox', 'stable', 48),
   *   seleniumAssistant.downloadLocalBrowser('firefox', 'beta', 48),
   *   seleniumAssistant.downloadLocalBrowser('firefox', 'unstable', 48),
@@ -115,7 +114,7 @@ class SeleniumAssistant {
    */
   downloadLocalBrowser(browserId, release, expirationInHours) {
     return downloadManager.downloadLocalBrowser(
-      browserId, release, expirationInHours);
+        browserId, release, expirationInHours);
   }
 
   /**
@@ -128,7 +127,7 @@ class SeleniumAssistant {
    * browser is available on the current environment.
    *
    * @param  {String} browserId The selenium id of the browser you want.
-   * @param  {String} release   The release of the browser you want. Either
+   * @param  {String} release The release of the browser you want. Either
    * 'stable', 'beta' or 'unstable.'
    * @return {LocalBrowser} A LocalBrowser instance that represents
    * your request.
@@ -152,12 +151,12 @@ class SeleniumAssistant {
       throw new Error('Sorry this library only supports OS X and Linux.');
     }
 
-    let webdriveBrowsers = browserManager.getSupportedBrowsers();
-    webdriveBrowsers = webdriveBrowsers.filter((webdriverBrowser) => {
+    let webdriverBrowsers = browserManager.getSupportedBrowsers();
+    webdriverBrowsers = webdriverBrowsers.filter((webdriverBrowser) => {
       return webdriverBrowser.isValid();
     });
 
-    return webdriveBrowsers;
+    return webdriverBrowsers;
   }
 
   /**
@@ -200,7 +199,7 @@ class SeleniumAssistant {
       let currentRowMaxLength = 0;
       rows.forEach((row) => {
         currentRowMaxLength = Math.max(
-          currentRowMaxLength, row[i].length);
+            currentRowMaxLength, row[i].length);
       });
       rowLengths[i] = currentRowMaxLength;
     }
@@ -213,7 +212,7 @@ class SeleniumAssistant {
     let outputString = chalk.gray('-'.repeat(totalRowLength)) + '\n';
     rows.forEach((row, rowIndex) => {
       const color = rowIndex === 0 ? chalk.bold : chalk.blue;
-      let coloredRows = row.map((column, columnIndex) => {
+      const coloredRows = row.map((column, columnIndex) => {
         const padding = rowLengths[columnIndex] - column.length;
         if (padding > 0) {
           return color(column) + ' '.repeat(padding);
@@ -221,7 +220,7 @@ class SeleniumAssistant {
         return color(column);
       });
 
-      let rowString = coloredRows.join(' | ');
+      const rowString = coloredRows.join(' | ');
 
       outputString += '| ' + rowString + ' |\n';
     });
@@ -288,7 +287,7 @@ class SeleniumAssistant {
     }
 
     return browserManager.getSauceLabsBrowser(browserId, browserVersion,
-      options);
+        options);
   }
 
   /**
@@ -343,16 +342,16 @@ class SeleniumAssistant {
       quitTimeout = setTimeout(resolve, 2000);
 
       driver.close()
-      .then(() => driver.quit(), () => driver.quit())
-      .then(resolve, resolve);
+          .then(() => driver.quit(), () => driver.quit())
+          .then(resolve, resolve);
     })
-    .then(() => {
-      clearTimeout(quitTimeout);
+        .then(() => {
+          clearTimeout(quitTimeout);
 
-      return new Promise((resolve, reject) => {
-        setTimeout(resolve, 2000);
-      });
-    });
+          return new Promise((resolve, reject) => {
+            setTimeout(resolve, 2000);
+          });
+        });
   }
 }
 

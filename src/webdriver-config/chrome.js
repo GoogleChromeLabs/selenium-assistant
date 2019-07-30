@@ -28,10 +28,10 @@ class ChromeConfig extends DriverConfig {
    */
   constructor() {
     super(
-      'chrome',
-      new seleniumChrome.Options(),
-      'Google Chrome',
-      'chromedriver'
+        'chrome',
+        new seleniumChrome.Options(),
+        'Google Chrome',
+        'chromedriver'
     );
   }
 }

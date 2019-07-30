@@ -56,10 +56,10 @@ class LocalSafariBrowser extends LocalBrowser {
     seleniumOptions.setTechnologyPreview((this._release === 'beta'));
 
     let builder = new webdriver
-      .Builder()
-      .withCapabilities(this._capabilities)
-      .forBrowser(this.getId())
-      .setSafariOptions(seleniumOptions);
+        .Builder()
+        .withCapabilities(this._capabilities)
+        .forBrowser(this.getId())
+        .setSafariOptions(seleniumOptions);
 
     // Run safari 12+ in legacy mode until this is resolved:
     // https://github.com/SeleniumHQ/selenium/issues/6026
@@ -137,9 +137,9 @@ class LocalSafariBrowser extends LocalBrowser {
       const versionDoc = fs.readFileSync(versionListPath).toString();
       /* eslint-disable no-useless-escape */
       const results = new RegExp(
-        '<key>CFBundleShortVersionString</key>' +
+          '<key>CFBundleShortVersionString</key>' +
         '[\\s]+<string>([\\d]+.[\\d]+(?:.[\\d]+)?)</string>', 'g')
-      .exec(versionDoc);
+          .exec(versionDoc);
       /* eslint-enable no-useless-escape */
       if (results) {
         this._rawVerstionString = results[1];
@@ -180,7 +180,7 @@ class LocalSafariBrowser extends LocalBrowser {
   }
 
   /**
-   * This method returns the pretty names for each browser releace.
+   * This method returns the pretty names for each browser release.
    * @return {Object} An object containing on or move of 'stable', 'beta' or
    * 'unstable' keys with a matching name for that release.
    */

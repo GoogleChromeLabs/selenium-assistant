@@ -18,13 +18,11 @@
 
 const LocalChromeBrowser = require('./local-browsers/chrome');
 const LocalFirefoxBrowser = require('./local-browsers/firefox');
-const LocalOperaBrowser = require('./local-browsers/opera');
 const LocalSafariBrowser = require('./local-browsers/safari');
 const SaucelabsChromeBrowser = require('./saucelabs-browsers/chrome');
 const SaucelabsEdgeBrowser = require('./saucelabs-browsers/edge');
 const SaucelabsFirefoxBrowser = require('./saucelabs-browsers/firefox');
 const SaucelabsIEBrowser = require('./saucelabs-browsers/ie');
-const SaucelabsOperaBrowser = require('./saucelabs-browsers/opera');
 const SaucelabsSafariBrowser = require('./saucelabs-browsers/safari');
 
 /**
@@ -58,8 +56,6 @@ class BrowserManager {
         return new SaucelabsFirefoxBrowser(browserVersion);
       case 'internet explorer':
         return new SaucelabsIEBrowser(browserVersion);
-      case 'opera':
-        return new SaucelabsOperaBrowser(browserVersion);
       case 'safari':
         return new SaucelabsSafariBrowser(browserVersion);
       default:
@@ -81,15 +77,10 @@ class BrowserManager {
     return [
       this.getLocalBrowser('chrome', 'stable'),
       this.getLocalBrowser('chrome', 'beta'),
-      this.getLocalBrowser('chrome', 'unstable'),
 
       this.getLocalBrowser('firefox', 'stable'),
       this.getLocalBrowser('firefox', 'beta'),
       this.getLocalBrowser('firefox', 'unstable'),
-
-      this.getLocalBrowser('opera', 'stable'),
-      this.getLocalBrowser('opera', 'beta'),
-      this.getLocalBrowser('opera', 'unstable'),
 
       this.getLocalBrowser('safari', 'stable'),
       this.getLocalBrowser('safari', 'beta'),
@@ -120,8 +111,6 @@ class BrowserManager {
         return new LocalChromeBrowser(release);
       case 'firefox':
         return new LocalFirefoxBrowser(release);
-      case 'opera':
-        return new LocalOperaBrowser(release);
       case 'safari':
         return new LocalSafariBrowser(release);
       default:

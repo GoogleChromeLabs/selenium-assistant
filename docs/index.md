@@ -25,10 +25,6 @@ To use **Google Chrome**:
 
     npm install chromedriver --save-dev
 
-To use **Opera**:
-
-    npm install operadriver --save-dev
-
 To use **Firefox**:
 
     npm install geckodriver --save-dev

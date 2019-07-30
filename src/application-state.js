@@ -130,9 +130,9 @@ class ApplicationState {
         resolve(sauceConnectProcess);
       });
     })
-    .then((sauceConnectProcess) => {
-      this._sauceConnect = sauceConnectProcess;
-    });
+        .then((sauceConnectProcess) => {
+          this._sauceConnect = sauceConnectProcess;
+        });
   }
 
   /**
@@ -146,9 +146,9 @@ class ApplicationState {
     return new Promise((resolve) => {
       this._sauceConnect.close(resolve);
     })
-    .then(() => {
-      this._sauceConnect = null;
-    });
+        .then(() => {
+          this._sauceConnect = null;
+        });
   }
 }
 

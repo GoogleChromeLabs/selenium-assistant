@@ -28,9 +28,9 @@ class Safari extends DriverConfig {
    */
   constructor() {
     super(
-      'safari',
-      new seleniumSafari.Options(),
-      'Safari'
+        'safari',
+        new seleniumSafari.Options(),
+        'Safari'
     );
   }
 }

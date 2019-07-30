@@ -17,13 +17,12 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 const execSync = require('child_process').execSync;
 const Browser = require('./browser.js');
 
 /**
  * The LocalBrowser class is an abstract class that is overriden by
- * browser classes that are supported (Chrome, Firefox, Opera and Safari).
+ * browser classes that are supported (Chrome, Firefox and Safari).
  * @extends Browser
  */
 class LocalBrowser extends Browser {
@@ -145,7 +144,7 @@ class LocalBrowser extends Browser {
 
     try {
       this._rawVerstionString = execSync(`"${executablePath}" --version`)
-        .toString();
+          .toString();
     } catch (err) {
       // NOOP
     }
@@ -163,13 +162,7 @@ class LocalBrowser extends Browser {
       try {
         // This will require the necessary driver module that will add the
         // driver executable to the current path.
-        const driverModule = require(this.getDriverModule());
-        // The operadriver module DOESNT add the driver to the current path.
-        if (this.getId() === 'opera') {
-          // Operadriver.path includes the executable name which upsets
-          // selenium and finding the operadriver executable.
-          process.env.PATH += path.delimiter + path.dirname(driverModule.path);
-        }
+        require(this.getDriverModule());
       } catch (err) {
         // NOOP
       }
@@ -183,12 +176,17 @@ class LocalBrowser extends Browser {
       }
 
       return buildResult
-      .then((driver) => {
-        // Enable async excution out of the box.
-        driver.manage().timeouts().setScriptTimeout(30 * 1000);
+          .then((driver) => {
+            // Enable async execution out of the box.
+            const timeout = 30 * 1000;
+            driver.manage().setTimeouts({
+              implicit: timeout,
+              pageLoad: timeout,
+              script: timeout,
+            });
 
-        return driver;
-      });
+            return driver;
+          });
     } catch (err) {
       return Promise.reject(err);
     }
@@ -237,7 +235,7 @@ class LocalBrowser extends Browser {
    * matching browser release name.
    *
    * For example, Chrome is:
-   * `{ stable: 'Stable', beta: 'Beta', unstable: 'Dev' }`
+   * `{ stable: 'Stable', beta: 'Beta' }`
    *
    * @return {Object} Returns an object containing release names as keys and
    * a user friendly release name as the value.

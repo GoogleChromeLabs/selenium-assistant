@@ -28,9 +28,9 @@ class IE extends DriverConfig {
    */
   constructor() {
     super(
-      'internet explorer',
-      new seleniumIE.Options(),
-      'Internet Explorer'
+        'internet explorer',
+        new seleniumIE.Options(),
+        'Internet Explorer'
     );
   }
 }

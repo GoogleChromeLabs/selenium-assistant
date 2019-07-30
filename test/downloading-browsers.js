@@ -36,6 +36,9 @@ describe('Test Download Manager - Browser Download', function() {
 
   browsers.forEach((browserId) => {
     releases.forEach((release) => {
+      if (browserId === 'chrome' && release === 'unstable') {
+        return;
+      }
       setupDownloadTest(browserId, release);
     });
   });
