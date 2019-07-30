@@ -19,24 +19,20 @@ matrix:
   include:
   - name: "Linux (Legacy Node)"
     os: linux
-    dist: trusty
+    dist: bionic
+    # See https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
+    services:
+      - xvfb
     node_js:
       - 8
-    before_script:
-      # Read more here: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
-      - "export DISPLAY=:99.0"
-      - "sh -e /etc/init.d/xvfb start || echo 'Unable to start virtual display.'"
-      - sleep 3 # give xvfb some time to start
   - name: "Linux (Latest Node)"
     os: linux
-    dist: trusty
+    dist: bionic
+    # See https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
+    services:
+      - xvfb
     node_js:
       - node
-    before_script:
-      # Read more here: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
-      - "export DISPLAY=:99.0"
-      - "sh -e /etc/init.d/xvfb start || echo 'Unable to start virtual display.'"
-      - sleep 3 # give xvfb some time to start
   - name: "OS X (Latest Node)"
     os: osx
     node_js:
