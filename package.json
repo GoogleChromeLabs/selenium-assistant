@@ -4,10 +4,11 @@
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint '.'",
-    "test": "mocha && npm run lint",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "istanbul": "npm run lint && istanbul cover _mocha",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "lint": "eslint '.'",
+    "pretest": "npm install --no-save chromedriver geckodriver",
+    "test": "mocha && npm run lint"
   },
   "repository": {
     "type": "git",
@@ -28,13 +29,11 @@
   "homepage": "https://github.com/GoogleChrome/selenium-assistant#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "chromedriver": "*",
     "coveralls": "^3.0.5",
     "eslint": "^6.1.0",
     "eslint-config-google": "^0.13.0",
     "express": "^4.17.1",
     "firebase": "^6.3.3",
-    "geckodriver": "*",
     "glob": "^7.1.4",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.6.3",
