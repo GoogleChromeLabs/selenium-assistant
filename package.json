@@ -7,8 +7,9 @@
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "istanbul": "npm run lint && istanbul cover _mocha",
     "lint": "eslint '.'",
+    "mocha": "mocha",
     "pretest": "npm install --no-save chromedriver geckodriver",
-    "test": "mocha && npm run lint"
+    "test": "npm run istanbul && npm run coveralls"
   },
   "repository": {
     "type": "git",

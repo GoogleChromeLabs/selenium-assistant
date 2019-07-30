@@ -13,11 +13,10 @@ notifications:
   webhooks: https://coveralls.io/webhook?repo_token=COVERALLS_REPO_TOKEN
 
 install:
-  - npm install
+  - npm ci
 
 script:
-  - npm run istanbul
-  - npm run coveralls
+  - npm run test
 
 matrix:
   include:
