@@ -2,9 +2,6 @@ sudo: required
 
 language: node_js
 
-node_js:
-  - 8
-
 env:
   global:
     - COVERALLS_PARALLEL=true
@@ -22,6 +19,10 @@ matrix:
   include:
   - name: "Linux"
     os: linux
+    # Explicitly test against both the oldest version supported by this project, as well as the latest stable.
+    node_js:
+      - 8
+      - node
     dist: trusty
     before_script:
       # Read more here: https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-a-GUI
@@ -30,6 +31,9 @@ matrix:
       - sleep 3 # give xvfb some time to start
   - name: "OS X"
     os: osx
+    # Since OS X tends to be slow, just kick off a single test using the latest stable version of node.
+    node_js:
+      - node
     before_script:
       # See https://github.com/GoogleChromeLabs/selenium-assistant/issues/118
       - "sudo /usr/bin/safaridriver --enable"
