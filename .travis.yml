@@ -32,11 +32,11 @@ matrix:
     services:
       - xvfb
     node_js:
-      - node
+      - 12
   - name: "OS X (Latest Node)"
     os: osx
     node_js:
-      - node
+      - 12
     before_script:
       # See https://github.com/GoogleChromeLabs/selenium-assistant/issues/118
       - "sudo /usr/bin/safaridriver --enable"
