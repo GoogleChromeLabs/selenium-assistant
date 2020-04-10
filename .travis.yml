@@ -17,14 +17,6 @@ script:
 
 matrix:
   include:
-  - name: "Linux (Legacy Node)"
-    os: linux
-    dist: bionic
-    # See https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-services
-    services:
-      - xvfb
-    node_js:
-      - 10
   - name: "Linux (Latest Node)"
     os: linux
     dist: bionic
