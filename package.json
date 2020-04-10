@@ -1,6 +1,6 @@
 {
   "name": "selenium-assistant",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "A node module to help with use of selenium driver",
   "main": "src/index.js",
   "scripts": {
