@@ -24,7 +24,7 @@ matrix:
     services:
       - xvfb
     node_js:
-      - 8
+      - 10
   - name: "Linux (Latest Node)"
     os: linux
     dist: bionic
@@ -32,11 +32,11 @@ matrix:
     services:
       - xvfb
     node_js:
-      - node
+      - 10
   - name: "OS X (Latest Node)"
     os: osx
     node_js:
-      - node
+      - 10
     before_script:
       # See https://github.com/GoogleChromeLabs/selenium-assistant/issues/118
       - "sudo /usr/bin/safaridriver --enable"
