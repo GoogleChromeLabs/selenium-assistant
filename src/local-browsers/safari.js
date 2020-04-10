@@ -61,9 +61,10 @@ class LocalSafariBrowser extends LocalBrowser {
         .forBrowser(this.getId())
         .setSafariOptions(seleniumOptions);
 
-    // Run safari 12+ in legacy mode until this is resolved:
+    // Run Safari 12 in legacy mode due to
     // https://github.com/SeleniumHQ/selenium/issues/6026
-    if (this.getVersionNumber() >= 12) {
+    // This is not needed in Safari 13+.
+    if (this.getVersionNumber() === 12) {
       builder = builder.usingServer(
           new safari.ServiceBuilder().addArguments('--legacy').build().start());
     }
