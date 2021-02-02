@@ -33,7 +33,7 @@ describe('LocalBrowser', function() {
     _prettyName: 'Example Pretty Name',
   };
 
-  const EXAMPLE_BLACKLIST = {
+  const EXAMPLE_DENYLIST = {
     999: '1.0.0',
   };
 
@@ -59,7 +59,7 @@ describe('LocalBrowser', function() {
     new LocalBrowser(
         EXAMPLE_CONFIG,
         'stable',
-        EXAMPLE_BLACKLIST
+        EXAMPLE_DENYLIST
     );
   });
 
@@ -71,7 +71,7 @@ describe('LocalBrowser', function() {
       new LocalBrowser(
           options,
           'stable',
-          EXAMPLE_BLACKLIST
+          EXAMPLE_DENYLIST
       );
     }).to.throw('Invalid prettyName');
   });
@@ -84,7 +84,7 @@ describe('LocalBrowser', function() {
       new LocalBrowser(
           options,
           'stable',
-          EXAMPLE_BLACKLIST
+          EXAMPLE_DENYLIST
       );
     }).to.throw('Invalid prettyName');
   });
@@ -296,5 +296,5 @@ describe('LocalBrowser', function() {
         });
   });
 
-  // TODO Blacklist test
+  // TODO denylist test
 });

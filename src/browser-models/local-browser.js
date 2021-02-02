@@ -32,12 +32,12 @@ class LocalBrowser extends Browser {
    * @param {DriverConfig} config The config for the browser.
    * @param {String} release Release name of the browser, must be 'stable',
    * 'beta' or 'unstable'.
-   * @param {Object} blacklist This is a list of browser versions => driver
-   * versions which is used to blacklist a browser from be made available. This
+   * @param {Object} denylist This is a list of browser versions => driver
+   * versions which is used to deny a browser from being made available. This
    * is not assurance of a browser working but may be used more actively
    * to block bad browser support in the future.
    */
-  constructor(config, release, blacklist) {
+  constructor(config, release, denylist) {
     super(config);
 
     if (typeof config._prettyName !== 'string' ||
@@ -57,7 +57,7 @@ class LocalBrowser extends Browser {
     }
 
     this._release = release;
-    this._blacklist = blacklist;
+    this._denylist = denylist;
   }
 
   /**
@@ -85,7 +85,7 @@ class LocalBrowser extends Browser {
         }
       }
 
-      if (this.isBlackListed()) {
+      if (this.isDenyListed()) {
         return false;
       }
 
@@ -101,13 +101,13 @@ class LocalBrowser extends Browser {
    * This method is largely used internally to determine if a browser should
    * be made available or not.
    *
-   * This method will only blacklist a browser if there is a known bad browser
+   * This method will only denylist a browser if there is a known bad browser
    * + driver module combination.
    *
-   * @return {Boolean} Whether this browser is blacklisted or not from being
+   * @return {Boolean} Whether this browser is denylisted or not from being
    * included in available browsers.
    */
-  isBlackListed() {
+  isDenyListed() {
     return false;
   }
 

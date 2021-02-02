@@ -101,8 +101,8 @@ describe('Test Usage of Browsers', function() {
   function setupTest(localBrowser) {
     describe(`Test Usage of ${localBrowser.getPrettyName()}`, function() {
       it(`should be able to use ${localBrowser.getId()} - ${localBrowser.getReleaseName()}`, function() {
-        if (localBrowser.isBlackListed()) {
-          console.warn(`Browser is blacklisted ${localBrowser.getId()} - ${localBrowser.getReleaseName()}`);
+        if (localBrowser.isDenyListed()) {
+          console.warn(`Browser is denylisted ${localBrowser.getId()} - ${localBrowser.getReleaseName()}`);
           return;
         }
 
