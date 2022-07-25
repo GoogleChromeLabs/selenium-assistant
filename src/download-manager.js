@@ -159,9 +159,9 @@ class DownloadManager {
         fileExtension = 'dmg';
         switch (release) {
           case 'stable':
-            // Must leave in GGRO as without it, the dmg will be for an
+            // Must leave in ggro (brand) as without it, the dmg will be for an
             // old version of Chrome
-            downloadUrl = `https://dl.google.com/chrome/mac/stable/GGRO/` +
+            downloadUrl = `https://dl.google.com/chrome/mac/universal/stable/ggro/` +
               `googlechrome.dmg`;
             chromeOSXAppName = 'Google Chrome.app';
             break;
