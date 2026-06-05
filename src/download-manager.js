@@ -344,7 +344,7 @@ class DownloadManager {
           if (fileExtension === '.tar.gz') {
             return new Promise((resolve, reject) => {
               const untarProcess = spawn('tar', [
-                'xvjf',
+                'xvf',
                 filePath,
                 '--directory',
                 path.join(installDir, 'firefox', release),
